@@ -30,8 +30,8 @@ AS = 745          # ascender
 DS = -205         # descender
 OV = 10           # overshoot for round shapes
 SE = 2.15         # superellipse exponent (2 = ellipse, higher = squarer)
-SX = 0.86         # horizontal condensing of skeletons (weight stays constant)
-SB = 0.9          # sidebearing scale
+SX = 1.00         # horizontal condensing of skeletons (weight stays constant)
+SB = 1.0          # sidebearing scale
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 
