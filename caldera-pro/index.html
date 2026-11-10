@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Caldera Pro</title>
+  <meta name="description" content="Caldera Pro — a privacy-first desktop calendar for Windows where every day can hold a photo, with a built-in analog clock scheduler.">
+  <link rel="icon" href="assets/icon.png">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f6f6f4;
+      --surface: #ffffff;
+      --border: #e2e2de;
+      --text: #1a1a1a;
+      --muted: #6b6b68;
+      --accent: #4f6ef7;
+      --accent-soft: #e8ecff;
+      --today: #e03030;
+      --star: #f0a500;
+      --radius: 12px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #121214;
+        --surface: #1c1c20;
+        --border: #2c2c32;
+        --text: #ededed;
+        --muted: #9a9aa2;
+        --accent-soft: #23294a;
+      }
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    a { color: inherit; }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+    /* Nav */
+    nav { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 85%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+    nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; text-decoration: none; letter-spacing: .02em; }
+    .brand img { width: 26px; height: 26px; }
+    .brand span { font-size: 11px; font-weight: 700; color: var(--accent); background: var(--accent-soft); padding: 2px 7px; border-radius: 99px; }
+    nav ul { display: flex; gap: 24px; list-style: none; font-size: 14px; }
+    nav ul a { text-decoration: none; color: var(--muted); }
+    nav ul a:hover { color: var(--text); }
+
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 10px; font-weight: 600; font-size: 15px; text-decoration: none; border: 1px solid transparent; transition: transform .15s, box-shadow .15s; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 6px 20px -8px var(--accent); }
+    .btn-ghost { border-color: var(--border); background: var(--surface); }
+    .btn-sm { padding: 8px 14px; font-size: 13px; }
+
+    /* Hero */
+    .hero { padding: 80px 0 40px; display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; align-items: center; }
+    .eyebrow { font-size: 13px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: .1em; }
+    h1 { font-size: clamp(36px, 5vw, 56px); line-height: 1.08; letter-spacing: -.02em; margin: 12px 0 18px; }
+    .lead { font-size: 18px; color: var(--muted); max-width: 46ch; }
+    .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .fine { font-size: 13px; color: var(--muted); margin-top: 14px; }
+
+    /* Mock calendar */
+    .mock { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: 0 30px 60px -30px rgba(0,0,0,.35); overflow: hidden; }
+    .mock-bar { height: 34px; display: flex; align-items: center; gap: 6px; padding: 0 12px; border-bottom: 1px solid var(--border); font-size: 12px; color: var(--muted); font-weight: 600; }
+    .mock-bar img { width: 14px; opacity: .6; }
+    .mock-month { display: flex; justify-content: space-between; padding: 12px 14px 6px; font-weight: 700; font-size: 14px; }
+    .grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; padding: 6px 12px 14px; }
+    .cell { aspect-ratio: 1; border-radius: 6px; background: var(--bg); position: relative; font-size: 10px; padding: 4px; color: var(--muted); overflow: hidden; }
+    .cell.img { color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.5); }
+    .cell.today { outline: 2px solid var(--today); outline-offset: -2px; }
+    .cell .badge { position: absolute; right: 3px; bottom: 3px; background: rgba(0,0,0,.55); color: #fff; border-radius: 99px; font-size: 9px; padding: 0 5px; }
+
+    /* Sections */
+    section { padding: 72px 0; }
+    h2 { font-size: clamp(28px, 3.5vw, 38px); letter-spacing: -.015em; line-height: 1.15; }
+    .section-head { max-width: 620px; margin-bottom: 40px; }
+    .section-head p { color: var(--muted); margin-top: 12px; font-size: 17px; }
+
+    .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+    .card .ico { width: 38px; height: 38px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; margin-bottom: 14px; }
+    .card h3 { font-size: 17px; margin-bottom: 6px; }
+    .card p { color: var(--muted); font-size: 15px; }
+
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+    .split ul { list-style: none; margin-top: 20px; display: grid; gap: 10px; }
+    .split li { padding-left: 26px; position: relative; color: var(--muted); }
+    .split li::before { content: ""; position: absolute; left: 0; top: 7px; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); }
+    .clock-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; display: grid; place-items: center; }
+    .clock-wrap svg { width: 100%; max-width: 340px; height: auto; }
+
+    .privacy { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 36px; }
+    .stat { border-left: 3px solid var(--accent); padding-left: 14px; }
+    .stat b { display: block; font-size: 22px; }
+    .stat span { color: var(--muted); font-size: 14px; }
+
+    table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; font-size: 15px; }
+    td { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+    tr:last-child td { border-bottom: 0; }
+    td:last-child { text-align: right; }
+    kbd { font-family: ui-monospace, Consolas, monospace; font-size: 12px; background: var(--bg); border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 5px; padding: 1px 6px; }
+
+    .final { text-align: center; }
+    .final .cta { justify-content: center; }
+    footer { padding: 32px 0; border-top: 1px solid var(--border); color: var(--muted); font-size: 14px; }
+    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+    @media (max-width: 860px) {
+      .hero, .split { grid-template-columns: 1fr; }
+      .features { grid-template-columns: 1fr 1fr; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      nav ul { display: none; }
+      .hero { padding-top: 48px; }
+    }
+    @media (max-width: 560px) {
+      .features { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#"><img src="assets/icon.png" alt="">Caldera <span>PRO</span></a>
+    <ul>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#clock">Clock scheduler</a></li>
+      <li><a href="#privacy">Privacy</a></li>
+      <li><a href="#controls">Controls</a></li>
+    </ul>
+    <a class="btn btn-primary btn-sm" href="#download">Download</a>
+  </div>
+</nav>
+
+<header class="wrap hero">
+  <div>
+    <div class="eyebrow">Desktop calendar for Windows</div>
+    <h1>Your days,<br>in pictures.</h1>
+    <p class="lead">Caldera Pro turns your calendar into a visual timeline. Every day can hold a photo, every event its own image and notes — and it all stays on your machine.</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="#download">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 21h16"/></svg>
+        Download for Windows
+      </a>
+      <a class="btn btn-ghost" href="#features">See features</a>
+    </div>
+    <p class="fine">Windows 10+ · 64-bit · No account required</p>
+  </div>
+
+  <div class="mock" aria-hidden="true">
+    <div class="mock-bar"><img src="assets/icon.png" alt="">CALDERA</div>
+    <div class="mock-month"><span>November 2026</span><span style="color:var(--muted)">‹ ›</span></div>
+    <div class="grid" id="grid"></div>
+  </div>
+</header>
+
+<section id="features">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Features</div>
+      <h2>A calendar that treats images as first-class data.</h2>
+      <p>See a whole month at a glance — not as text, but as the moments that filled it.</p>
+    </div>
+    <div class="features">
+      <div class="card">
+        <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg></div>
+        <h3>Visual calendar grid</h3>
+        <p>Each day shows a cover image. Hover a day to watch all its photos scroll past in a seamless loop.</p>
+      </div>
+      <div class="card">
+        <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.8z"/></svg></div>
+        <h3>Unlimited events per day</h3>
+        <p>Give every event its own image, time and notes. Star one to make it the day's cover.</p>
+      </div>
+      <div class="card">
+        <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="3" width="8" height="4" rx="1"/><path d="M16 5h2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2"/></svg></div>
+        <h3>Paste, drop or pick</h3>
+        <p>Add images with <kbd>Ctrl</kbd>+<kbd>V</kbd>, drag files onto any day, or browse with the file picker.</p>
+      </div>
+      <div class="card">
+        <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+        <h3>Analog clock scheduler</h3>
+        <p>Click-drag arcs on a 12-hour ring to block out your day, with labels that curve along the arc.</p>
+      </div>
+      <div class="card">
+        <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></div>
+        <h3>Dark mode</h3>
+        <p>One click in the title bar. Your choice is remembered between sessions.</p>
+      </div>
+      <div class="card">
+        <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4M11 8v6M8 11h6"/></svg></div>
+        <h3>Full-resolution lightbox</h3>
+        <p>Open any image at full size for a closer look, right from the day view.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="clock">
+  <div class="wrap split">
+    <div>
+      <div class="eyebrow">Clock scheduler</div>
+      <h2>Plan your day on a clock face, not a list.</h2>
+      <p class="lead" style="margin-top:12px">Switch from the grid to an analog clock tied to the selected day. Time blocks are arcs you can see — so you know how much of the day is spoken for.</p>
+      <ul>
+        <li>Click-drag to create a block</li>
+        <li>Labels render as curved text along each arc</li>
+        <li>Colour-coded legend for quick edits and deletes</li>
+      </ul>
+    </div>
+    <div class="clock-wrap" aria-hidden="true">
+      <svg viewBox="0 0 200 200" id="clock-svg">
+        <circle cx="100" cy="100" r="92" fill="none" stroke="var(--border)" stroke-width="18"/>
+        <g id="arcs"></g>
+        <circle cx="100" cy="100" r="78" fill="var(--bg)"/>
+        <g id="ticks"></g>
+        <line x1="100" y1="100" x2="100" y2="52" stroke="var(--text)" stroke-width="3" stroke-linecap="round" transform="rotate(300 100 100)"/>
+        <line x1="100" y1="100" x2="100" y2="36" stroke="var(--text)" stroke-width="2" stroke-linecap="round" transform="rotate(60 100 100)"/>
+        <circle cx="100" cy="100" r="4" fill="var(--today)"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section id="privacy" class="privacy">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Privacy</div>
+      <h2>Local only. Nothing leaves your computer.</h2>
+      <p>Events, images and preferences live in your local app data folder. No accounts, no cloud sync, no telemetry.</p>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>0</b><span>accounts to create</span></div>
+      <div class="stat"><b>0</b><span>bytes sent online</span></div>
+      <div class="stat"><b>~150 MB</b><span>on disk</span></div>
+      <div class="stat"><b>~120 MB</b><span>RAM at runtime</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="controls">
+  <div class="wrap split">
+    <div>
+      <div class="eyebrow">Controls</div>
+      <h2>Fast to learn. Faster to use.</h2>
+      <p class="lead" style="margin-top:12px">Everything is one click, one drag or one paste away.</p>
+    </div>
+    <table>
+      <tr><td>Open a day</td><td>Click any cell</td></tr>
+      <tr><td>Add image from clipboard</td><td>Click cell → <kbd>Ctrl</kbd>+<kbd>V</kbd></td></tr>
+      <tr><td>Add image from file</td><td>Drag onto cell</td></tr>
+      <tr><td>Set cover image</td><td>Click ★</td></tr>
+      <tr><td>Change month / year</td><td><kbd>‹</kbd> <kbd>›</kbd> / <kbd>«</kbd> <kbd>»</kbd></td></tr>
+      <tr><td>Create time block</td><td>Drag an arc on the clock</td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="download" class="final">
+  <div class="wrap">
+    <h2>Make your calendar worth looking at.</h2>
+    <p class="lead" style="margin:12px auto 0">Download Caldera Pro and run it — no installer required.</p>
+    <div class="cta">
+      <!-- TODO: point this at the real release download URL -->
+      <a class="btn btn-primary" href="#">Download for Windows</a>
+    </div>
+    <p class="fine">Unsigned build: if SmartScreen appears, choose <b>More info → Run anyway</b>.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="yr"></span> Lucidian Creative. Caldera is proprietary software.</span>
+    <span>Made for Windows 10+</span>
+  </div>
+</footer>
+
+<script>
+  // Mock calendar grid: November 2026 starts on a Sunday.
+  const grid = document.getElementById('grid');
+  const photos = {
+    2: ['#f6a96b','#d0546b'], 5: ['#7cc6c9','#3a6ea5'], 8: ['#f4d27a','#e07b39'],
+    10: ['#9ad08f','#3f8f5b'], 13: ['#c9a5e8','#6c4cc2'], 14: ['#f19aa8','#b5446e'],
+    18: ['#8fd3f4','#3d6fd6'], 21: ['#f7c873','#c0532f'], 24: ['#b3e0a6','#4e9e72'],
+    27: ['#e8b4d8','#8a4fa3'], 29: ['#9fc9f0','#4a5fc1']
+  };
+  const counts = { 5: 3, 13: 2, 21: 4 };
+  'SMTWTFS'.split('').forEach(d => {
+    const h = document.createElement('div');
+    h.textContent = d;
+    h.style.cssText = 'font-size:10px;text-align:center;color:var(--muted);font-weight:600';
+    grid.appendChild(h);
+  });
+  for (let d = 1; d <= 30; d++) {
+    const c = document.createElement('div');
+    c.className = 'cell';
+    c.textContent = d;
+    if (photos[d]) {
+      c.classList.add('img');
+      c.style.background = `linear-gradient(135deg, ${photos[d][0]}, ${photos[d][1]})`;
+    }
+    if (counts[d]) c.innerHTML += `<span class="badge">${counts[d]}</span>`;
+    if (d === 10) c.classList.add('today');
+    grid.appendChild(c);
+  }
+
+  // Clock arcs (hours on a 12h ring)
+  const arcs = [[9, 11.5, '#4f6ef7'], [12, 13, '#f0a500'], [14, 17, '#3f8f5b'], [19, 20.5, '#d0546b']];
+  const pt = (h, r) => { const a = (h / 12) * 2 * Math.PI - Math.PI / 2; return [100 + r * Math.cos(a), 100 + r * Math.sin(a)]; };
+  const g = document.getElementById('arcs');
+  arcs.forEach(([s, e, col]) => {
+    const [x1, y1] = pt(s, 92), [x2, y2] = pt(e, 92);
+    const large = (e - s) > 6 ? 1 : 0;
+    g.innerHTML += `<path d="M${x1} ${y1} A92 92 0 ${large} 1 ${x2} ${y2}" fill="none" stroke="${col}" stroke-width="18" stroke-linecap="butt"/>`;
+  });
+  const t = document.getElementById('ticks');
+  for (let i = 0; i < 12; i++) {
+    const [x1, y1] = pt(i, 72), [x2, y2] = pt(i, i % 3 ? 68 : 62);
+    t.innerHTML += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="var(--muted)" stroke-width="${i % 3 ? 1 : 2}"/>`;
+  }
+  document.getElementById('yr').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
