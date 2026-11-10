@@ -1,10 +1,14 @@
-"""Generate "Caldera Sans Light", a monoline light sans-serif.
+"""Generate the Caldera Sans family (Light, Regular, Bold).
+
+A clean, highly readable sans-serif for UI and body text: generous x-height,
+open apertures, distinct I / l / 1 and O / 0, and even spacing.
 
 Every glyph is described as centre-line strokes (lines and superelliptic
-arcs).  The strokes are expanded to a constant weight with Shapely, merged,
-and written to TrueType / WOFF2 with fontTools.
+arcs).  The strokes are expanded with a slightly flattened pen (horizontals a
+touch thinner than verticals), merged with Shapely, kerned, autohinted and
+written to TrueType / WOFF2 with fontTools.
 
-    pip install fonttools shapely brotli
+    pip install fonttools shapely brotli ttfautohint-py
     python fonts/src/build_font.py
 """
 import math
@@ -18,20 +22,32 @@ from shapely.geometry.polygon import orient
 from shapely.ops import unary_union
 
 FAMILY = "Caldera Sans"
-STYLE = "Light"
-VERSION = "1.000"
+VERSION = "2.000"
+
+# name, stroke weight (vertical stems), usWeightClass
+WEIGHTS = [("Light", 46, 300), ("Regular", 78, 400), ("Bold", 118, 700)]
 
 UPM = 1000
-W = 44            # stroke weight
-H = W / 2         # half weight
-XH = 520          # x-height
-CH = 700          # cap height
-AS = 745          # ascender
-DS = -205         # descender
-OV = 10           # overshoot for round shapes
-SE = 2.15         # superellipse exponent (2 = ellipse, higher = squarer)
-SX = 1.00         # horizontal condensing of skeletons (weight stays constant)
-SB = 1.0          # sidebearing scale
+XH = 540          # x-height (tall, for legibility at small sizes)
+CH = 720          # cap height
+AS = 760          # ascender
+DS = -210         # descender
+OV = 11           # overshoot for round shapes
+SE = 2.2          # superellipse exponent (2 = ellipse, higher = squarer)
+CONTRAST = 0.9    # horizontal stroke thickness relative to vertical
+
+# set per weight by set_weight()
+W = H = SX = SB = R_DOT = None
+
+
+def set_weight(w):
+    """Configure the globals that every glyph drawing reads."""
+    global W, H, SX, SB, R_DOT
+    W = w
+    H = w / 2
+    SX = 0.93 + (w - 46) * 0.001      # heavier weights get a little wider
+    SB = 0.90 + (w - 46) * 0.0008     # ...and a little more room
+    R_DOT = max(31, w * 0.66)
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 
@@ -64,13 +80,20 @@ def sx(p):
     return (p[0] * SX, p[1])
 
 
-def stroke(*parts, join="round", w=W):
-    pts = [sx(p) for p in flat(*parts)]
-    return LineString(pts).buffer(w / 2, cap_style="flat", join_style=join,
-                                  mitre_limit=4.0, quad_segs=24)
+def pen(geom_fn, pts):
+    """Expand with a flattened pen: squash y, buffer round, unsquash."""
+    k = CONTRAST
+    g = geom_fn([(x * SX, y / k) for x, y in pts])
+    return affinity.scale(g, 1, k, origin=(0, 0))
 
 
-def seg(p0, p1, e0=0, e1=0, w=W):
+def stroke(*parts, join="round", w=None):
+    w = w or W
+    return pen(lambda p: LineString(p).buffer(w / 2, cap_style="flat", join_style=join,
+                                              mitre_limit=4.0, quad_segs=24), flat(*parts))
+
+
+def seg(p0, p1, e0=0, e1=0, w=None):
     """Straight stroke, optionally extended past either end (for clipping)."""
     dx, dy = p1[0] - p0[0], p1[1] - p0[1]
     d = math.hypot(dx, dy)
@@ -81,12 +104,12 @@ def seg(p0, p1, e0=0, e1=0, w=W):
 
 
 def ring(cx, cy, rx, ry, n=SE):
-    pts = [sx(p) for p in arc(cx, cy, rx, ry, 0, 360, n)[:-1]]
-    return Polygon(pts).exterior.buffer(H, quad_segs=24)
+    return pen(lambda p: Polygon(p).exterior.buffer(H, quad_segs=24),
+               arc(cx, cy, rx, ry, 0, 360, n)[:-1])
 
 
-def dot(x, y, r=31):
-    return Point(x * SX, y).buffer(r, quad_segs=32)
+def dot(x, y, r=None):
+    return Point(x * SX, y).buffer(r or R_DOT, quad_segs=32)
 
 
 def clip(g, x0=-2000, y0=-2000, x1=4000, y1=4000):
@@ -142,7 +165,7 @@ def g_o(g):
 @glyph("c", lsb=44, rsb=34)
 def g_c(g):
     rx, ry = 470 / 2 - H, (XH + 2 * OV) / 2 - H
-    g.add(stroke(arc(235, XH / 2, rx, ry, 44, 316)))
+    g.add(stroke(arc(235, XH / 2, rx, ry, 50, 310)))
 
 
 @glyph("e", lsb=44)
@@ -150,7 +173,7 @@ def g_e(g):
     rx, ry = 490 / 2 - H, (XH + 2 * OV) / 2 - H
     cx, cy = 245, XH / 2
     g.add(stroke((cx - rx, cy + 4), (cx + rx, cy + 4)))
-    g.add(stroke(arc(cx, cy, rx, ry, 0, 322)))
+    g.add(stroke(arc(cx, cy, rx, ry, -8, 316)))
 
 
 def s_shape(top, ow, mid_ratio=0.53):
@@ -218,7 +241,7 @@ def g_r(g):
 
 @glyph("i", lsb=64)
 def g_i(g):
-    g.add(stroke((H, 0), (H, XH)), dot(H, XH + 165))
+    g.add(stroke((H, 0), (H, XH)), dot(H, XH + 95 + R_DOT))
 
 
 @glyph("j", lsb=-10, rsb=64)
@@ -226,18 +249,21 @@ def g_j(g):
     x, r = 150, 120
     y0 = DS + H + r
     g.add(stroke((x, XH), (x, y0), arc(x - r, y0, r, r, 0, -90)))
-    g.add(dot(x, XH + 165))
+    g.add(dot(x, XH + 95 + R_DOT))
 
 
-@glyph("l", lsb=64)
+@glyph("l", lsb=64, rsb=24)
 def g_l(g):
-    g.add(stroke((H, 0), (H, AS)))
+    # a small tail keeps l distinct from I and 1
+    r = 95
+    y0 = H * CONTRAST - OV / 2 + r
+    g.add(stroke((H, AS), (H, y0), arc(H + r, y0, r, r, 180, 272)))
 
 
 @glyph("t", lsb=24, rsb=30)
 def g_t(g):
     x, r = 120, 115
-    top = 650
+    top = 670
     y0 = H - OV / 2 + r
     g.add(stroke((x, top), (x, y0), arc(x + r, y0, r, r, 180, 275)))
     g.add(stroke((x - 110, XH - H), (x + 150, XH - H)))
@@ -421,7 +447,7 @@ def g_G(g):
     ow, oh = 680, CH + 2 * OV
     cx, cy, rx, ry = ow / 2, CH / 2, ow / 2 - H, oh / 2 - H
     R = cx + rx
-    g.add(stroke(arc(cx, cy, rx, ry, 42, 360), (R, 315), (cx + 95, 315), join="mitre"))
+    g.add(stroke(arc(cx, cy, rx, ry, 42, 366)), stroke((cx + 150, 330), (R, 330)))
 
 
 @glyph("D", lsb=80, rsb=48)
@@ -649,7 +675,6 @@ def g_8(g):
 
 
 # -------------------------------------------------------------- punctuation
-R_DOT = 31
 
 
 @glyph(".", lsb=70)
@@ -884,6 +909,16 @@ def g_bullet(g):
     g.add(dot(90, 300, 90))
 
 
+@glyph("\u00B7", lsb=70)
+def g_middot(g):
+    g.add(dot(R_DOT, XH / 2 + 20))
+
+
+@glyph("\u00D7", lsb=70)
+def g_times(g):
+    g.add(stroke((0, 110), (360, 470)), stroke((0, 470), (360, 110)))
+
+
 @glyph("\u00B0", lsb=60)
 def g_degree(g):
     g.add(ring(110, CH - 110, 95, 95))
@@ -924,7 +959,36 @@ def gname(ch):
     return "uni%04X" % ord(ch)
 
 
-def build():
+KERN = """
+@T = [T];
+@VW = [V W];
+@Y = [Y];
+@round_lc = [a c d e g o q s];
+@diag_lc = [v w y];
+@punct = [uni002E uni002C uni2026];
+@quote = [uni0027 uni0022 uni2019 uni201D];
+@open_uc = [A];
+@FP = [F P];
+@L = [L];
+@r = [r];
+feature kern {
+  pos @T @round_lc -70;  pos @T [u r z m n p x] -50;  pos @T @diag_lc -40;
+  pos @T @punct -80;  pos @T @open_uc -50;  pos @open_uc @T -50;
+  pos @VW @round_lc -40;  pos @VW @punct -70;  pos @VW @open_uc -35;  pos @open_uc @VW -35;
+  pos @Y @round_lc -60;  pos @Y @punct -80;  pos @Y @open_uc -50;  pos @open_uc @Y -50;
+  pos @open_uc @diag_lc -15;  pos @open_uc @quote -50;  pos @quote @open_uc -50;
+  pos @L @T -70;  pos @L @VW -50;  pos @L @Y -70;  pos @L @quote -70;  pos @L @diag_lc -20;
+  pos @FP @punct -90;  pos @FP @open_uc -30;  pos @FP @round_lc -15;
+  pos @r @punct -50;  pos @diag_lc @punct -45;
+  pos [f] @quote 30;  pos @quote @round_lc -25;
+} kern;
+"""
+
+
+def build_weight(style, weight, wclass):
+    from fontTools.feaLib.builder import addOpenTypeFeaturesFromString
+
+    set_weight(weight)
     order = [".notdef", "space", "uni00A0"]
     cmap = {0x20: "space", 0xA0: "uni00A0"}
     glyphs, metrics = {}, {}
@@ -944,7 +1008,7 @@ def build():
     empty = TTGlyphPen(None).glyph()
     for n in ("space", "uni00A0"):
         glyphs[n] = empty
-        metrics[n] = (250, 0)
+        metrics[n] = (round(260 * SB), 0)
 
     for ch, (fn, kw) in GLYPHS.items():
         lsb = kw.get("lsb", 60)
@@ -967,37 +1031,57 @@ def build():
         order.append(name)
         cmap[ord(ch)] = name
 
+    bold = style == "Bold"
+    ribbi = style in ("Regular", "Bold")
+    ps = f"{FAMILY.replace(' ', '')}-{style}"
+    names = {
+        "familyName": FAMILY if ribbi else f"{FAMILY} {style}",
+        "styleName": style if ribbi else "Regular",
+        "uniqueFontIdentifier": f"{ps};{VERSION}",
+        "fullName": f"{FAMILY} {style}",
+        "psName": ps,
+        "version": f"Version {VERSION}",
+    }
+    if not ribbi:
+        names["typographicFamily"] = FAMILY
+        names["typographicSubfamily"] = style
+
     fb = FontBuilder(UPM, isTTF=True)
     fb.setupGlyphOrder(order)
     fb.setupCharacterMap(cmap)
     fb.setupGlyf(glyphs)
     fb.setupHorizontalMetrics(metrics)
-    fb.setupHorizontalHeader(ascent=930, descent=-260, lineGap=0)
+    fb.setupHorizontalHeader(ascent=950, descent=-250, lineGap=0)
     fb.setupOS2(
-        sTypoAscender=780, sTypoDescender=-220, sTypoLineGap=200,
-        usWinAscent=930, usWinDescent=260, sxHeight=XH, sCapHeight=CH,
-        version=4, usWeightClass=300, fsSelection=0x40 | 0x80, achVendID="NONE",
+        sTypoAscender=800, sTypoDescender=-220, sTypoLineGap=180,
+        usWinAscent=980, usWinDescent=280, sxHeight=XH, sCapHeight=CH,
+        version=4, usWeightClass=wclass,
+        fsSelection=(0x20 if bold else 0x40) | 0x80, achVendID="NONE",
     )
-    ps = (FAMILY + "-" + STYLE).replace(" ", "")
-    fb.setupNameTable({
-        "familyName": FAMILY,
-        "styleName": STYLE,
-        "uniqueFontIdentifier": f"{ps};{VERSION}",
-        "fullName": f"{FAMILY} {STYLE}",
-        "psName": ps,
-        "version": f"Version {VERSION}",
-    })
+    fb.setupNameTable(names)
     fb.setupPost()
-    fb.setupHead(unitsPerEm=UPM)
+    fb.setupHead(unitsPerEm=UPM, macStyle=1 if bold else 0)
     font = fb.font
     font["head"].fontRevision = float(VERSION)
+    addOpenTypeFeaturesFromString(font, KERN)
 
     ttf = os.path.join(OUT, f"{ps}.ttf")
     font.save(ttf)
-    font.flavor = "woff2"
-    font.save(os.path.join(OUT, f"{ps}.woff2"))
+    try:  # hinting sharpens small sizes on Windows
+        from ttfautohint import ttfautohint
+        ttfautohint(in_file=ttf, out_file=ttf, hinting_limit=72)
+    except ImportError:
+        print("  (ttfautohint-py not installed: font left unhinted)")
+    from fontTools.ttLib import TTFont
+    web = TTFont(ttf)
+    web.flavor = "woff2"
+    web.save(os.path.join(OUT, f"{ps}.woff2"))
     print("wrote", ttf, "glyphs:", len(order))
     return ttf
+
+
+def build():
+    return [build_weight(*w) for w in WEIGHTS]
 
 
 if __name__ == "__main__":
