@@ -3,330 +3,829 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Caldera Pro</title>
-  <meta name="description" content="Caldera Pro — a privacy-first desktop calendar for Windows where every day can hold a photo, with a built-in analog clock scheduler.">
-  <link rel="icon" href="assets/icon.png">
+  <title>Caldera Pro — Calendar and project workspace for Windows</title>
+  <meta name="description" content="Caldera Pro is a local-first calendar and project workspace for Windows, with AI built in. Plan your week on a drag-and-drop timeline, run a project through seven lenses, and build your own boards out of panels.">
+  <meta property="og:title" content="Caldera Pro">
+  <meta property="og:description" content="A local-first calendar and project workspace for Windows, with AI built in.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121214" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="assets/favicon.png">
+  <script>document.documentElement.classList.add('js');</script>
   <style>
+    /* DM Sans, SIL Open Font License: see assets/fonts/dm-sans-OFL.txt */
+    @font-face {
+      font-family: 'DM Sans';
+      font-style: normal;
+      font-weight: 100 1000;
+      font-display: swap;
+      src: url(assets/fonts/dm-sans-latin.woff2) format('woff2');
+    }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    /* Colours follow the app's Studio skin (tokens.css in the Caldera Pro repo). */
     :root {
-      --bg: #f6f6f4;
+      --bg: #f5f5f7;
       --surface: #ffffff;
-      --border: #e2e2de;
-      --text: #1a1a1a;
-      --muted: #6b6b68;
-      --accent: #4f6ef7;
-      --accent-soft: #e8ecff;
-      --today: #e03030;
-      --star: #f0a500;
-      --radius: 12px;
+      --fill: #eeeef1;
+      --border: #e2e2e6;
+      --text: #1f1f23;
+      --muted: #5c5c66;
+      --accent: #5f53d9;
+      --on-accent: #ffffff;
+      --wave: #175aa8;
+      --tint: #e6f2fd;
+      --dot: #d6d6dc;
+      --shadow: 0 30px 80px -30px rgba(23, 34, 80, .35), 0 2px 6px rgba(0, 0, 0, .05);
+      --blue: #2457c5; --purple: #7442c8; --teal: #08695f; --amber: #854c00;
+      --rose: #a8244f; --green: #116633; --indigo: #5f53d9;
+      --radius: 14px;
+      --radius-sm: 10px;
     }
     @media (prefers-color-scheme: dark) {
       :root {
         --bg: #121214;
         --surface: #1c1c20;
-        --border: #2c2c32;
-        --text: #ededed;
-        --muted: #9a9aa2;
-        --accent-soft: #23294a;
+        --fill: #26262b;
+        --border: #323238;
+        --text: #ececf1;
+        --muted: #a1a1aa;
+        --accent: #9a92f2;
+        --on-accent: #141416;
+        --wave: #9ccbf7;
+        --tint: #1a3352;
+        --dot: #2a2a30;
+        --shadow: 0 30px 80px -30px rgba(0, 0, 0, .8), 0 2px 6px rgba(0, 0, 0, .3);
+        --blue: #7aa8ff; --purple: #b89cff; --teal: #46d0bf; --amber: #f2b347;
+        --rose: #ff7f9f; --green: #3ecf8e; --indigo: #9a92f2;
       }
     }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; scroll-padding-top: 76px; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      font-family: 'DM Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-size: 17px;
       line-height: 1.55;
+      color: var(--text);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
+    img { max-width: 100%; height: auto; display: block; }
     a { color: inherit; }
-    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+    .wrap { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+    .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
-    /* Nav */
-    nav { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 85%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
-    nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; }
-    .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; text-decoration: none; letter-spacing: .02em; }
-    .brand img { width: 26px; height: 26px; }
-    .brand span { font-size: 11px; font-weight: 700; color: var(--accent); background: var(--accent-soft); padding: 2px 7px; border-radius: 99px; }
-    nav ul { display: flex; gap: 24px; list-style: none; font-size: 14px; }
-    nav ul a { text-decoration: none; color: var(--muted); }
-    nav ul a:hover { color: var(--text); }
-
-    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 10px; font-weight: 600; font-size: 15px; text-decoration: none; border: 1px solid transparent; transition: transform .15s, box-shadow .15s; }
-    .btn:hover { transform: translateY(-1px); }
-    .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 6px 20px -8px var(--accent); }
-    .btn-ghost { border-color: var(--border); background: var(--surface); }
-    .btn-sm { padding: 8px 14px; font-size: 13px; }
-
-    /* Hero */
-    .hero { padding: 80px 0 40px; display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; align-items: center; }
-    .eyebrow { font-size: 13px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: .1em; }
-    h1 { font-size: clamp(36px, 5vw, 56px); line-height: 1.08; letter-spacing: -.02em; margin: 12px 0 18px; }
-    .lead { font-size: 18px; color: var(--muted); max-width: 46ch; }
-    .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
-    .fine { font-size: 13px; color: var(--muted); margin-top: 14px; }
-
-    /* Mock calendar */
-    .mock { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: 0 30px 60px -30px rgba(0,0,0,.35); overflow: hidden; }
-    .mock-bar { height: 34px; display: flex; align-items: center; gap: 6px; padding: 0 12px; border-bottom: 1px solid var(--border); font-size: 12px; color: var(--muted); font-weight: 600; }
-    .mock-bar img { width: 14px; opacity: .6; }
-    .mock-month { display: flex; justify-content: space-between; padding: 12px 14px 6px; font-weight: 700; font-size: 14px; }
-    .grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; padding: 6px 12px 14px; }
-    .cell { aspect-ratio: 1; border-radius: 6px; background: var(--bg); position: relative; font-size: 10px; padding: 4px; color: var(--muted); overflow: hidden; }
-    .cell.img { color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.5); }
-    .cell.today { outline: 2px solid var(--today); outline-offset: -2px; }
-    .cell .badge { position: absolute; right: 3px; bottom: 3px; background: rgba(0,0,0,.55); color: #fff; border-radius: 99px; font-size: 9px; padding: 0 5px; }
-
-    /* Sections */
-    section { padding: 72px 0; }
-    h2 { font-size: clamp(28px, 3.5vw, 38px); letter-spacing: -.015em; line-height: 1.15; }
-    .section-head { max-width: 620px; margin-bottom: 40px; }
-    .section-head p { color: var(--muted); margin-top: 12px; font-size: 17px; }
-
-    .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
-    .card .ico { width: 38px; height: 38px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; margin-bottom: 14px; }
-    .card h3 { font-size: 17px; margin-bottom: 6px; }
-    .card p { color: var(--muted); font-size: 15px; }
-
-    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
-    .split ul { list-style: none; margin-top: 20px; display: grid; gap: 10px; }
-    .split li { padding-left: 26px; position: relative; color: var(--muted); }
-    .split li::before { content: ""; position: absolute; left: 0; top: 7px; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); }
-    .clock-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; display: grid; place-items: center; }
-    .clock-wrap svg { width: 100%; max-width: 340px; height: auto; }
-
-    .privacy { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 36px; }
-    .stat { border-left: 3px solid var(--accent); padding-left: 14px; }
-    .stat b { display: block; font-size: 22px; }
-    .stat span { color: var(--muted); font-size: 14px; }
-
-    table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; font-size: 15px; }
-    td { padding: 12px 16px; border-bottom: 1px solid var(--border); }
-    tr:last-child td { border-bottom: 0; }
-    td:last-child { text-align: right; }
-    kbd { font-family: ui-monospace, Consolas, monospace; font-size: 12px; background: var(--bg); border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 5px; padding: 1px 6px; }
-
-    .final { text-align: center; }
-    .final .cta { justify-content: center; }
-    footer { padding: 32px 0; border-top: 1px solid var(--border); color: var(--muted); font-size: 14px; }
-    footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-
-    @media (max-width: 860px) {
-      .hero, .split { grid-template-columns: 1fr; }
-      .features { grid-template-columns: 1fr 1fr; }
-      .stats { grid-template-columns: 1fr 1fr; }
-      nav ul { display: none; }
-      .hero { padding-top: 48px; }
+    kbd {
+      font-family: inherit; font-size: .78em; font-weight: 600;
+      padding: 1px 6px; border-radius: 5px;
+      background: var(--fill); border: 1px solid var(--border); border-bottom-width: 2px;
+      white-space: nowrap;
     }
-    @media (max-width: 560px) {
-      .features { grid-template-columns: 1fr; }
+
+    /* ── Nav ── */
+    .nav {
+      position: sticky; top: 0; z-index: 20;
+      background: color-mix(in srgb, var(--bg) 82%, transparent);
+      backdrop-filter: saturate(1.4) blur(12px);
+      -webkit-backdrop-filter: saturate(1.4) blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav .wrap { display: flex; align-items: center; gap: 28px; height: 64px; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 700; font-size: 18px; letter-spacing: -.01em; }
+    .brand img { width: 38px; height: auto; }
+    .brand em { font-style: normal; font-weight: 500; color: var(--muted); }
+    .nav ul { display: flex; gap: 26px; list-style: none; margin-left: auto; font-size: 15px; }
+    .nav ul a { text-decoration: none; color: var(--muted); transition: color .15s; }
+    .nav ul a:hover { color: var(--text); }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+      padding: 13px 22px; border-radius: 11px; border: 1px solid transparent;
+      font: inherit; font-weight: 600; font-size: 16px; text-decoration: none; cursor: pointer;
+      transition: transform .15s, box-shadow .15s, background .15s;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--accent); color: var(--on-accent); box-shadow: 0 10px 24px -12px var(--accent); }
+    .btn-ghost { background: var(--surface); border-color: var(--border); }
+    .btn-sm { padding: 9px 16px; font-size: 14px; border-radius: 9px; }
+
+    /* ── Hero ── */
+    .hero { position: relative; padding: 84px 0 0; text-align: center; }
+    .hero::before {
+      content: ""; position: absolute; inset: 0 0 auto 0; height: 720px; z-index: -1;
+      background-image: radial-gradient(var(--dot) 1.2px, transparent 1.2px);
+      background-size: 22px 22px;
+      -webkit-mask-image: radial-gradient(70% 70% at 50% 20%, #000 30%, transparent 100%);
+              mask-image: radial-gradient(70% 70% at 50% 20%, #000 30%, transparent 100%);
+    }
+    .pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 99px; font-size: 14px; font-weight: 600;
+      color: var(--wave); background: var(--tint);
+    }
+    .pill i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    h1 {
+      font-size: clamp(40px, 6.4vw, 76px); line-height: 1.04; letter-spacing: -.025em; font-weight: 700;
+      max-width: 15ch; margin: 22px auto 22px;
+    }
+    h1 span { background: linear-gradient(100deg, #1481d6, #4b3fc9 55%, #23276e); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    @media (prefers-color-scheme: dark) { h1 span { background-image: linear-gradient(100deg, #8fe0ff, #7aa8ff 50%, #9a92f2); } }
+    .lead { font-size: clamp(18px, 2vw, 21px); color: var(--muted); max-width: 60ch; margin: 0 auto; }
+    .cta { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 32px; }
+    .fine { font-size: 14px; color: var(--muted); margin-top: 16px; }
+
+    .shot { position: relative; margin-top: 60px; }
+    .hero .shot::before {
+      content: ""; position: absolute; inset: 8% 5% -3%; z-index: -1; filter: blur(60px); opacity: .38;
+      background: linear-gradient(100deg, #1481d6, #5f53d9 60%, #23276e);
+    }
+    .frame {
+      border-radius: var(--radius); overflow: hidden;
+      border: 1px solid var(--border); background: #fff; box-shadow: var(--shadow);
+    }
+
+    .facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 64px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .facts div { padding: 26px 12px; text-align: center; border-left: 1px solid var(--border); }
+    .facts div:first-child { border-left: 0; }
+    .facts b { display: block; font-size: 34px; letter-spacing: -.02em; line-height: 1.1; }
+    .facts span { color: var(--muted); font-size: 15px; }
+
+    /* ── Sections ── */
+    section { padding: 112px 0; }
+    .eyebrow { font-size: 14px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--accent); }
+    h2 { font-size: clamp(30px, 4.2vw, 48px); line-height: 1.1; letter-spacing: -.02em; font-weight: 700; margin-top: 10px; }
+    .head { max-width: 680px; margin-bottom: 48px; }
+    .head p { color: var(--muted); font-size: 19px; margin-top: 16px; }
+
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 26px; }
+    .card h3 { font-size: 18px; letter-spacing: -.01em; margin-bottom: 6px; }
+    .card p { color: var(--muted); font-size: 16px; }
+    .ico {
+      width: 40px; height: 40px; border-radius: 11px; display: grid; place-items: center; margin-bottom: 16px;
+      color: var(--hue, var(--accent)); background: color-mix(in srgb, var(--hue, var(--accent)) 13%, transparent);
+    }
+    svg.i { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ── Lenses ── */
+    .lens { display: grid; grid-template-columns: 250px 1fr; gap: 20px; align-items: start; }
+    .lens-tabs { display: none; flex-direction: column; gap: 4px; }
+    .js .lens-tabs { display: flex; }
+    .lens-tab {
+      display: flex; align-items: center; gap: 12px; width: 100%;
+      padding: 9px 10px; border-radius: 12px; border: 1px solid transparent; background: none;
+      font: inherit; font-weight: 600; color: var(--muted); text-align: left; cursor: pointer;
+      transition: background .15s, color .15s;
+    }
+    .lens-tab .ico { width: 36px; height: 36px; margin: 0; flex: none; }
+    .lens-tab:hover { color: var(--text); }
+    .lens-tab[aria-selected="true"] { background: var(--surface); border-color: var(--border); color: var(--text); box-shadow: 0 4px 14px -8px rgba(0, 0, 0, .25); }
+    .lens-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 34px; }
+    .lens-panel + .lens-panel { margin-top: 16px; }
+    .js .lens-panel + .lens-panel { margin-top: 0; }
+    .js .lens-panel[hidden] { display: none; }
+    .lens-panel header { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+    .lens-panel header .ico { margin: 0; width: 46px; height: 46px; border-radius: 13px; }
+    .lens-panel h3 { font-size: 26px; letter-spacing: -.02em; line-height: 1.1; }
+    .lens-panel header span { color: var(--muted); font-size: 15px; }
+    .lens-panel > p { color: var(--muted); max-width: 62ch; }
+    .ticks { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 28px; margin-top: 22px; }
+    .ticks li { position: relative; padding-left: 26px; font-size: 16px; }
+    .ticks li::before {
+      content: ""; position: absolute; left: 2px; top: .42em; width: 11px; height: 6px;
+      border-left: 2px solid var(--hue, var(--accent)); border-bottom: 2px solid var(--hue, var(--accent));
+      transform: rotate(-45deg);
+    }
+    figure.shot-sm { margin: 40px auto 0; max-width: 1000px; }
+    figcaption { text-align: center; color: var(--muted); font-size: 14px; margin-top: 14px; }
+
+    /* ── Boards ── */
+    .split { display: grid; grid-template-columns: 1fr 1.3fr; gap: 56px; align-items: center; }
+    .split h2 { font-size: clamp(28px, 3.4vw, 40px); }
+    .list { list-style: none; display: grid; gap: 18px; }
+    .list li { padding-left: 18px; border-left: 2px solid var(--border); }
+    .list b { display: block; }
+    .list span { color: var(--muted); font-size: 16px; }
+
+    /* ── AI band (always dark) ── */
+    .ink {
+      --bg: #101014; --surface: #1a1a20; --fill: #24242b; --border: #2f2f38; --text: #ececf1; --muted: #a4a4b0;
+      --accent: #9a92f2; --on-accent: #141416; --wave: #9ccbf7; --tint: #1a3352;
+      --blue: #7aa8ff; --purple: #b89cff; --teal: #46d0bf; --amber: #f2b347; --rose: #ff7f9f; --green: #3ecf8e; --indigo: #9a92f2;
+      background: var(--bg); color: var(--text); position: relative; overflow: hidden;
+    }
+    .ink::before {
+      content: ""; position: absolute; left: 50%; top: -260px; width: 900px; height: 520px; transform: translateX(-50%);
+      background: radial-gradient(closest-side, rgba(95, 83, 217, .38), transparent); pointer-events: none;
+    }
+    .ink .wrap { position: relative; }
+    .ink .head { margin-left: auto; margin-right: auto; text-align: center; }
+    .prompt {
+      display: flex; align-items: center; gap: 12px; max-width: 640px; margin: 0 auto 56px;
+      padding: 16px 18px; border-radius: 14px; background: var(--surface); border: 1px solid var(--border);
+      box-shadow: 0 0 0 5px rgba(154, 146, 242, .1), 0 24px 60px -24px #000; font-size: 18px; min-height: 62px;
+    }
+    .prompt svg { color: var(--accent); flex: none; }
+    .prompt .typed { flex: 1; text-align: left; white-space: nowrap; overflow: hidden; }
+    .prompt .caret { display: inline-block; width: 2px; height: 1.1em; margin-left: 2px; background: var(--accent); vertical-align: -.18em; animation: blink 1s steps(2) infinite; }
+    .prompt .keys { display: flex; gap: 4px; flex: none; }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .levels { display: grid; grid-template-columns: 1fr 1.35fr; gap: 48px; align-items: center; margin-top: 72px; padding-top: 72px; border-top: 1px solid var(--border); }
+    .levels h3 { font-size: 28px; letter-spacing: -.02em; line-height: 1.15; }
+    .levels > div > p { color: var(--muted); margin-top: 14px; }
+    .levels code { font-family: Consolas, ui-monospace, monospace; font-size: .9em; background: var(--fill); padding: 1px 6px; border-radius: 5px; }
+    .steps { list-style: none; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .steps li { display: grid; grid-template-columns: 124px 1fr; gap: 16px; padding: 16px 20px; border-top: 1px solid var(--border); font-size: 16px; }
+    .steps li:first-child { border-top: 0; }
+    .steps b { display: flex; align-items: center; gap: 9px; align-self: start; }
+    .steps b::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--hue); flex: none; }
+    .steps span { color: var(--muted); }
+
+    /* ── Skins ── */
+    .skins { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .skin { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .skin-body { padding: 22px 24px 24px; }
+    .skin-body h3 { font-size: 19px; }
+    .skin-body p { color: var(--muted); font-size: 16px; margin-top: 4px; }
+    .mini { height: 170px; padding: 16px; display: grid; grid-template-columns: 1fr 1.6fr; grid-template-rows: 1fr 1fr; gap: 9px; }
+    .mini i { border-radius: 7px; background: var(--p); border: 1px solid var(--pb); position: relative; }
+    .mini i:nth-child(2) { grid-row: span 2; }
+    .mini i::before { content: ""; position: absolute; left: 10px; top: 10px; width: 42%; height: 5px; border-radius: 3px; background: var(--a); opacity: .9; }
+    .mini i::after { content: ""; position: absolute; left: 10px; right: 10px; top: 24px; height: 4px; border-radius: 3px; background: var(--l); box-shadow: 0 10px 0 var(--l), 0 20px 0 var(--l); }
+    .mini.studio { background-color: #e6e6ea; background-image: radial-gradient(#cfcfd6 1px, transparent 1px); background-size: 12px 12px; --p: #fff; --pb: #e4e4e7; --a: #5f53d9; --l: #e4e4e9; }
+    .mini.classic { background: linear-gradient(160deg, #d9efe9, #bfe0d8); --p: linear-gradient(180deg, #fbfffe, #eaf6f2); --pb: #b3d6cc; --a: #0f7a69; --l: #cfe6df; }
+    .mini.glass { background: linear-gradient(140deg, #23276e, #1481d6 45%, #f29d7e 100%); --p: rgba(255, 255, 255, .2); --pb: rgba(255, 255, 255, .38); --a: #fff; --l: rgba(255, 255, 255, .38); }
+    .mini.glass i { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+    .also { margin-top: 20px; color: var(--muted); font-size: 16px; text-align: center; }
+
+    /* ── Privacy ── */
+    .privacy { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .privacy .split { grid-template-columns: 1fr 1.1fr; align-items: start; }
+    .path { display: inline-block; margin-top: 22px; padding: 10px 16px; border-radius: 10px; background: var(--fill); border: 1px solid var(--border); font-family: Consolas, ui-monospace, monospace; font-size: 16px; }
+
+    /* ── Pricing ── */
+    .pricing .head { margin-left: auto; margin-right: auto; text-align: center; }
+    .plans { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 780px; margin: 0 auto; }
+    .plan { position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 32px; display: flex; flex-direction: column; }
+    .plan.best { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 24px 60px -30px var(--accent); }
+    .plan .tag { position: absolute; top: -13px; right: 24px; padding: 3px 12px; border-radius: 99px; font-size: 13px; font-weight: 700; background: var(--accent); color: var(--on-accent); }
+    .plan h3 { font-size: 17px; color: var(--muted); font-weight: 600; }
+    .price { font-size: 56px; font-weight: 700; letter-spacing: -.025em; line-height: 1.1; margin-top: 6px; }
+    .price small { font-size: 17px; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+    .plan .note { color: var(--muted); font-size: 15px; min-height: 1.6em; }
+    .plan .ticks { grid-template-columns: 1fr; margin: 22px 0 28px; }
+    .plan .btn { margin-top: auto; }
+    .under { text-align: center; color: var(--muted); font-size: 15px; margin-top: 22px; }
+
+    /* ── FAQ ── */
+    .faq { max-width: 780px; margin: 0 auto; }
+    .faq details { border-bottom: 1px solid var(--border); }
+    .faq summary { list-style: none; cursor: pointer; padding: 20px 36px 20px 0; font-weight: 600; font-size: 18px; position: relative; }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after { content: "+"; position: absolute; right: 4px; top: 50%; transform: translateY(-50%); font-size: 24px; font-weight: 400; color: var(--muted); transition: transform .2s; }
+    .faq details[open] summary::after { transform: translateY(-50%) rotate(45deg); }
+    .faq details p { color: var(--muted); padding: 0 36px 22px 0; }
+    .faq a { color: var(--accent); }
+
+    /* ── Final + footer ── */
+    .final { text-align: center; padding-top: 40px; }
+    .final img { width: 96px; margin: 0 auto 20px; }
+    .final h2 { max-width: 18ch; margin-left: auto; margin-right: auto; }
+    footer { border-top: 1px solid var(--border); padding: 32px 0 44px; color: var(--muted); font-size: 15px; }
+    footer .wrap { display: flex; flex-wrap: wrap; gap: 10px 28px; justify-content: space-between; }
+    footer nav { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+    footer a { text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    /* ── Responsive ── */
+    @media (max-width: 960px) {
+      .nav ul { display: none; }
+      .nav .btn { margin-left: auto; }
+      .cards, .skins { grid-template-columns: 1fr 1fr; }
+      .split, .privacy .split, .levels { grid-template-columns: 1fr; gap: 36px; }
+      .lens { grid-template-columns: 1fr; }
+      .js .lens-tabs { flex-direction: row; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; margin: 0 -24px; padding-left: 24px; padding-right: 24px; }
+      .lens-tabs::-webkit-scrollbar { display: none; }
+      .lens-tab { width: auto; flex: none; padding-right: 16px; }
+      section { padding: 80px 0; }
+    }
+    @media (max-width: 640px) {
+      body { font-size: 16px; }
+      .wrap { padding: 0 16px; }
+      .js .lens-tabs { margin: 0 -16px; padding-left: 16px; padding-right: 16px; }
+      .hero { padding-top: 52px; }
+      .cards, .skins, .plans, .ticks { grid-template-columns: 1fr; }
+      .facts { grid-template-columns: 1fr 1fr; }
+      .facts div:nth-child(3) { border-left: 0; }
+      .facts div:nth-child(n+3) { border-top: 1px solid var(--border); }
+      .lens-panel { padding: 24px; }
+      .steps li { grid-template-columns: 1fr; gap: 4px; }
+      .prompt { font-size: 15px; padding: 14px; }
+      .prompt .keys { display: none; }
+      .cta .btn { width: 100%; }
+      .shot { margin-top: 44px; }
+      section { padding: 64px 0; }
+      .levels { margin-top: 56px; padding-top: 56px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { transition: none !important; animation: none !important; }
     }
   </style>
 </head>
 <body>
 
-<nav>
+<!-- Inline icon set -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-people" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 19c.6-3.4 3-5 6-5s5.4 1.6 6 5"/><path d="M16 5.2a3.2 3.2 0 0 1 0 5.6M18 14.4c1.7.7 2.7 2.2 3 4.6"/></symbol>
+  <symbol id="i-time" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></symbol>
+  <symbol id="i-manager" viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="16" rx="1.2"/><rect x="9.5" y="4" width="5" height="10" rx="1.2"/><rect x="16" y="4" width="5" height="13" rx="1.2"/></symbol>
+  <symbol id="i-money" viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M16.5 8.2c-.6-1.5-2.2-2.4-4.5-2.4-2.6 0-4.3 1.2-4.3 3.1 0 4.3 9 2.1 9 6.5 0 1.9-1.8 3.2-4.7 3.2-2.4 0-4.1-.9-4.8-2.5"/></symbol>
+  <symbol id="i-materials" viewBox="0 0 24 24"><path d="M3.5 7.5 12 3l8.5 4.5v9L12 21l-8.5-4.5z"/><path d="M3.5 7.5 12 12l8.5-4.5M12 12v9"/></symbol>
+  <symbol id="i-scope" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h4.2l2 2.2h8.8a1.5 1.5 0 0 1 1.5 1.5V18a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18z"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></symbol>
+  <symbol id="i-drag" viewBox="0 0 24 24"><rect x="3" y="8" width="11" height="8" rx="2"/><path d="M17.5 12H21m0 0-2.5-2.5M21 12l-2.5 2.5"/></symbol>
+  <symbol id="i-repeat" viewBox="0 0 24 24"><path d="M4 11V9.5a3 3 0 0 1 3-3h12m0 0-3-3m3 3-3 3M20 13v1.5a3 3 0 0 1-3 3H5m0 0 3 3m-3-3 3-3"/></symbol>
+  <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M3 13.5 5.8 5.5h12.4l2.8 8v5H3z"/><path d="M3 13.5h5.2l1.3 2.5h5l1.3-2.5H21"/></symbol>
+  <symbol id="i-photo" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="2"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="m4 17.5 5-5 3.5 3.5 2.5-2.5 5 4.5"/></symbol>
+  <symbol id="i-tabs" viewBox="0 0 24 24"><path d="M3 9.5V7a2 2 0 0 1 2-2h4.5a2 2 0 0 1 2 2v2.5"/><path d="M11.5 9.5V7.5a2 2 0 0 1 2-2H18a2 2 0 0 1 2 2v2"/><rect x="3" y="9.5" width="18" height="10" rx="2"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3.5 13.8 9l5.7 1.8-5.7 1.8L12 18.5l-1.8-5.9-5.7-1.8L10.2 9z"/><path d="M19 3v3M17.5 4.5h3M5 17.5v3M3.5 19h3"/></symbol>
+  <symbol id="i-clockrun" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9.5 2.5h5"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="m11 12 8.5-8.5M16 7l2.5 2.5M19 4l1.5 1.5"/></symbol>
+  <symbol id="i-term" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="m7 9.5 3 2.5-3 2.5M12.5 15h4.5"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 3.5v11m0 0-4.5-4.5m4.5 4.5 4.5-4.5M4.5 20h15"/></symbol>
+</svg>
+
+<nav class="nav" aria-label="Main">
   <div class="wrap">
-    <a class="brand" href="#"><img src="assets/icon.png" alt="">Caldera <span>PRO</span></a>
+    <a class="brand" href="#top">
+      <picture>
+        <source srcset="assets/logo-dk.png" media="(prefers-color-scheme: dark)">
+        <img src="assets/logo.png" width="320" height="196" alt="">
+      </picture>
+      <span>Caldera <em>Pro</em></span>
+    </a>
     <ul>
-      <li><a href="#features">Features</a></li>
-      <li><a href="#clock">Clock scheduler</a></li>
+      <li><a href="#lenses">Lenses</a></li>
+      <li><a href="#boards">Boards</a></li>
+      <li><a href="#ai">AI</a></li>
       <li><a href="#privacy">Privacy</a></li>
-      <li><a href="#controls">Controls</a></li>
+      <li><a href="#pricing">Pricing</a></li>
     </ul>
-    <a class="btn btn-primary btn-sm" href="#download">Download</a>
+    <a class="btn btn-primary btn-sm" href="https://downloads.zenfrogstudio.com/caldera/win/Caldera-Setup.exe">Download</a>
   </div>
 </nav>
 
-<header class="wrap hero">
-  <div>
-    <div class="eyebrow">Desktop calendar for Windows</div>
-    <h1>Your days,<br>in pictures.</h1>
-    <p class="lead">Caldera Pro turns your calendar into a visual timeline. Every day can hold a photo, every event its own image and notes — and it all stays on your machine.</p>
-    <div class="cta">
-      <a class="btn btn-primary" href="#download">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 21h16"/></svg>
-        Download for Windows
-      </a>
-      <a class="btn btn-ghost" href="#features">See features</a>
-    </div>
-    <p class="fine">Windows 10+ · 64-bit · No account required</p>
-  </div>
+<main id="top">
 
-  <div class="mock" aria-hidden="true">
-    <div class="mock-bar"><img src="assets/icon.png" alt="">CALDERA</div>
-    <div class="mock-month"><span>November 2026</span><span style="color:var(--muted)">‹ ›</span></div>
-    <div class="grid" id="grid"></div>
+<header class="hero">
+  <div class="wrap">
+    <span class="pill"><i></i>Local-first · For Windows · AI built in</span>
+    <h1>The calendar that runs your <span>whole project.</span></h1>
+    <p class="lead">Plan your week on a drag-and-drop timeline, see a project through seven lenses, and build your own boards out of panels. Everything lives on your own machine.</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="https://downloads.zenfrogstudio.com/caldera/win/Caldera-Setup.exe">
+        <svg class="i"><use href="#i-down"/></svg>Download for Windows
+      </a>
+      <a class="btn btn-ghost" href="#pricing">See pricing</a>
+    </div>
+    <p class="fine">Free for 30 days · No card needed · Windows 10 or later, 64-bit</p>
+
+    <div class="shot">
+      <div class="frame">
+        <img src="assets/time-week.webp" width="1600" height="1060" alt="Caldera Pro's Time lens: a task inbox and scheduled tasks beside a week timeline of colour-coded time blocks, with sub-tasks below.">
+      </div>
+    </div>
+
+    <div class="facts">
+      <div><b>7</b><span>project lenses</span></div>
+      <div><b>31</b><span>built-in panels</span></div>
+      <div><b>3</b><span>skins, light and dark</span></div>
+      <div><b>0</b><span>telemetry, no cloud sync</span></div>
+    </div>
   </div>
 </header>
 
-<section id="features">
+<section id="calendar">
   <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow">Features</div>
-      <h2>A calendar that treats images as first-class data.</h2>
-      <p>See a whole month at a glance — not as text, but as the moments that filled it.</p>
+    <div class="head">
+      <div class="eyebrow">Calendar and schedule</div>
+      <h2>A week you can pick up and move.</h2>
+      <p>Draw a time block by dragging. Drag it again to move it, even to another day. That's most of what you need to know.</p>
     </div>
-    <div class="features">
-      <div class="card">
-        <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg></div>
-        <h3>Visual calendar grid</h3>
-        <p>Each day shows a cover image. Hover a day to watch all its photos scroll past in a seamless loop.</p>
+    <div class="cards">
+      <article class="card" style="--hue:var(--blue)">
+        <div class="ico"><svg class="i"><use href="#i-cal"/></svg></div>
+        <h3>Year, Month, Week and Day</h3>
+        <p>Four views of the same plan. The Month grid shows either your photo events or your scheduled tasks.</p>
+      </article>
+      <article class="card" style="--hue:var(--purple)">
+        <div class="ico"><svg class="i"><use href="#i-drag"/></svg></div>
+        <h3>Week timeline</h3>
+        <p>Move a block, resize it, or zoom the timeline in and out. Every block carries its own sub-tasks and notes.</p>
+      </article>
+      <article class="card" style="--hue:var(--rose)">
+        <div class="ico"><svg class="i"><use href="#i-repeat"/></svg></div>
+        <h3>Repeats and deadlines</h3>
+        <p>Repeat daily, weekly, monthly, on weekdays or weekends. Flag a deadline and it gets a red outline everywhere it shows.</p>
+      </article>
+      <article class="card" style="--hue:var(--amber)">
+        <div class="ico"><svg class="i"><use href="#i-inbox"/></svg></div>
+        <h3>Task inbox</h3>
+        <p>Jot down tasks with no time yet, then drag them onto the timeline when you're ready.</p>
+      </article>
+      <article class="card" style="--hue:var(--teal)">
+        <div class="ico"><svg class="i"><use href="#i-photo"/></svg></div>
+        <h3>Photo days</h3>
+        <p>Paste an image onto a day with <kbd>Ctrl</kbd> <kbd>V</kbd> to turn it into an event. Caldera reads any text in the photo on your computer, with no internet.</p>
+      </article>
+      <article class="card" style="--hue:var(--green)">
+        <div class="ico"><svg class="i"><use href="#i-tabs"/></svg></div>
+        <h3>A tab for every project</h3>
+        <p>Each project opens in its own browser-style tab, with its own calendar and data.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="lenses" style="padding-top:0">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">Seven project lenses</div>
+      <h2>One project. Seven ways to look at it.</h2>
+      <p>A row of icons switches the whole window between seven views of the current project: people, time, tasks, money, materials, scope and information.</p>
+    </div>
+
+    <div class="lens">
+      <div class="lens-tabs" role="tablist" aria-label="Project lenses">
+        <button class="lens-tab" role="tab" id="t-people" aria-controls="p-people" aria-selected="true" style="--hue:var(--blue)"><span class="ico"><svg class="i"><use href="#i-people"/></svg></span>People</button>
+        <button class="lens-tab" role="tab" id="t-time" aria-controls="p-time" aria-selected="false" tabindex="-1" style="--hue:var(--indigo)"><span class="ico"><svg class="i"><use href="#i-time"/></svg></span>Time</button>
+        <button class="lens-tab" role="tab" id="t-manager" aria-controls="p-manager" aria-selected="false" tabindex="-1" style="--hue:var(--purple)"><span class="ico"><svg class="i"><use href="#i-manager"/></svg></span>Manager</button>
+        <button class="lens-tab" role="tab" id="t-money" aria-controls="p-money" aria-selected="false" tabindex="-1" style="--hue:var(--green)"><span class="ico"><svg class="i"><use href="#i-money"/></svg></span>Money</button>
+        <button class="lens-tab" role="tab" id="t-materials" aria-controls="p-materials" aria-selected="false" tabindex="-1" style="--hue:var(--amber)"><span class="ico"><svg class="i"><use href="#i-materials"/></svg></span>Materials</button>
+        <button class="lens-tab" role="tab" id="t-scope" aria-controls="p-scope" aria-selected="false" tabindex="-1" style="--hue:var(--rose)"><span class="ico"><svg class="i"><use href="#i-scope"/></svg></span>Scope</button>
+        <button class="lens-tab" role="tab" id="t-info" aria-controls="p-info" aria-selected="false" tabindex="-1" style="--hue:var(--teal)"><span class="ico"><svg class="i"><use href="#i-info"/></svg></span>Information</button>
       </div>
-      <div class="card">
-        <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.8z"/></svg></div>
-        <h3>Unlimited events per day</h3>
-        <p>Give every event its own image, time and notes. Star one to make it the day's cover.</p>
+
+      <div class="lens-panels">
+        <article class="lens-panel" role="tabpanel" id="p-people" aria-labelledby="t-people" style="--hue:var(--blue)">
+          <header><div class="ico"><svg class="i"><use href="#i-people"/></svg></div><div><h3>People</h3><span>Who is on the project</span></div></header>
+          <p>One shared address book for every project, with photos, several emails and phones, and qualifications.</p>
+          <ul class="ticks">
+            <li>Import from vCard or CSV, export to .vcf</li>
+            <li>Group people into teams with a lead</li>
+            <li>Email panel on your own account, with reply and compose</li>
+            <li>Chat panel: a Matrix client with encrypted rooms</li>
+          </ul>
+        </article>
+        <article class="lens-panel" role="tabpanel" id="p-time" aria-labelledby="t-time" style="--hue:var(--indigo)">
+          <header><div class="ico"><svg class="i"><use href="#i-time"/></svg></div><div><h3>Time</h3><span>When it all happens</span></div></header>
+          <p>The Schedule on top: your plan as a Gantt chart, with the calendar, task inbox, scheduled tasks and sub-tasks under it.</p>
+          <ul class="ticks">
+            <li>Day, Week, Month and Year timeline</li>
+            <li>Decision gates, tentative and fixed lines</li>
+            <li>Lookahead and Risks</li>
+            <li>Every dated line paired with a Manager task</li>
+          </ul>
+        </article>
+        <article class="lens-panel" role="tabpanel" id="p-manager" aria-labelledby="t-manager" style="--hue:var(--purple)">
+          <header><div class="ico"><svg class="i"><use href="#i-manager"/></svg></div><div><h3>Manager</h3><span>What needs doing, and who does it</span></div></header>
+          <p>The same task list as a Kanban board, one column per section. Assign a card to a person, a team, or Claude Code.</p>
+          <ul class="ticks">
+            <li>Generate plan and Run now on every card</li>
+            <li>Chain Claude Code tasks into one run</li>
+            <li>Task detail shows the agent's reply and the files it changed</li>
+            <li>Outputs panel lists every task's latest result</li>
+          </ul>
+        </article>
+        <article class="lens-panel" role="tabpanel" id="p-money" aria-labelledby="t-money" style="--hue:var(--green)">
+          <header><div class="ico"><svg class="i"><use href="#i-money"/></svg></div><div><h3>Money</h3><span>What it costs</span></div></header>
+          <p>Budgets with income, assets, liabilities, bills, expenses and goals, plus a live summary.</p>
+          <ul class="ticks">
+            <li>Several budgets per project</li>
+            <li>Wallet panel for your own Avalanche wallet (AVAX and USDC)</li>
+            <li>Write the wallet total into a budget line</li>
+          </ul>
+        </article>
+        <article class="lens-panel" role="tabpanel" id="p-materials" aria-labelledby="t-materials" style="--hue:var(--amber)">
+          <header><div class="ico"><svg class="i"><use href="#i-materials"/></svg></div><div><h3>Materials</h3><span>What you need to buy</span></div></header>
+          <p>Procurement lists with quantities, vendors, status and totals, and an AI wantlist that searches the web for listings you're hunting for.</p>
+          <ul class="ticks">
+            <li>Generate a list from a document, Excel included</li>
+            <li>Let AI price the list</li>
+            <li>Track each item from needed to received</li>
+            <li>Totals kept for you</li>
+          </ul>
+        </article>
+        <article class="lens-panel" role="tabpanel" id="p-scope" aria-labelledby="t-scope" style="--hue:var(--rose)">
+          <header><div class="ico"><svg class="i"><use href="#i-scope"/></svg></div><div><h3>Scope</h3><span>What the project includes</span></div></header>
+          <p>Stages and a numbered work breakdown with dates and % done. The same plan is the Schedule on the Time page, so you only keep one.</p>
+          <ul class="ticks">
+            <li>Stages and numbered work items</li>
+            <li>Dates and % done on every line</li>
+            <li>One plan, shared with the Schedule</li>
+          </ul>
+        </article>
+        <article class="lens-panel" role="tabpanel" id="p-info" aria-labelledby="t-info" style="--hue:var(--teal)">
+          <header><div class="ico"><svg class="i"><use href="#i-info"/></svg></div><div><h3>Information</h3><span>Where the files are</span></div></header>
+          <p>A files explorer for a real folder on your disk, with a viewer built in.</p>
+          <ul class="ticks">
+            <li>PDFs, images, audio and video</li>
+            <li>Markdown, text and code, Excel/CSV and Word</li>
+            <li>DXF drawings</li>
+            <li>A library of saved AI plans and a history of AI job runs</li>
+          </ul>
+        </article>
       </div>
-      <div class="card">
-        <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="8" y="3" width="8" height="4" rx="1"/><path d="M16 5h2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2"/></svg></div>
-        <h3>Paste, drop or pick</h3>
-        <p>Add images with <kbd>Ctrl</kbd>+<kbd>V</kbd>, drag files onto any day, or browse with the file picker.</p>
+    </div>
+
+    <figure class="shot shot-sm">
+      <div class="frame">
+        <img src="assets/people.webp" width="1600" height="1060" loading="lazy" alt="The People lens: a contact list, a team with its lead and members, and a contact card with role, company, email and phone.">
       </div>
-      <div class="card">
-        <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
-        <h3>Analog clock scheduler</h3>
-        <p>Click-drag arcs on a 12-hour ring to block out your day, with labels that curve along the arc.</p>
-      </div>
-      <div class="card">
-        <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></div>
-        <h3>Dark mode</h3>
-        <p>One click in the title bar. Your choice is remembered between sessions.</p>
-      </div>
-      <div class="card">
-        <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4M11 8v6M8 11h6"/></svg></div>
-        <h3>Full-resolution lightbox</h3>
-        <p>Open any image at full size for a closer look, right from the day view.</p>
+      <figcaption>The People lens: contacts, teams and a contact card.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="boards" style="padding-top:0">
+  <div class="wrap split">
+    <div>
+      <div class="eyebrow">Boards and panels</div>
+      <h2>Every lens is a board. Make your own.</h2>
+      <ul class="list" style="margin-top:28px">
+        <li><b>31 built-in panels</b><span>Put any lens view on any board: an inbox next to a Gantt chart, a budget next to a contact list.</span></li>
+        <li><b>HTML panels</b><span>Drop in an HTML file and it becomes a live mini-app. React, Tailwind, Chart.js, Recharts, D3 and more are built in.</span></li>
+        <li><b>Web page panels</b><span>Open any website inside a panel. Each one keeps its own logins.</span></li>
+        <li><b>AI panel builder</b><span>Lay out a panel or describe it, and let your own Claude Code or Codex build it for you.</span></li>
+        <li><b>Pop out, share and lock</b><span>Move a panel to its own window for a second screen, export it as a .calderapanel file, or padlock a board so nothing gets bumped.</span></li>
+      </ul>
+    </div>
+    <div class="shot" style="margin-top:0">
+      <div class="frame">
+        <img src="assets/custom-board.webp" width="1600" height="1060" loading="lazy" alt="A custom board with an hours-logged chart panel, a Gantt schedule, an inbox and a procurement list side by side.">
       </div>
     </div>
   </div>
 </section>
 
-<section id="clock">
-  <div class="wrap split">
-    <div>
-      <div class="eyebrow">Clock scheduler</div>
-      <h2>Plan your day on a clock face, not a list.</h2>
-      <p class="lead" style="margin-top:12px">Switch from the grid to an analog clock tied to the selected day. Time blocks are arcs you can see — so you know how much of the day is spoken for.</p>
-      <ul>
-        <li>Click-drag to create a block</li>
-        <li>Labels render as curved text along each arc</li>
-        <li>Colour-coded legend for quick edits and deletes</li>
-      </ul>
+<section id="ai" class="ink">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">AI built in</div>
+      <h2>Tell it what's next.</h2>
+      <p>Type a plain request and an AI agent carries it out, on the AI subscription you already have.</p>
     </div>
-    <div class="clock-wrap" aria-hidden="true">
-      <svg viewBox="0 0 200 200" id="clock-svg">
-        <circle cx="100" cy="100" r="92" fill="none" stroke="var(--border)" stroke-width="18"/>
-        <g id="arcs"></g>
-        <circle cx="100" cy="100" r="78" fill="var(--bg)"/>
-        <g id="ticks"></g>
-        <line x1="100" y1="100" x2="100" y2="52" stroke="var(--text)" stroke-width="3" stroke-linecap="round" transform="rotate(300 100 100)"/>
-        <line x1="100" y1="100" x2="100" y2="36" stroke="var(--text)" stroke-width="2" stroke-linecap="round" transform="rotate(60 100 100)"/>
-        <circle cx="100" cy="100" r="4" fill="var(--today)"/>
-      </svg>
+
+    <div class="prompt" aria-hidden="true">
+      <svg class="i"><use href="#i-spark"/></svg>
+      <span class="typed"><span id="typed">move Tuesday's inspection to Thursday</span><span class="caret"></span></span>
+      <span class="keys"><kbd>Ctrl</kbd><kbd>K</kbd></span>
     </div>
+    <p class="sr">Example requests: "move Tuesday's inspection to Thursday" or "add a budget line for paint".</p>
+
+    <div class="cards">
+      <article class="card" style="--hue:var(--indigo)">
+        <div class="ico"><svg class="i"><use href="#i-spark"/></svg></div>
+        <h3>"What's next?" prompt bar</h3>
+        <p>Press <kbd>Ctrl</kbd> <kbd>K</kbd> from anywhere in the main window and say what you want changed.</p>
+      </article>
+      <article class="card" style="--hue:var(--amber)">
+        <div class="ico"><svg class="i"><use href="#i-clockrun"/></svg></div>
+        <h3>Scheduled AI prompts</h3>
+        <p>Attach a prompt to a sub-task. The AI writes a plan, you review it, then it runs once, daily or weekly.</p>
+      </article>
+      <article class="card" style="--hue:var(--teal)">
+        <div class="ico"><svg class="i"><use href="#i-globe"/></svg></div>
+        <h3>AI event import</h3>
+        <p>Pull events from web pages or a web search into your calendar, with Claude, OpenAI or a local Ollama model.</p>
+      </article>
+      <article class="card" style="--hue:var(--rose)">
+        <div class="ico"><svg class="i"><use href="#i-mic"/></svg></div>
+        <h3>Voice input, offline</h3>
+        <p>Turn it on and a microphone button turns your speech into text on your PC, using a 61 MB English model downloaded once.</p>
+      </article>
+      <article class="card" style="--hue:var(--green)">
+        <div class="ico"><svg class="i"><use href="#i-key"/></svg></div>
+        <h3>Your own AI, no API key</h3>
+        <p>Run AI tasks through Claude Code, Codex or OpenCode on your existing subscription. Or use an API key instead.</p>
+      </article>
+      <article class="card" style="--hue:var(--blue)">
+        <div class="ico"><svg class="i"><use href="#i-term"/></svg></div>
+        <h3>Built-in terminal</h3>
+        <p>A real shell docked at the bottom of the window. Watch scheduled runs live.</p>
+      </article>
+    </div>
+
+    <div class="levels">
+      <div>
+        <div class="eyebrow">Agent access (MCP)</div>
+        <h3 style="margin-top:10px">Let Claude Desktop drive the app. You set how far.</h3>
+        <p>An agent on your computer can check your schedule, add tasks or fill in a budget. It works over a small server that only listens on your own machine (<code>127.0.0.1</code>), so nothing is exposed to the network.</p>
+      </div>
+      <ol class="steps">
+        <li style="--hue:#6b6b78"><b>Off</b><span>Nothing. The server doesn't run.</span></li>
+        <li style="--hue:var(--blue)"><b>Read only</b><span>See your projects, schedule and budgets, but change nothing.</span></li>
+        <li style="--hue:var(--amber)"><b>Read + write</b><span>Also add, edit and delete tasks, blocks, budgets and plans. <kbd>Ctrl</kbd> <kbd>Z</kbd> undoes its recent changes.</span></li>
+        <li style="--hue:var(--rose)"><b>Full</b><span>Also arm scheduled prompts and Manager task jobs, and start a research run or an AI import, which Caldera asks you to allow first.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="look">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">Look and feel</div>
+      <h2>Three skins, each in light and dark.</h2>
+    </div>
+    <div class="skins">
+      <article class="skin">
+        <div class="mini studio" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="skin-body"><h3>Studio</h3><p>The default. Clean panels on a dotted canvas.</p></div>
+      </article>
+      <article class="skin">
+        <div class="mini classic" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="skin-body"><h3>Classic</h3><p>Pick any colour and it builds the whole look from it.</p></div>
+      </article>
+      <article class="skin">
+        <div class="mini glass" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="skin-body"><h3>Glass</h3><p>See-through panels over your own photo or video, or one of eighteen built-in wallpapers.</p></div>
+      </article>
+    </div>
+    <p class="also">Plus app zoom from 70% to 150%, a zoom slider on every panel, and any installed font as the app font.</p>
   </div>
 </section>
 
 <section id="privacy" class="privacy">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow">Privacy</div>
-      <h2>Local only. Nothing leaves your computer.</h2>
-      <p>Events, images and preferences live in your local app data folder. No accounts, no cloud sync, no telemetry.</p>
-    </div>
-    <div class="stats">
-      <div class="stat"><b>0</b><span>accounts to create</span></div>
-      <div class="stat"><b>0</b><span>bytes sent online</span></div>
-      <div class="stat"><b>~150 MB</b><span>on disk</span></div>
-      <div class="stat"><b>~120 MB</b><span>RAM at runtime</span></div>
-    </div>
-  </div>
-</section>
-
-<section id="controls">
   <div class="wrap split">
     <div>
-      <div class="eyebrow">Controls</div>
-      <h2>Fast to learn. Faster to use.</h2>
-      <p class="lead" style="margin-top:12px">Everything is one click, one drag or one paste away.</p>
+      <div class="eyebrow">Private by design</div>
+      <h2>Your work stays on your machine.</h2>
+      <p style="color:var(--muted);font-size:19px;margin-top:16px">There is no telemetry and no cloud sync. Your whole workspace is a folder on your own computer.</p>
+      <span class="path">%APPDATA%\caldera</span>
     </div>
-    <table>
-      <tr><td>Open a day</td><td>Click any cell</td></tr>
-      <tr><td>Add image from clipboard</td><td>Click cell → <kbd>Ctrl</kbd>+<kbd>V</kbd></td></tr>
-      <tr><td>Add image from file</td><td>Drag onto cell</td></tr>
-      <tr><td>Set cover image</td><td>Click ★</td></tr>
-      <tr><td>Change month / year</td><td><kbd>‹</kbd> <kbd>›</kbd> / <kbd>«</kbd> <kbd>»</kbd></td></tr>
-      <tr><td>Create time block</td><td>Drag an arc on the clock</td></tr>
-    </table>
+    <ul class="list">
+      <li><b>Online only when you ask</b><span>Caldera reaches a service only when you use a feature that needs it: your AI provider, your mail server, your chat server, or the wallet's network. Installed copies also check for updates, with no install ID.</span></li>
+      <li><b>Backups without lifting a finger</b><span>A copy of your workspace is kept at each start: the last 10 starts, and one a day for 14 days.</span></li>
+      <li><b>Nothing gets written over</b><span>If the data file is ever damaged, Caldera keeps it and offers to put the newest good copy back.</span></li>
+      <li><b>Leave whenever you like</b><span>Settings › Data exports your workspace to a folder you choose, or erases everything Caldera stored.</span></li>
+    </ul>
   </div>
 </section>
 
-<section id="download" class="final">
+<section id="pricing" class="pricing">
   <div class="wrap">
-    <h2>Make your calendar worth looking at.</h2>
-    <p class="lead" style="margin:12px auto 0">Download Caldera Pro and run it — no installer required.</p>
-    <div class="cta">
-      <!-- TODO: point this at the real release download URL -->
-      <a class="btn btn-primary" href="#">Download for Windows</a>
+    <div class="head">
+      <div class="eyebrow">Pricing</div>
+      <h2>Free for 30 days. Then one plan.</h2>
+      <p>Try everything on each computer for 30 days, no card needed. Either plan covers up to 5 machines on one account.</p>
     </div>
-    <p class="fine">Unsigned build: if SmartScreen appears, choose <b>More info → Run anyway</b>.</p>
+    <div class="plans">
+      <div class="plan">
+        <h3>Monthly</h3>
+        <div class="price">$16 <small>/ month</small></div>
+        <p class="note">Billed monthly.</p>
+        <ul class="ticks">
+          <li>Every feature</li>
+          <li>Up to 5 machines on one account</li>
+          <li>Manage or cancel in Settings › Account</li>
+        </ul>
+        <a class="btn btn-ghost" href="https://downloads.zenfrogstudio.com/caldera/win/Caldera-Setup.exe">Start free trial</a>
+      </div>
+      <div class="plan best">
+        <span class="tag">Save $43 a year</span>
+        <h3>Yearly</h3>
+        <div class="price">$149 <small>/ year</small></div>
+        <p class="note">About $12.42 a month.</p>
+        <ul class="ticks">
+          <li>Every feature</li>
+          <li>Up to 5 machines on one account</li>
+          <li>Manage or cancel in Settings › Account</li>
+        </ul>
+        <a class="btn btn-primary" href="https://downloads.zenfrogstudio.com/caldera/win/Caldera-Setup.exe">Start free trial</a>
+      </div>
+    </div>
+    <p class="under">Download, use it free, then sign in and subscribe from Settings › Account when you're ready.</p>
   </div>
 </section>
+
+<section id="faq" style="padding-top:0">
+  <div class="wrap">
+    <div class="head" style="margin-left:auto;margin-right:auto;text-align:center">
+      <div class="eyebrow">Questions</div>
+      <h2>Good to know.</h2>
+    </div>
+    <div class="faq">
+      <details>
+        <summary>What do I need to run it?</summary>
+        <p>Windows 10 or later, 64-bit. Run the installer and choose whether to install for just you or for everyone on the PC.</p>
+      </details>
+      <details>
+        <summary>Do I need an AI subscription?</summary>
+        <p>No. The calendar, lenses and boards all work without one. The AI features are optional and use what you already have: Claude Code, Codex or OpenCode, Ollama for local models, or a Claude or OpenAI API key.</p>
+      </details>
+      <details>
+        <summary>Windows SmartScreen warned me. Is that expected?</summary>
+        <p>Yes. The installer isn't code-signed yet, so SmartScreen may warn you on first run. Click <b>More info › Run anyway</b>.</p>
+      </details>
+      <details>
+        <summary>How does it update?</summary>
+        <p>Caldera keeps itself up to date. Settings › Account › Updates picks Automatic (download in the background, install when you quit) or Manual.</p>
+      </details>
+      <details>
+        <summary>What happens to my data if I uninstall?</summary>
+        <p>Uninstalling leaves your workspace folder in place. To remove it, use Settings › Data to erase everything Caldera stored.</p>
+      </details>
+      <details>
+        <summary>Is there a free version?</summary>
+        <p>Yes. The free edition is the original Caldera photo calendar, on <a href="https://github.com/ZenFrogStudio/Caldera">GitHub</a>.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap">
+    <picture>
+      <source srcset="assets/logo-dk.png" media="(prefers-color-scheme: dark)">
+      <img src="assets/logo.png" width="320" height="196" loading="lazy" alt="">
+    </picture>
+    <h2>Plan the week. Run the project.</h2>
+    <div class="cta">
+      <a class="btn btn-primary" href="https://downloads.zenfrogstudio.com/caldera/win/Caldera-Setup.exe">
+        <svg class="i"><use href="#i-down"/></svg>Download for Windows
+      </a>
+    </div>
+    <p class="fine">Free for 30 days · No card needed</p>
+  </div>
+</section>
+
+</main>
 
 <footer>
   <div class="wrap">
-    <span>© <span id="yr"></span> Lucidian Creative. Caldera is proprietary software.</span>
-    <span>Made for Windows 10+</span>
+    <span>© 2026 Z3n. Caldera Pro is proprietary software.</span>
+    <nav aria-label="Footer">
+      <a href="mailto:support@zenfrogstudio.com">support@zenfrogstudio.com</a>
+      <a href="https://github.com/ZenFrogStudio/Caldera">Free edition</a>
+      <a href="#pricing">Pricing</a>
+    </nav>
   </div>
 </footer>
 
 <script>
-  // Mock calendar grid: November 2026 starts on a Sunday.
-  const grid = document.getElementById('grid');
-  const photos = {
-    2: ['#f6a96b','#d0546b'], 5: ['#7cc6c9','#3a6ea5'], 8: ['#f4d27a','#e07b39'],
-    10: ['#9ad08f','#3f8f5b'], 13: ['#c9a5e8','#6c4cc2'], 14: ['#f19aa8','#b5446e'],
-    18: ['#8fd3f4','#3d6fd6'], 21: ['#f7c873','#c0532f'], 24: ['#b3e0a6','#4e9e72'],
-    27: ['#e8b4d8','#8a4fa3'], 29: ['#9fc9f0','#4a5fc1']
-  };
-  const counts = { 5: 3, 13: 2, 21: 4 };
-  'SMTWTFS'.split('').forEach(d => {
-    const h = document.createElement('div');
-    h.textContent = d;
-    h.style.cssText = 'font-size:10px;text-align:center;color:var(--muted);font-weight:600';
-    grid.appendChild(h);
-  });
-  for (let d = 1; d <= 30; d++) {
-    const c = document.createElement('div');
-    c.className = 'cell';
-    c.textContent = d;
-    if (photos[d]) {
-      c.classList.add('img');
-      c.style.background = `linear-gradient(135deg, ${photos[d][0]}, ${photos[d][1]})`;
+  // Lens tabs: click or arrow keys.
+  (function () {
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('.lens-tab'));
+    function select(tab, focus) {
+      tabs.forEach(function (t) {
+        var on = t === tab;
+        t.setAttribute('aria-selected', on);
+        t.tabIndex = on ? 0 : -1;
+        document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+      });
+      if (focus) { tab.focus(); tab.scrollIntoView({ block: 'nearest', inline: 'nearest' }); }
     }
-    if (counts[d]) c.innerHTML += `<span class="badge">${counts[d]}</span>`;
-    if (d === 10) c.classList.add('today');
-    grid.appendChild(c);
-  }
+    tabs.forEach(function (tab, i) {
+      tab.addEventListener('click', function () { select(tab); });
+      tab.addEventListener('keydown', function (e) {
+        var step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+        if (e.key === 'Home') select(tabs[0], true);
+        else if (e.key === 'End') select(tabs[tabs.length - 1], true);
+        else if (step) select(tabs[(i + step + tabs.length) % tabs.length], true);
+        else return;
+        e.preventDefault();
+      });
+    });
+    if (tabs.length) select(tabs[0]);
+  })();
 
-  // Clock arcs (hours on a 12h ring)
-  const arcs = [[9, 11.5, '#4f6ef7'], [12, 13, '#f0a500'], [14, 17, '#3f8f5b'], [19, 20.5, '#d0546b']];
-  const pt = (h, r) => { const a = (h / 12) * 2 * Math.PI - Math.PI / 2; return [100 + r * Math.cos(a), 100 + r * Math.sin(a)]; };
-  const g = document.getElementById('arcs');
-  arcs.forEach(([s, e, col]) => {
-    const [x1, y1] = pt(s, 92), [x2, y2] = pt(e, 92);
-    const large = (e - s) > 6 ? 1 : 0;
-    g.innerHTML += `<path d="M${x1} ${y1} A92 92 0 ${large} 1 ${x2} ${y2}" fill="none" stroke="${col}" stroke-width="18" stroke-linecap="butt"/>`;
-  });
-  const t = document.getElementById('ticks');
-  for (let i = 0; i < 12; i++) {
-    const [x1, y1] = pt(i, 72), [x2, y2] = pt(i, i % 3 ? 68 : 62);
-    t.innerHTML += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="var(--muted)" stroke-width="${i % 3 ? 1 : 2}"/>`;
-  }
-  document.getElementById('yr').textContent = new Date().getFullYear();
+  // Prompt bar: type the example requests in turn.
+  (function () {
+    var el = document.getElementById('typed');
+    if (!el || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var lines = ["move Tuesday's inspection to Thursday", 'add a budget line for paint'];
+    var line = 0, pos = lines[0].length, dir = -1, started = false;
+    function tick() {
+      pos += dir;
+      el.textContent = lines[line].slice(0, pos);
+      var wait = dir > 0 ? 55 : 22;
+      if (pos === 0) { line = (line + 1) % lines.length; dir = 1; wait = 350; }
+      else if (pos === lines[line].length) { dir = -1; wait = 2200; }
+      setTimeout(tick, wait);
+    }
+    new IntersectionObserver(function (entries, io) {
+      if (entries[0].isIntersecting && !started) { started = true; io.disconnect(); setTimeout(tick, 1800); }
+    }).observe(el);
+  })();
 </script>
 </body>
 </html>
