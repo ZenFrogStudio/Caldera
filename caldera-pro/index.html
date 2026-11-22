@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Caldera Pro — Time, budget and resources in sync</title>
-  <meta name="description" content="Caldera Pro is a local-first project workspace for Windows. It keeps schedule, cost and crew on one plan, finds and prices your materials from a list, compares the options, tracks changes and status, and shows the job on dashboards you design.">
+  <meta name="description" content="Caldera Pro is an AI-native, local-first project workspace for Windows. It keeps schedule, cost and crew on one plan, lets AI agents price materials and run routine tasks, tracks changes and status, and shows the job on dashboards you design.">
   <meta property="og:title" content="Caldera Pro">
   <meta property="og:description" content="Time, budget and resources on one plan, for Windows.">
   <meta property="og:type" content="website">
@@ -81,7 +81,7 @@
     .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
     /* The one panel recipe every card shares */
-    .card, .tile, .flow li, .list li, .plan, .faq {
+    .card, .tile, .flow li, .list li, .plan, .faq, .arch-chip, .arch-core {
       background: var(--glass);
       -webkit-backdrop-filter: var(--blur);
               backdrop-filter: var(--blur);
@@ -152,6 +152,18 @@
         radial-gradient(50% 34% at 76% 30%, rgba(106, 92, 255, .5), transparent 70%),
         radial-gradient(60% 34% at 55% 92%, rgba(240, 90, 170, .32), transparent 70%),
         linear-gradient(180deg, #04050f 0%, #0a1026 60%, #170f33 100%);
+    }
+    .scene-forest {
+      --eyebrow: #cdf7c4;
+      --base: #0f3b2a;
+      --ridge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 300' preserveAspectRatio='none'%3E%3Cpath fill='%23174d33' d='M0 300V170l40 40 50-110 50 100 40-70 60 120 50-150 60 140 40-60 60 110 50-130 60 120 50-80 50 110 60-160 60 150 40-70 60 120 50-140 60 130 50-60 50 100 60-150 60 140 40-80 60 120 50-100 50 90 40-60v190z'/%3E%3Cpath fill='%2305170f' d='M0 300V230l60-80 50 90 60-110 60 120 50-70 70 100 50-130 70 130 60-90 60 110 50-120 70 120 60-80 60 110 50-140 70 130 60-70 60 100 50-110 70 120 60-90 60 100 50-80 60 70v90z'/%3E%3C/svg%3E");
+      --art:
+        var(--ridge) bottom / 100% 30vh no-repeat,
+        linear-gradient(108deg, transparent 0 30%, rgba(214, 255, 190, .16) 30% 37%, transparent 37%),
+        linear-gradient(100deg, transparent 0 52%, rgba(214, 255, 190, .12) 52% 61%, transparent 61%),
+        radial-gradient(60% 42% at 34% 6%, rgba(196, 255, 170, .5), transparent 70%),
+        radial-gradient(50% 40% at 82% 34%, rgba(84, 214, 140, .34), transparent 70%),
+        linear-gradient(180deg, #061c13 0%, #0f3b2a 45%, #1f6a45 100%);
     }
     .scene-dunes {
       --eyebrow: #d3dcff;
@@ -326,11 +338,11 @@
     footer a:hover { color: #fff; }
 
     /* ── Selling points: tiles, the time/budget/resources triad, numbered steps ── */
-    .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 56px; text-align: left; }
-    .tile { display: block; padding: 20px 22px; text-decoration: none; transition: transform .15s; }
+    .tiles { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 56px; text-align: left; }
+    .tile { display: block; padding: 18px 18px; text-decoration: none; transition: transform .15s; }
     .tile:hover { transform: translateY(-2px); }
     .tile .ico { margin-bottom: 12px; }
-    .tile b { display: block; font-size: 18px; letter-spacing: -.01em; }
+    .tile b { display: block; font-size: 17px; letter-spacing: -.01em; }
     .tile span { color: var(--ink-muted); font-size: 15px; }
 
     .triad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
@@ -352,6 +364,31 @@
     .flow b { display: block; font-size: 18px; letter-spacing: -.01em; margin-bottom: 4px; }
     .flow span { color: var(--ink-muted); font-size: 16px; }
 
+    /* ── AI-native: who asks, the one tool layer, the project ── */
+    .arch { display: grid; gap: 0; margin-bottom: 44px; }
+    .arch-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+    .arch-chip { padding: 14px 14px; text-align: center; border-radius: 13px; }
+    .arch-chip b { display: block; font-size: 16px; letter-spacing: -.01em; }
+    .arch-chip span { display: block; font-size: 14px; color: var(--ink-muted); }
+    .arch-link { position: relative; height: 46px; display: grid; place-items: center; }
+    .arch-link::before { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; margin-left: -1px; background: linear-gradient(180deg, rgba(255, 255, 255, .15), rgba(255, 255, 255, .7)); }
+    .arch-link span {
+      position: relative; padding: 2px 12px; border-radius: 99px; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+      color: #fff; background: #0c1430; border: 1px solid rgba(255, 255, 255, .35); text-shadow: none;
+    }
+    .arch-core {
+      display: grid; grid-template-columns: 1fr 1.25fr; gap: 28px; align-items: center; padding: 24px 28px;
+      background: var(--glass-strong); border-color: #fff;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, .6), 0 30px 80px -30px rgba(70, 230, 170, .9);
+    }
+    .arch-core h3 { font-size: 26px; letter-spacing: -.02em; line-height: 1.1; }
+    .arch-core p { color: var(--ink-muted); font-size: 16px; margin-top: 6px; }
+    .arch-core .ticks { grid-template-columns: 1fr; margin-top: 0; gap: 8px; }
+    .arch-data { grid-template-columns: repeat(6, 1fr); }
+    .arch-data .arch-chip { padding: 10px 10px; }
+    .arch-data .arch-chip b { font-size: 15px; }
+    .arch-note { text-align: center; color: var(--on-muted); font-size: 14px; margin-top: 12px; }
+
     figure.shot { margin-top: 44px; }
     .ticks-row { grid-template-columns: repeat(3, 1fr); margin-top: 28px; color: var(--on); font-weight: 500; }
     .ticks-row li::before { border-color: var(--eyebrow); }
@@ -370,6 +407,11 @@
       section { padding: 80px 0; }
 
       .tiles, .flow, .list-4 { grid-template-columns: 1fr 1fr; }
+      .tile:first-child { grid-column: span 2; }
+      .arch-row { grid-template-columns: 1fr 1fr; }
+      .arch-who .arch-chip:first-child { grid-column: span 2; }
+      .arch-data { grid-template-columns: repeat(3, 1fr); }
+      .arch-core { grid-template-columns: 1fr; gap: 16px; }
       .triad { grid-template-columns: 1fr; }
       .triad .card + .card::before { left: 50%; top: -29px; transform: translateX(-50%) rotate(90deg); }
       .ticks-row { grid-template-columns: 1fr; }
@@ -389,6 +431,9 @@
       .faq { padding: 4px 20px; }
       .scene + .scene { border-radius: 24px 24px 0 0; }
       .tiles, .flow, .list-4 { grid-template-columns: 1fr; }
+      .tile:first-child { grid-column: auto; }
+      .arch-data { grid-template-columns: 1fr 1fr; }
+      .arch-core { padding: 20px; }
       .tiles { margin-top: 40px; gap: 10px; }
     }
     @media (prefers-reduced-motion: reduce) {
@@ -419,7 +464,10 @@
   <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 3 5 13.5h6L10 21l8-10.5h-6z"/></symbol>
   <symbol id="i-screen" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="12" rx="2"/><path d="M8.5 20h7M12 16.5V20"/></symbol>
   <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></symbol>
-  <symbol id="i-plug" viewBox="0 0 24 24"><path d="M9 3v5M15 3v5M6.5 8h11v3.5a5.5 5.5 0 0 1-11 0zM12 17v4"/></symbol>
+  <symbol id="i-repeat" viewBox="0 0 24 24"><path d="M4 11V9.5a3 3 0 0 1 3-3h12m0 0-3-3m3 3-3 3M20 13v1.5a3 3 0 0 1-3 3H5m0 0 3 3m-3-3 3-3"/></symbol>
+  <symbol id="i-term" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="m7 9.5 3 2.5-3 2.5M12.5 15h4.5"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></symbol>
 </svg>
 
 <nav class="nav" aria-label="Main">
@@ -433,6 +481,7 @@
     </a>
     <ul>
       <li><a href="#sync">In sync</a></li>
+      <li><a href="#ai">AI-native</a></li>
       <li><a href="#materials">Materials</a></li>
       <li><a href="#changes">Changes</a></li>
       <li><a href="#workspace">Dashboards</a></li>
@@ -450,9 +499,9 @@
 
 <header class="hero">
   <div class="wrap">
-    <span class="pill"><i></i>Project management for Windows · Local-first</span>
+    <span class="pill"><i></i>AI-native project management for Windows</span>
     <h1>Time, budget and resources, <span>kept in sync.</span></h1>
-    <p class="lead">Caldera Pro keeps the schedule, the costs and the crew on one plan. Hand it a list and it finds and prices your materials, compares the options, and shows the whole job on a dashboard you design.</p>
+    <p class="lead">Caldera Pro keeps the schedule, the costs and the crew on one plan. It's AI-native underneath, so agents price your materials, compare the options and take routine work off your desk, while live dashboards show where the job stands.</p>
     <div class="cta">
       <a class="btn btn-light" href="https://downloads.zenfrogstudio.com/caldera/win/Caldera-Setup.exe">
         <svg class="i"><use href="#i-down"/></svg>Download for Windows
@@ -471,6 +520,10 @@
       <a class="tile" href="#sync" style="--hue:var(--blue)">
         <div class="ico"><svg class="i"><use href="#i-time"/></svg></div>
         <b>One plan</b><span>Dates, costs and people move together.</span>
+      </a>
+      <a class="tile" href="#ai" style="--hue:var(--green)">
+        <div class="ico"><svg class="i"><use href="#i-spark"/></svg></div>
+        <b>AI-native</b><span>Agents do the routine work, on your terms.</span>
       </a>
       <a class="tile" href="#materials" style="--hue:var(--teal)">
         <div class="ico"><svg class="i"><use href="#i-box"/></svg></div>
@@ -539,6 +592,95 @@
 </div>
 </div>
 
+<div class="scene scene-night">
+<div class="scene-bg" aria-hidden="true"></div>
+<div class="scene-body">
+
+<section id="ai">
+  <div class="wrap">
+    <div class="head">
+      <div class="eyebrow">AI-native architecture</div>
+      <h2>Built for agents, so your day has fewer steps.</h2>
+      <p>Caldera wasn't given a chatbot. Every action in the app is a tool, 140 of them, and the same tools serve you, your panels and your AI agents. Anything you can do yourself, you can hand off.</p>
+    </div>
+
+    <div class="arch">
+      <div class="arch-row arch-who">
+        <div class="arch-chip"><b>You</b><span>The "What's next?" bar</span></div>
+        <div class="arch-chip"><b>Task agents</b><span>Cards on the Manager board</span></div>
+        <div class="arch-chip"><b>Scheduled prompts</b><span>Once, daily or weekly</span></div>
+        <div class="arch-chip"><b>Outside agents</b><span>Claude Desktop, any MCP client</span></div>
+        <div class="arch-chip"><b>Your panels</b><span>Charts and mini-apps</span></div>
+      </div>
+      <div class="arch-link"><span>all use</span></div>
+      <div class="arch-core">
+        <div>
+          <h3>One tool layer</h3>
+          <p>140 tools: 24 that read, 105 that make changes and 11 for AI jobs.</p>
+        </div>
+        <ul class="ticks">
+          <li>You set how far agents go: Off, Read only, Read + write or Full.</li>
+          <li>Every agent call is written to a log.</li>
+          <li><kbd>Ctrl</kbd> <kbd>Z</kbd> undoes an agent's recent changes.</li>
+        </ul>
+      </div>
+      <div class="arch-link"><span>to work on</span></div>
+      <div class="arch-row arch-data">
+        <div class="arch-chip"><b>Schedule</b></div>
+        <div class="arch-chip"><b>Costs</b></div>
+        <div class="arch-chip"><b>People</b></div>
+        <div class="arch-chip"><b>Tasks</b></div>
+        <div class="arch-chip"><b>Materials</b></div>
+        <div class="arch-chip"><b>Notes and files</b></div>
+      </div>
+      <p class="arch-note">Your project, kept on your own PC.</p>
+    </div>
+
+    <div class="cards">
+      <article class="card" style="--hue:var(--blue)">
+        <div class="ico"><svg class="i"><use href="#i-search"/></svg></div>
+        <h3>Ask, don't click</h3>
+        <p>Press <kbd>Ctrl</kbd> <kbd>K</kbd> and type "move Tuesday's inspection to Thursday". An agent makes the change.</p>
+      </article>
+      <article class="card" style="--hue:var(--purple)">
+        <div class="ico"><svg class="i"><use href="#i-manager"/></svg></div>
+        <h3>Hand a task to an agent</h3>
+        <p>Assign a card to Claude Code. It drafts a plan, you review it, it runs, and its reply and the files it changed land on the card.</p>
+      </article>
+      <article class="card" style="--hue:var(--amber)">
+        <div class="ico"><svg class="i"><use href="#i-repeat"/></svg></div>
+        <h3>Put the routine on rails</h3>
+        <p>Chain agent tasks into one run, or set a prompt to run once, daily or weekly.</p>
+      </article>
+      <article class="card" style="--hue:var(--teal)">
+        <div class="ico"><svg class="i"><use href="#i-doc"/></svg></div>
+        <h3>Skip the data entry</h3>
+        <p>Agents read the items out of a document, price a whole list and sweep the web for listings.</p>
+      </article>
+      <article class="card" style="--hue:var(--rose)">
+        <div class="ico"><svg class="i"><use href="#i-spark"/></svg></div>
+        <h3>Describe a tool, get a tool</h3>
+        <p>Need a new chart or a mini-app? Describe it and your agent builds the panel.</p>
+      </article>
+      <article class="card" style="--hue:var(--green)">
+        <div class="ico"><svg class="i"><use href="#i-lock"/></svg></div>
+        <h3>Your AI, not ours</h3>
+        <p>It runs on Claude Code, Codex or OpenCode with the subscription you already have, on a local Ollama model, or with an API key.</p>
+      </article>
+    </div>
+
+    <figure class="shot">
+      <a class="frame" href="assets/ai.webp" target="_blank" rel="noopener" title="Open full size">
+        <img src="assets/ai.webp" width="1600" height="1060" loading="lazy" alt="The Manager board with an Agent desk column: three tasks assigned to Claude Code, each with written details and Generate plan, Run now and Chain buttons. A plain request is typed in the prompt bar at the top, and the Task detail panel shows the selected agent task.">
+      </a>
+      <figcaption>A column of work handed to an agent, and a plain request typed in the prompt bar.</figcaption>
+    </figure>
+  </div>
+</section>
+
+</div>
+</div>
+
 <div class="scene scene-shore">
 <div class="scene-bg" aria-hidden="true"></div>
 <div class="scene-body">
@@ -590,7 +732,7 @@
 </div>
 </div>
 
-<div class="scene scene-night">
+<div class="scene scene-forest">
 <div class="scene-bg" aria-hidden="true"></div>
 <div class="scene-body">
 
@@ -636,10 +778,10 @@
     </div>
 
     <figure class="shot">
-      <a class="frame" href="assets/status.webp" target="_blank" rel="noopener" title="Open full size">
-        <img src="assets/status.webp" width="1600" height="1060" loading="lazy" alt="The Manager board: task cards in columns for New, Projects, Recurring, In work, Waiting and Complete, each with an owner, and a Task detail panel showing the Drywall task's section, owner and dates.">
+      <a class="frame" href="assets/change-order.webp" target="_blank" rel="noopener" title="Open full size">
+        <img src="assets/change-order.webp" width="1600" height="1060" loading="lazy" alt="The Schedule with a change order line, CO-01 Add vocal booth, drawn hatched on the Gantt chart. Its drawer shows the owner, the decision gate it waits on, Client approves vocal booth, and the Tentative box ticked.">
       </a>
-      <figcaption>The Manager board. Drywall moved to In work on its own when its Schedule line got under way.</figcaption>
+      <figcaption>A change order on the Schedule: hatched, costed, and waiting on the gate "Client approves vocal booth".</figcaption>
     </figure>
   </div>
 </section>
@@ -721,14 +863,14 @@
           <p>A viewer for PDFs, DXF drawings, Excel, Word, images and video, on a real folder on your disk.</p>
         </article>
         <article class="card" style="--hue:var(--amber)">
-          <div class="ico"><svg class="i"><use href="#i-search"/></svg></div>
-          <h3>"What's next?" prompt bar</h3>
-          <p>Type a plain request, such as "add a budget line for paint", and an AI agent carries it out.</p>
+          <div class="ico"><svg class="i"><use href="#i-term"/></svg></div>
+          <h3>Built-in terminal</h3>
+          <p>A real shell docked at the bottom of the window. Watch an agent's run live.</p>
         </article>
         <article class="card" style="--hue:var(--rose)">
-          <div class="ico"><svg class="i"><use href="#i-plug"/></svg></div>
-          <h3>Agent access</h3>
-          <p>Let Claude Desktop read or drive the app. You set how far: off, read only, read and write, or full.</p>
+          <div class="ico"><svg class="i"><use href="#i-mic"/></svg></div>
+          <h3>Voice input, offline</h3>
+          <p>Speak a request instead of typing it. Your speech is turned into text on your own PC.</p>
         </article>
         <article class="card" style="--hue:var(--green)">
           <div class="ico"><svg class="i"><use href="#i-lock"/></svg></div>
