@@ -1,0 +1,588 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-27T20:34:05Z",
+  "title": "Design System: Caldera Pro",
+  "extensions": {
+    "colorMeta": {
+      "violet": {
+        "role": "primary",
+        "displayName": "Pad Violet",
+        "canonical": "#4a25c9",
+        "tonalRamp": [
+          "#0a002f",
+          "#230170",
+          "#3e00b4",
+          "#583ede",
+          "#776cff",
+          "#9d9ffe",
+          "#c5c9ff",
+          "#ebedfe"
+        ]
+      },
+      "violet-deep": {
+        "role": "primary",
+        "displayName": "Pressed Violet",
+        "canonical": "#3a1ba6",
+        "tonalRamp": [
+          "#09002f",
+          "#230071",
+          "#3b1ca7",
+          "#5648d0",
+          "#766ff9",
+          "#9c9ffe",
+          "#c5c9fe",
+          "#ebedff"
+        ]
+      },
+      "green": {
+        "role": "secondary",
+        "displayName": "Pad Green",
+        "canonical": "#0b7a45",
+        "tonalRamp": [
+          "#001005",
+          "#003017",
+          "#02502b",
+          "#037742",
+          "#3c9c64",
+          "#72bf8d",
+          "#a8ddb9",
+          "#dcf6e4"
+        ]
+      },
+      "green-deep": {
+        "role": "secondary",
+        "displayName": "Pressed Green",
+        "canonical": "#086236",
+        "tonalRamp": [
+          "#001005",
+          "#012f17",
+          "#02502b",
+          "#257447",
+          "#4c9969",
+          "#7cbc92",
+          "#aedbbc",
+          "#dff5e5"
+        ]
+      },
+      "red": {
+        "role": "tertiary",
+        "displayName": "Pad Red",
+        "canonical": "#c91d38",
+        "tonalRamp": [
+          "#1f0002",
+          "#4f010e",
+          "#80011c",
+          "#ba022d",
+          "#e6404f",
+          "#ff7d80",
+          "#ffb9b7",
+          "#ffe8e7"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Cool Form Paper",
+        "canonical": "#f1f4fb",
+        "tonalRamp": [
+          "#0a0b0e",
+          "#25262b",
+          "#404248",
+          "#616369",
+          "#83868c",
+          "#a8abb0",
+          "#ccced2",
+          "#edeef0"
+        ]
+      },
+      "paper-deep": {
+        "role": "neutral",
+        "displayName": "Deep Paper",
+        "canonical": "#e2e8f6",
+        "tonalRamp": [
+          "#090b10",
+          "#23262f",
+          "#3e424d",
+          "#5e636f",
+          "#818693",
+          "#a6abb6",
+          "#caced6",
+          "#edeef3"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Printed Rule Blue",
+        "canonical": "#6c88dd",
+        "tonalRamp": [
+          "#030629",
+          "#111e5c",
+          "#263a87",
+          "#445dae",
+          "#6581d5",
+          "#8da8f2",
+          "#bacdff",
+          "#e8eeff"
+        ]
+      },
+      "form": {
+        "role": "neutral",
+        "displayName": "Form Blue",
+        "canonical": "#2748b5",
+        "tonalRamp": [
+          "#010133",
+          "#07146e",
+          "#17329e",
+          "#3458c6",
+          "#547eef",
+          "#84a8fe",
+          "#b8cdfe",
+          "#e7efff"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Indigo Black",
+        "canonical": "#1c1740",
+        "tonalRamp": [
+          "#0a081c",
+          "#242144",
+          "#3e3c69",
+          "#5e5d8d",
+          "#8180b2",
+          "#a6a6d2",
+          "#cacaeb",
+          "#ecedfe"
+        ]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Soft Indigo",
+        "canonical": "#4a4672",
+        "tonalRamp": [
+          "#0a081b",
+          "#252143",
+          "#403c67",
+          "#605d8b",
+          "#8380b0",
+          "#a8a5d0",
+          "#cbcae9",
+          "#ededfd"
+        ]
+      },
+      "on-ink": {
+        "role": "neutral",
+        "displayName": "Reverse White",
+        "canonical": "#f4f6fc",
+        "tonalRamp": [
+          "#0a0b0d",
+          "#25262a",
+          "#414247",
+          "#616368",
+          "#84868b",
+          "#a9abaf",
+          "#ccced1",
+          "#eeeef0"
+        ]
+      },
+      "tint-violet": {
+        "role": "neutral",
+        "displayName": "Flood Tint, Violet",
+        "canonical": "#ddd6ff",
+        "tonalRamp": [
+          "#0c0817",
+          "#27223c",
+          "#433d5e",
+          "#645d81",
+          "#8780a6",
+          "#aba6c7",
+          "#cecae2",
+          "#efedf9"
+        ]
+      },
+      "tint-green": {
+        "role": "neutral",
+        "displayName": "Flood Tint, Green",
+        "canonical": "#d3f5e2",
+        "tonalRamp": [
+          "#030e08",
+          "#152c20",
+          "#2d4a3b",
+          "#4d6b5b",
+          "#6f8f7e",
+          "#97b2a3",
+          "#c0d3c8",
+          "#e7f1ec"
+        ]
+      },
+      "tint-red": {
+        "role": "neutral",
+        "displayName": "Flood Tint, Red",
+        "canonical": "#ffe9ec",
+        "tonalRamp": [
+          "#10090a",
+          "#302224",
+          "#4e3d40",
+          "#705e60",
+          "#948083",
+          "#b7a6a8",
+          "#d7cacc",
+          "#f3eced"
+        ]
+      },
+      "mount": {
+        "role": "neutral",
+        "displayName": "Mount White",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#262626",
+          "#424242",
+          "#636363",
+          "#868686",
+          "#ababab",
+          "#cecece",
+          "#eeeeee"
+        ]
+      },
+      "staple": {
+        "role": "neutral",
+        "displayName": "Staple Gray",
+        "canonical": "#565c7a",
+        "tonalRamp": [
+          "#080a16",
+          "#21253b",
+          "#3b405d",
+          "#5b617f",
+          "#7d84a4",
+          "#a3a9c6",
+          "#c8cde1",
+          "#ebeef9"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The page title and the closing line. League Gothic capitals, inked."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section headlines. League Gothic capitals, inked, max-width 15em."
+      },
+      "numeral": {
+        "displayName": "Numeral",
+        "purpose": "Prices. 5rem at 640px and below; the unit beside it is Libre Franklin 600 at 1.05rem."
+      },
+      "stamp": {
+        "displayName": "Stamp",
+        "purpose": "Framed impressions for facts that can change. Sized by context from 1.7rem to 3.2rem."
+      },
+      "stamp-sm": {
+        "displayName": "Small stamp",
+        "purpose": "Status in table rows and against listings; single 2px frame, fine ink filter."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Libre Franklin sub-headings inside demos and the slip."
+      },
+      "statement": {
+        "displayName": "Statement",
+        "purpose": "One line of content shown large: the typed request (600), the hunted item, a demo title (700). Line height 1.2 to 1.3."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "The paragraph under a headline, Soft Indigo, max 58ch. 1.1rem at 640px and below."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Paragraphs, max 68ch. 1rem at 640px and below."
+      },
+      "note": {
+        "displayName": "Note",
+        "purpose": "Sample-data disclosures and hints, Soft Indigo."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "The field caption: uppercase, Form Blue, on a field, column, axis or control. Never above a headline."
+      }
+    },
+    "shadows": [
+      {
+        "name": "button-rest",
+        "value": "0 9px 18px -10px rgba(28, 23, 64, .75)",
+        "purpose": "Under filled buttons at rest. Line buttons have none."
+      },
+      {
+        "name": "button-pressed",
+        "value": "0 2px 5px -3px rgba(28, 23, 64, .8)",
+        "purpose": "While a button is pressed and moved down 3px."
+      },
+      {
+        "name": "stapled-sheet",
+        "value": "0 1px 2px rgba(28, 23, 64, .25), 0 22px 44px -22px rgba(28, 23, 64, .55)",
+        "purpose": "Under an attachment's white mount."
+      },
+      {
+        "name": "slip-on-flood",
+        "value": "0 2px 3px rgba(12, 6, 60, .3), 0 26px 50px -24px rgba(12, 6, 60, .8)",
+        "purpose": "Under the work-order slip on the violet flood."
+      },
+      {
+        "name": "pin",
+        "value": "0 0 0 3px #fff, 0 6px 14px rgba(28, 23, 64, .5)",
+        "purpose": "White ring plus a soft drop under an annotation pin on a capture."
+      },
+      {
+        "name": "pin-narrow",
+        "value": "0 0 0 2px #fff",
+        "purpose": "Pin ring only, at 640px and below."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease",
+        "value": "cubic-bezier(.16, 1, .3, 1)",
+        "purpose": "--ease. The one easing, used by the thump and every slide."
+      },
+      {
+        "name": "thump",
+        "value": "thump .24s cubic-bezier(.16, 1, .3, 1); @keyframes thump { from { scale: 1.24; opacity: 0; } }",
+        "purpose": "The stamp impact. Fires when a stamp's value or label changes."
+      },
+      {
+        "name": "slide-bar",
+        "value": "left .5s cubic-bezier(.16, 1, .3, 1), width .5s cubic-bezier(.16, 1, .3, 1)",
+        "purpose": "Schedule bars moving to a new position and length."
+      },
+      {
+        "name": "slide-gate",
+        "value": "left .55s cubic-bezier(.16, 1, .3, 1)",
+        "purpose": "Decision gates and tentative bars."
+      },
+      {
+        "name": "slide-token",
+        "value": "translate .5s cubic-bezier(.16, 1, .3, 1), background .3s",
+        "purpose": "A task token moving between board columns and taking its column colour."
+      },
+      {
+        "name": "press",
+        "value": "translate .1s cubic-bezier(.16, 1, .3, 1), box-shadow .1s cubic-bezier(.16, 1, .3, 1), background .12s",
+        "purpose": "Button hover and press."
+      },
+      {
+        "name": "pin-hot",
+        "value": "scale .18s cubic-bezier(.16, 1, .3, 1), background .18s",
+        "purpose": "A pin and its key number lighting together."
+      },
+      {
+        "name": "disclosure",
+        "value": "rotate .2s cubic-bezier(.16, 1, .3, 1)",
+        "purpose": "The question marker's upright bar turning flat when open."
+      },
+      {
+        "name": "caret-blink",
+        "value": "blink 1s steps(2) infinite",
+        "purpose": "Typing caret in the agent demo. One of two loops, both state indicators."
+      },
+      {
+        "name": "search-shimmer",
+        "value": "shimmer .9s linear infinite",
+        "purpose": "Table cells while a row is being priced."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "transition: none !important; animation: none !important",
+        "purpose": "Under prefers-reduced-motion: no thump, demos shown finished, no autoplay, no smooth scroll."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "wide-min",
+        "value": "1240px"
+      },
+      {
+        "name": "single-column-max",
+        "value": "1020px"
+      },
+      {
+        "name": "narrow-max",
+        "value": "640px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The download and commit action: violet fill, reverse text, an ink-tinted shadow that tightens as the button drops 3px when pressed.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#\"><svg class=\"ds-btn-primary-icon\" viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 3.5v11m0 0-4.5-4.5m4.5 4.5 4.5-4.5M4.5 20h15\"/></svg>Download for Windows</a>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: .55em; cursor: pointer; padding: .8em 1.3em; border: 2px solid var(--violet, #4a25c9); border-radius: 6px; background: var(--violet, #4a25c9); color: var(--on-ink, #f4f6fc); font-family: var(--text-face, 'Libre Franklin', sans-serif); font-weight: 700; font-size: 1.02rem; text-decoration: none; transition: translate .1s cubic-bezier(.16, 1, .3, 1), box-shadow .1s cubic-bezier(.16, 1, .3, 1), background .12s; box-shadow: 0 9px 18px -10px rgba(28, 23, 64, .75); } .ds-btn-primary:hover { background: #3a1ba6; border-color: #3a1ba6; } .ds-btn-primary:active { translate: 0 3px; box-shadow: 0 2px 5px -3px rgba(28, 23, 64, .8); } .ds-btn-primary:focus-visible { outline: 3px solid var(--violet, #4a25c9); outline-offset: 3px; } .ds-btn-primary-icon { width: 1.15em; height: 1.15em; flex: none; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }"
+    },
+    {
+      "name": "Line Button",
+      "kind": "button",
+      "refersTo": "button-line",
+      "description": "The secondary action beside a primary: violet outline and text on paper, no shadow, a Deep Paper wash on hover.",
+      "html": "<a class=\"ds-btn-line\" href=\"#\">See pricing</a>",
+      "css": ".ds-btn-line { display: inline-flex; align-items: center; justify-content: center; gap: .55em; cursor: pointer; padding: .8em 1.3em; border: 2px solid var(--violet, #4a25c9); border-radius: 6px; background: transparent; color: var(--violet, #4a25c9); font-family: var(--text-face, 'Libre Franklin', sans-serif); font-weight: 700; font-size: 1.02rem; text-decoration: none; transition: translate .1s cubic-bezier(.16, 1, .3, 1), background .12s; } .ds-btn-line:hover { background: var(--paper-deep, #e2e8f6); } .ds-btn-line:active { translate: 0 3px; } .ds-btn-line:focus-visible { outline: 3px solid var(--violet, #4a25c9); outline-offset: 3px; }"
+    },
+    {
+      "name": "Stamp with Ghost and Revision",
+      "kind": "custom",
+      "refersTo": "stamp",
+      "description": "A fact that can change: double-framed League Gothic impression, the earlier value ghosted beneath and a red revision stamp printing the change. In the page the thump fires when the value changes; here hovering replays it.",
+      "html": "<span class=\"ds-stampbox\"><svg class=\"ds-stamp-defs\" aria-hidden=\"true\" focusable=\"false\"><defs><filter id=\"ds-stamp-ink\" x=\"-4%\" y=\"-12%\" width=\"108%\" height=\"124%\" color-interpolation-filters=\"sRGB\"><feTurbulence type=\"fractalNoise\" baseFrequency=\".7\" numOctaves=\"2\" seed=\"4\" result=\"grain\"/><feDisplacementMap in=\"SourceGraphic\" in2=\"grain\" scale=\"1.5\" xChannelSelector=\"R\" yChannelSelector=\"G\" result=\"rough\"/><feTurbulence type=\"fractalNoise\" baseFrequency=\".011 .028\" numOctaves=\"2\" seed=\"11\" result=\"blot\"/><feColorMatrix in=\"blot\" type=\"matrix\" values=\"0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0\" result=\"level\"/><feComponentTransfer in=\"level\" result=\"pressure\"><feFuncA type=\"table\" tableValues=\"1 1 1 1 .94 .85 .82 .82 .82\"/></feComponentTransfer><feComposite in=\"rough\" in2=\"pressure\" operator=\"in\"/></filter><filter id=\"ds-stamp-ink-fine\" x=\"-4%\" y=\"-14%\" width=\"108%\" height=\"128%\" color-interpolation-filters=\"sRGB\"><feTurbulence type=\"fractalNoise\" baseFrequency=\".9\" numOctaves=\"2\" seed=\"7\" result=\"grain\"/><feDisplacementMap in=\"SourceGraphic\" in2=\"grain\" scale=\"1.1\" xChannelSelector=\"R\" yChannelSelector=\"G\" result=\"rough\"/><feTurbulence type=\"fractalNoise\" baseFrequency=\".05 .09\" numOctaves=\"2\" seed=\"15\" result=\"blot\"/><feColorMatrix in=\"blot\" type=\"matrix\" values=\"0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0\" result=\"level\"/><feComponentTransfer in=\"level\" result=\"pressure\"><feFuncA type=\"table\" tableValues=\"1 1 1 1 .97 .9 .88 .88 .88\"/></feComponentTransfer><feComposite in=\"rough\" in2=\"pressure\" operator=\"in\"/></filter></defs></svg><span class=\"ds-stamp ds-stamp-ghost\" aria-hidden=\"true\"><small>Finish</small><b>Nov 27</b></span><span class=\"ds-stamp ds-stamp-live\"><small>Finish</small><b>Nov 30</b></span><span class=\"ds-stamp ds-stamp-rev\">+3 days</span></span>",
+      "css": ".ds-stamp-defs { position: absolute; width: 0; height: 0; } .ds-stampbox { position: relative; display: inline-flex; margin: 24px 22px 14px 10px; } .ds-stamp { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: .3em .55em .22em; border: .085em solid currentColor; border-radius: .2em; outline: .035em solid currentColor; outline-offset: .07em; color: var(--stamp-ink, var(--violet, #4a25c9)); font-family: var(--stamp-face, 'League Gothic', sans-serif); font-weight: 400; font-size: 3.2rem; min-width: 3.9em; text-transform: uppercase; letter-spacing: .012em; line-height: .96; white-space: nowrap; font-variant-numeric: tabular-nums; rotate: var(--ds-tilt, -2deg); filter: url(#ds-stamp-ink); mix-blend-mode: multiply; } .ds-stamp small { font: inherit; font-size: .42em; letter-spacing: .08em; line-height: 1.3; } .ds-stamp b { font-weight: 400; font-size: 1em; } .ds-stamp-ghost { position: absolute; inset: 0; opacity: .17; --ds-tilt: 3.5deg; translate: 7px 5px; pointer-events: none; } .ds-stamp-rev { position: absolute; right: -16px; top: -18px; z-index: 1; font-size: 1.25rem; min-width: 0; color: var(--red, #c91d38); --ds-tilt: 7deg; padding: .2em .45em .12em; border-width: 2px; outline: 0; filter: url(#ds-stamp-ink-fine); } .ds-stampbox:hover .ds-stamp-live, .ds-stampbox:hover .ds-stamp-rev { animation: ds-thump .24s cubic-bezier(.16, 1, .3, 1); } @keyframes ds-thump { from { scale: 1.24; opacity: 0; } } @media (prefers-reduced-motion: reduce) { .ds-stampbox:hover .ds-stamp-live, .ds-stampbox:hover .ds-stamp-rev { animation: none; } }"
+    },
+    {
+      "name": "Status Stamps",
+      "kind": "chip",
+      "refersTo": "stamp-small",
+      "description": "Small single-frame stamps for a row or a listing. Ink carries the meaning and a dashed frame means not settled yet.",
+      "html": "<span class=\"ds-status-row\"><svg class=\"ds-status-defs\" aria-hidden=\"true\" focusable=\"false\"><defs><filter id=\"ds-status-ink-fine\" x=\"-4%\" y=\"-14%\" width=\"108%\" height=\"128%\" color-interpolation-filters=\"sRGB\"><feTurbulence type=\"fractalNoise\" baseFrequency=\".9\" numOctaves=\"2\" seed=\"7\" result=\"grain\"/><feDisplacementMap in=\"SourceGraphic\" in2=\"grain\" scale=\"1.1\" xChannelSelector=\"R\" yChannelSelector=\"G\" result=\"rough\"/><feTurbulence type=\"fractalNoise\" baseFrequency=\".05 .09\" numOctaves=\"2\" seed=\"15\" result=\"blot\"/><feColorMatrix in=\"blot\" type=\"matrix\" values=\"0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0\" result=\"level\"/><feComponentTransfer in=\"level\" result=\"pressure\"><feFuncA type=\"table\" tableValues=\"1 1 1 1 .97 .9 .88 .88 .88\"/></feComponentTransfer><feComposite in=\"rough\" in2=\"pressure\" operator=\"in\"/></filter></defs></svg><span class=\"ds-status ds-status-needed\">Needed</span><span class=\"ds-status ds-status-priced\">Priced</span><span class=\"ds-status ds-status-received\">Received</span><span class=\"ds-status ds-status-open\">Open</span></span>",
+      "css": ".ds-status-defs { position: absolute; width: 0; height: 0; } .ds-status-row { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 14px 18px; padding: 8px 4px; } .ds-status { display: inline-flex; align-items: center; justify-content: center; min-width: 4.6em; padding: .2em .5em .12em; border: 2px solid currentColor; border-radius: .2em; font-family: var(--stamp-face, 'League Gothic', sans-serif); font-weight: 400; font-size: 1.32rem; text-transform: uppercase; letter-spacing: .05em; line-height: .96; white-space: nowrap; rotate: -1.5deg; filter: url(#ds-status-ink-fine); mix-blend-mode: multiply; } .ds-status-needed { color: var(--red, #c91d38); border-style: dashed; } .ds-status-priced { color: var(--violet, #4a25c9); } .ds-status-received { color: var(--green, #0b7a45); } .ds-status-open { color: var(--ink-soft, #4a4672); border-style: dashed; }"
+    },
+    {
+      "name": "Letterhead",
+      "kind": "nav",
+      "refersTo": "letterhead",
+      "description": "The sticky 64px page head: name, section links and a small download button over a printed rule. The page also sets the logo mark (assets/logo.png) at 40px before the name; links hide at 1020px and below.",
+      "html": "<header class=\"ds-top\"><a class=\"ds-top-brand\" href=\"#\">Caldera Pro</a><nav class=\"ds-top-nav\" aria-label=\"Main\"><a href=\"#\">In sync</a><a href=\"#\">AI-native</a><a href=\"#\">Materials</a><a href=\"#\">Pricing</a></nav><a class=\"ds-top-btn\" href=\"#\">Download</a></header>",
+      "css": ".ds-top { display: flex; align-items: center; gap: 30px; height: 64px; padding: 0 28px; background: var(--paper, #f1f4fb) var(--grain-paper, none); border-bottom: 1.5px solid var(--rule, #6c88dd); font-family: var(--text-face, 'Libre Franklin', sans-serif); } .ds-top-brand { text-decoration: none; font-weight: 800; font-size: 1.1rem; letter-spacing: -.01em; color: var(--ink, #1c1740); } .ds-top-nav { display: flex; gap: 26px; margin-left: auto; font-size: .95rem; font-weight: 600; } .ds-top-nav a { text-decoration: none; color: var(--ink-soft, #4a4672); text-underline-offset: .18em; text-decoration-thickness: .08em; } .ds-top-nav a:hover { color: var(--violet, #4a25c9); text-decoration: underline; } .ds-top-btn { display: inline-flex; align-items: center; justify-content: center; padding: .5em .95em; border: 2px solid var(--violet, #4a25c9); border-radius: 6px; background: var(--violet, #4a25c9); color: var(--on-ink, #f4f6fc); font-weight: 700; font-size: .93rem; text-decoration: none; box-shadow: 0 9px 18px -10px rgba(28, 23, 64, .75); transition: translate .1s cubic-bezier(.16, 1, .3, 1), box-shadow .1s cubic-bezier(.16, 1, .3, 1), background .12s; } .ds-top-btn:hover { background: #3a1ba6; border-color: #3a1ba6; } .ds-top-btn:active { translate: 0 3px; box-shadow: 0 2px 5px -3px rgba(28, 23, 64, .8); } .ds-top-brand:focus-visible, .ds-top-nav a:focus-visible, .ds-top-btn:focus-visible { outline: 3px solid var(--violet, #4a25c9); outline-offset: 3px; }"
+    },
+    {
+      "name": "Field Strip",
+      "kind": "custom",
+      "refersTo": "field-caption",
+      "description": "Short facts set as form fields: a ruled box of cells, each a small blue caption over its value. Folds to two by two at 1020px and below.",
+      "html": "<dl class=\"ds-fields\"><div><dt>Product</dt><dd>Caldera Pro</dd></div><div><dt>Runs on</dt><dd>Windows 10 or later</dd></div><div><dt>Trial</dt><dd>30 days free, no card</dd></div><div><dt>Then</dt><dd>$16 a month or $149 a year</dd></div></dl>",
+      "css": ".ds-fields { display: grid; grid-template-columns: 1.1fr 1.2fr 1.2fr 1.5fr; margin: 0; border: 1.5px solid var(--rule, #6c88dd); border-radius: 3px; font-family: var(--text-face, 'Libre Franklin', sans-serif); color: var(--ink, #1c1740); } .ds-fields div { padding: 8px 14px 9px; border-left: 1.5px solid var(--rule, #6c88dd); } .ds-fields div:first-child { border-left: 0; } .ds-fields dt { font-size: .75rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--form, #2748b5); } .ds-fields dd { margin: 0; font-weight: 600; font-size: 1rem; }"
+    },
+    {
+      "name": "Day Dial",
+      "kind": "input",
+      "refersTo": "stepper",
+      "description": "The only input pattern in the build: a range slider between two round steppers, with the live figure beside it in League Gothic.",
+      "html": "<div class=\"ds-dial\"><label class=\"ds-dial-label\" for=\"ds-dial-days\">Try it. Drywall takes</label><span class=\"ds-dial-ctl\"><button type=\"button\" class=\"ds-dial-step\" aria-label=\"One day shorter\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M6 12h12\"/></svg></button><input class=\"ds-dial-range\" type=\"range\" id=\"ds-dial-days\" min=\"4\" max=\"14\" value=\"8\"><button type=\"button\" class=\"ds-dial-step\" aria-label=\"One day longer\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M6 12h12M12 6v12\"/></svg></button></span><output class=\"ds-dial-out\" for=\"ds-dial-days\">8 days</output></div>",
+      "css": ".ds-dial { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 18px; padding: 14px 0; border-top: 1.5px solid var(--rule, #6c88dd); border-bottom: 1.5px solid var(--rule, #6c88dd); font-family: var(--text-face, 'Libre Franklin', sans-serif); color: var(--ink, #1c1740); } .ds-dial-label { font-weight: 700; } .ds-dial-ctl { display: inline-flex; align-items: center; gap: 10px; } .ds-dial-step { display: grid; place-items: center; width: 38px; height: 38px; padding: 0; border: 2px solid var(--violet, #4a25c9); border-radius: 50%; background: transparent; color: var(--violet, #4a25c9); cursor: pointer; } .ds-dial-step:hover { background: var(--violet, #4a25c9); color: var(--on-ink, #f4f6fc); } .ds-dial-step svg { width: 1.15em; height: 1.15em; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; } .ds-dial-range { -webkit-appearance: none; appearance: none; width: 210px; height: 30px; margin: 0; background: transparent; cursor: pointer; } .ds-dial-range::-webkit-slider-runnable-track { height: 4px; background: var(--violet, #4a25c9); } .ds-dial-range::-moz-range-track { height: 4px; background: var(--violet, #4a25c9); } .ds-dial-range::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; margin-top: -10px; border-radius: 50%; background: var(--paper, #f1f4fb); border: 4px solid var(--violet, #4a25c9); } .ds-dial-range::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--paper, #f1f4fb); border: 4px solid var(--violet, #4a25c9); } .ds-dial-range:hover::-webkit-slider-thumb { background: var(--violet, #4a25c9); } .ds-dial-range:hover::-moz-range-thumb { background: var(--violet, #4a25c9); } .ds-dial-step:focus-visible, .ds-dial-range:focus-visible { outline: 3px solid var(--violet, #4a25c9); outline-offset: 3px; } .ds-dial-out { font-family: var(--stamp-face, 'League Gothic', sans-serif); font-size: 1.9rem; line-height: 1; text-transform: uppercase; min-width: 4.3em; color: var(--violet, #4a25c9); font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Schedule Line",
+      "kind": "custom",
+      "refersTo": "schedule-bar",
+      "description": "A ruled 46px row: owner initials in a ring, the line name, and a violet bar on a track with week ticks. The line being changed takes a dashed red outline. Bars slide to a new place; hovering the live row here previews that slide.",
+      "html": "<div class=\"ds-lines\"><div class=\"ds-line\"><div class=\"ds-line-who\"><i class=\"ds-line-av\">LF</i>Electrical</div><div class=\"ds-line-track\"><div class=\"ds-line-bar ds-line-bar-a\">7d · $8.8k</div></div></div><div class=\"ds-line ds-line-live\"><div class=\"ds-line-who\"><i class=\"ds-line-av\">TB</i>Drywall</div><div class=\"ds-line-track\"><div class=\"ds-line-bar ds-line-bar-b\">8d · $7.0k</div></div></div></div>",
+      "css": ".ds-lines { border-bottom: 1.5px solid var(--rule, #6c88dd); font-family: var(--text-face, 'Libre Franklin', sans-serif); color: var(--ink, #1c1740); } .ds-line { display: grid; grid-template-columns: 196px 1fr; align-items: center; height: 46px; border-top: 1.5px solid var(--rule, #6c88dd); } .ds-line-who { display: flex; align-items: center; gap: 10px; font-weight: 700; white-space: nowrap; overflow: hidden; } .ds-line-av { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border: 2px solid var(--violet, #4a25c9); border-radius: 50%; font-family: var(--stamp-face, 'League Gothic', sans-serif); font-style: normal; font-weight: 400; font-size: 1rem; letter-spacing: .04em; color: var(--violet, #4a25c9); padding-top: 1px; } .ds-line-track { position: relative; height: 28px; background: repeating-linear-gradient(90deg, transparent 0 calc(21.875% - 1.5px), rgba(108, 136, 221, .5) calc(21.875% - 1.5px) 21.875%); } .ds-line-bar { position: absolute; top: 0; height: 28px; padding: 2px 9px 0; display: flex; align-items: center; overflow: hidden; background: var(--violet, #4a25c9); color: var(--on-ink, #f4f6fc); border-radius: 3px; font-family: var(--stamp-face, 'League Gothic', sans-serif); font-weight: 400; font-size: 1.12rem; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; font-variant-numeric: tabular-nums; transition: left .5s cubic-bezier(.16, 1, .3, 1), width .5s cubic-bezier(.16, 1, .3, 1); } .ds-line-bar-a { left: 18.75%; width: 21.875%; } .ds-line-bar-b { left: 40.625%; width: 25%; } .ds-line-live .ds-line-bar { outline: 2px dashed var(--red, #c91d38); outline-offset: 3px; } .ds-line-live:hover .ds-line-bar-b { width: 34.375%; } @media (prefers-reduced-motion: reduce) { .ds-line-bar { transition: none; } }"
+    },
+    {
+      "name": "Stapled Attachment",
+      "kind": "card",
+      "refersTo": "attachment",
+      "description": "An app capture as a separate sheet: white mount, drawn staple, a half-degree lean and the stapled-sheet shadow, with a caption beneath. The dark block stands in for the capture image; in the page the mount links to the full-size file.",
+      "html": "<figure class=\"ds-attach\"><a class=\"ds-attach-mount\" href=\"#\" title=\"Open full size\"><span class=\"ds-attach-capture\" role=\"img\" aria-label=\"App capture\"></span></a><figcaption>The Schedule in the app. Owner, status, dates and cost live on every line.</figcaption></figure>",
+      "css": ".ds-attach { position: relative; margin: 12px 8px; font-family: var(--text-face, 'Libre Franklin', sans-serif); } .ds-attach-mount { position: relative; display: block; padding: 34px 10px 10px; background: #fff; rotate: .5deg; box-shadow: 0 1px 2px rgba(28, 23, 64, .25), 0 22px 44px -22px rgba(28, 23, 64, .55); } .ds-attach-mount::after { content: \"\"; position: absolute; left: 14px; top: 8px; width: 30px; height: 18px; background: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 18'%3E%3Cpath d='M3 15 27 3' fill='none' stroke='%23565c7a' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E\") center / contain no-repeat; } .ds-attach-capture { display: block; aspect-ratio: 1600 / 1060; background: #1b1b3a; } .ds-attach-mount:focus-visible { outline: 3px solid var(--violet, #4a25c9); outline-offset: 3px; } .ds-attach figcaption { margin-top: 16px; font-size: .95rem; color: var(--ink-soft, #4a4672); max-width: 68ch; }"
+    },
+    {
+      "name": "Flood Band",
+      "kind": "custom",
+      "refersTo": "flood-green",
+      "description": "A section printed in reverse: one ink edge to edge under a grain, an inked headline in Reverse White, the lead in that flood's tint, and buttons inverted. Shown in Pad Green; the page also floods in violet and red.",
+      "html": "<section class=\"ds-flood\"><svg class=\"ds-flood-defs\" aria-hidden=\"true\" focusable=\"false\"><defs><filter id=\"ds-flood-ink\" x=\"-4%\" y=\"-12%\" width=\"108%\" height=\"124%\" color-interpolation-filters=\"sRGB\"><feTurbulence type=\"fractalNoise\" baseFrequency=\".7\" numOctaves=\"2\" seed=\"4\" result=\"grain\"/><feDisplacementMap in=\"SourceGraphic\" in2=\"grain\" scale=\"1.5\" xChannelSelector=\"R\" yChannelSelector=\"G\" result=\"rough\"/><feTurbulence type=\"fractalNoise\" baseFrequency=\".011 .028\" numOctaves=\"2\" seed=\"11\" result=\"blot\"/><feColorMatrix in=\"blot\" type=\"matrix\" values=\"0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0\" result=\"level\"/><feComponentTransfer in=\"level\" result=\"pressure\"><feFuncA type=\"table\" tableValues=\"1 1 1 1 .94 .85 .82 .82 .82\"/></feComponentTransfer><feComposite in=\"rough\" in2=\"pressure\" operator=\"in\"/></filter></defs></svg><div class=\"ds-flood-in\"><h2 class=\"ds-flood-head\">Free for 30 days. Then one plan.</h2><p class=\"ds-flood-lead\">Try everything on each computer for 30 days, no card needed.</p><div class=\"ds-flood-cta\"><a class=\"ds-flood-btn\" href=\"#\">Start free trial</a><a class=\"ds-flood-btn ds-flood-btn-line\" href=\"#\">See pricing</a></div></div></section>",
+      "css": ".ds-flood-defs { position: absolute; width: 0; height: 0; } .ds-flood { position: relative; padding: 44px 28px; background: var(--green, #0b7a45); color: var(--on-ink, #f4f6fc); font-family: var(--text-face, 'Libre Franklin', sans-serif); } .ds-flood::before { content: \"\"; position: absolute; inset: 0; background: var(--grain, none); opacity: .5; pointer-events: none; } .ds-flood-in { position: relative; } .ds-flood-head { margin: 0; font-family: var(--stamp-face, 'League Gothic', sans-serif); font-weight: 400; font-size: clamp(2.7rem, 5.6vw, 4.6rem); text-transform: uppercase; letter-spacing: .012em; line-height: .96; text-wrap: balance; max-width: 15em; filter: url(#ds-flood-ink); } .ds-flood-lead { margin: 18px 0 0; font-size: 1.22rem; line-height: 1.5; color: #d3f5e2; max-width: 58ch; } .ds-flood-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; margin-top: 22px; } .ds-flood-btn { display: inline-flex; align-items: center; justify-content: center; padding: .8em 1.3em; border: 2px solid var(--on-ink, #f4f6fc); border-radius: 6px; background: var(--on-ink, #f4f6fc); color: var(--green, #0b7a45); font-weight: 700; font-size: 1.02rem; text-decoration: none; box-shadow: 0 9px 18px -10px rgba(28, 23, 64, .75); transition: translate .1s cubic-bezier(.16, 1, .3, 1), box-shadow .1s cubic-bezier(.16, 1, .3, 1), background .12s; } .ds-flood-btn:hover { background: #fff; } .ds-flood-btn:active { translate: 0 3px; box-shadow: 0 2px 5px -3px rgba(28, 23, 64, .8); } .ds-flood-btn:focus-visible { outline: 3px solid var(--on-ink, #f4f6fc); outline-offset: 3px; } .ds-flood-btn-line { background: transparent; color: var(--on-ink, #f4f6fc); box-shadow: none; } .ds-flood-btn-line:hover { background: rgba(255, 255, 255, .14); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Stamped Job Sheet",
+    "overview": "The page is one sheet of cool form paper, ruled in printed blue, and every fact on it that can change is a rubber-stamp impression: a finish date, a total, a status. Three stamp-pad inks carry fixed meanings, so the colour of a stamp already says what kind of fact it is. When the plan moves, the value is stamped again with a thump and the earlier impression stays underneath as a ghost. That one behaviour is the whole argument of the product, so it is also the whole motion system.\n\nEverything else is printed matter and stays quiet. Structure is drawn with thin blue rules and small blue captions, the way a form is, and content sits on those rules in rows instead of in boxes. Headlines are condensed gothic capitals pressed with uneven ink; text is a Franklin grotesque. Three sections flood edge to edge in one of the inks and print in reverse. Captures of the app, in its own Glass skin, are separate sheets stapled on at a slight lean. They are the only place another visual language appears.\n\nThe product record rules out three looks, and the build honours them: a page like every SaaS page, a dark and techy page, and a plain corporate one. It also records that the owner dislikes grids of generic feature cards. The system is light only (`color-scheme: light`); there is no dark variant.",
+    "keyCharacteristics": [
+      "Light, cool paper with visible grain. One deeper paper tone, no dark mode.",
+      "Structure is ruled lines (1.5px blue) and form rows, not filled boxes.",
+      "Three pad inks with fixed meanings: violet for time and the plan, green for money and done, red for changes and attention.",
+      "League Gothic capitals for anything stamped or measured; Libre Franklin for anything read.",
+      "Stamps tilt, sink into the paper (multiply blend) and carry uneven ink. Printed matter stays square, clean and flat.",
+      "Solid means committed. Dashed or hatched means pending.",
+      "One signature motion, the thump. Positions slide; nothing else moves.",
+      "Shadows only under separate objects: stapled captures, the work-order slip, buttons, pins."
+    ],
+    "rules": [
+      {
+        "name": "The Three Pads Rule",
+        "body": "Ink is chosen by what the fact is, never for variety: violet for time and the plan, green for money and done, red for changes and attention. A stamp that changes meaning changes ink, as Tentative in red becomes Approved in green.",
+        "section": "colors"
+      },
+      {
+        "name": "The Printed Blue Rule",
+        "body": "Blue belongs to the form, not to the content. It draws rules and sets captions; it never fills a shape and never inks a stamp.",
+        "section": "colors"
+      },
+      {
+        "name": "The Reverse Print Rule",
+        "body": "On a flood everything prints in Reverse White: headline, stamps, focus ring, and rules at 50% alpha. Secondary text takes that flood's tint. Buttons invert to a Reverse White fill with the flood's ink as their text. A paper slip laid on a flood resets to the paper palette inside its own edges.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Faces Rule",
+        "body": "League Gothic sets what is stamped or measured: headlines, stamps, prices, live outputs, bar labels, initials, pin numbers. Libre Franklin sets everything that is read. League Gothic appears only as capitals and figures, at weight 400, down to 1rem on desktop and about 0.9rem at the smallest on narrow screens.",
+        "section": "typography"
+      },
+      {
+        "name": "The Caption Rule",
+        "body": "The small blue caption names a field, a column, an axis or a control, and sits on the thing it names. No headline in the build has one above it.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Figures Rule",
+        "body": "Anything that is re-stamped or lines up in a column asks for `tabular-nums`: stamps, live outputs, bar labels, the price table, bid amounts.",
+        "section": "typography"
+      },
+      {
+        "name": "The Separate Sheet Rule",
+        "body": "A shadow means the thing could be picked up: a stapled capture, the work-order slip, a button, a pin. Anything printed or stamped on the sheet has none.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Ink Shadow Rule",
+        "body": "Shadows on paper are tints of Indigo Black, offset downward, soft, and pulled in with a negative spread so they sit under the object instead of around it.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Pending Is Dashed Rule",
+        "body": "A dashed frame, a dashed outline or hatching means not settled yet: Needed, Open, Tentative, Not a full match, the schedule line being changed, a gate, a limit, the list before it is priced. Solid means committed. Approving a tentative bar redraws it solid and green.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Thump Rule",
+        "body": "A change of state lands as a stamp impact and a change of position slides. Nothing moves that is not reporting a change.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "Do choose ink by meaning: violet for time and the plan, green for money and done, red for changes and attention (The Three Pads Rule).",
+      "Do draw structure with rules: 1.5px Printed Rule Blue, 2px for heavier divisions and control strokes, a 4px double rule above a total.",
+      "Do set stamped and measured things in League Gothic capitals at weight 400, and everything that is read in Libre Franklin.",
+      "Do give every stamp a tilt between -5deg and +7deg (default -2deg), lean neighbours differently, and alternate the `ink` and `ink-2` filters on adjacent impressions.",
+      "Do use the `ink-fine` filter on stamps of about 1.3rem and under, on every revision stamp, and on the hero stamps at 640px and below.",
+      "Do mark anything pending with a dashed frame or 45-degree hatching, and redraw it solid when it is committed.",
+      "Do re-stamp a changed value with the thump (0.24s, from scale 1.24 and opacity 0) and leave the earlier impression as a ghost at 17% opacity.",
+      "Do ask for `tabular-nums` on every figure that changes or aligns.",
+      "Do print in Reverse White on a flood, tint secondary text with that flood's tint, and invert the buttons.",
+      "Do show app captures as stapled attachments on a white mount, in the app's Glass skin, with a caption beneath.",
+      "Do set tool names, keys and sample lists in Libre Franklin inside a ruled box; the build has no monospace face.",
+      "Do keep the browser's own surfaces in the palette: violet selection, caret and scrollbar thumb, a 3px violet focus ring at 3px offset, underlines at 0.18em offset.",
+      "Do honour reduced motion the way the build does: no transitions, no animations, demos shown finished."
+    ],
+    "donts": [
+      "Don't build a grid of feature cards. The owner dislikes them and the build has none; claims are form rows, ruled demos and attachments.",
+      "Don't make it look like every SaaS page, dark and techy, or plain and corporate. The system is light only.",
+      "Don't add a fourth pad ink, and don't use blue as an ink. Blue draws rules and captions only.",
+      "Don't put a caption above a headline. Captions name fields, columns, axes and controls.",
+      "Don't tilt, roughen or multiply-blend printed matter. Body text, tables, buttons, form rows and bars stay square and clean; only stamps, inked headlines and the seal carry the ink filter, and only stamps, the seal and attachments lean.",
+      "Don't put a shadow under anything printed or stamped on the sheet (The Separate Sheet Rule).",
+      "Don't group content on paper with a filled or shadowed box. Rule it.",
+      "Don't set sentences or lowercase in League Gothic.",
+      "Don't add motion that is not reporting a change: no scroll-reveal entrances and no looping decoration.",
+      "Don't use a colour-blend gradient. Gradients in the build are only ruled lines, week ticks, hatching and the search shimmer."
+    ]
+  }
+}
