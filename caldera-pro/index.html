@@ -3,775 +3,689 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Caldera Pro — Time, budget and resources in sync</title>
-  <meta name="description" content="Caldera Pro is an AI-native, local-first project workspace for Windows. It keeps schedule, cost and crew on one plan, lets AI agents price materials and run routine tasks, tracks changes and status, and shows the job on dashboards you design.">
+  <title>Caldera Pro: time, budget and resources in sync</title>
+  <meta name="description" content="Caldera Pro is AI-native project management for Windows. It keeps schedule, cost and crew on one plan, lets AI agents price materials and run routine tasks, tracks changes and status, and shows the job on dashboards you design.">
   <meta property="og:title" content="Caldera Pro">
   <meta property="og:description" content="Time, budget and resources on one plan, for Windows.">
   <meta property="og:type" content="website">
-  <meta name="theme-color" content="#0b0c3a">
+  <meta name="theme-color" content="#f1f4fb">
   <link rel="icon" href="assets/favicon.png">
+  <link rel="preload" href="assets/fonts/league-gothic-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <script>document.documentElement.classList.add('js');</script>
   <style>
-    /* DM Sans, SIL Open Font License: see assets/fonts/dm-sans-OFL.txt */
-    @font-face {
-      font-family: 'DM Sans';
-      font-style: normal;
-      font-weight: 100 1000;
-      font-display: swap;
-      src: url(assets/fonts/dm-sans-latin.woff2) format('woff2');
-    }
+    /* League Gothic and Libre Franklin, SIL Open Font License: see assets/fonts/*-OFL.txt */
+    @font-face { font-family: 'League Gothic'; font-style: normal; font-weight: 400; font-display: swap; src: url(assets/fonts/league-gothic-latin-400-normal.woff2) format('woff2'); }
+    @font-face { font-family: 'Libre Franklin'; font-style: normal; font-weight: 100 900; font-display: swap; src: url(assets/fonts/libre-franklin-latin-wght-normal.woff2) format('woff2'); }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* The page wears the app's Glass skin: see-through panels over a backdrop that changes scene by scene.
-       --glass* and --ink* are the panels; --on* is text set straight on a backdrop and is set per scene. */
+    /* One job sheet. Paper, printed blue rules, and three stamp-pad inks:
+       violet = time and the plan, green = money and done, red = changes and attention. */
     :root {
-      --glass: rgba(255, 255, 255, .62);
-      --glass-strong: rgba(255, 255, 255, .82);
-      --glass-soft: rgba(255, 255, 255, .3);
-      --glass-line: rgba(255, 255, 255, .6);
-      --ink: #14173d;
-      --ink-muted: #383c66;
-      --accent: #1d4f91;
-      --on-accent: #ffffff;
-      --blue: #2457c5; --purple: #7442c8; --teal: #08695f; --amber: #854c00;
-      --rose: #a8244f; --green: #116633; --indigo: #4a3fc2;
-      --blur: saturate(1.6) blur(18px);
-      --shadow: 0 24px 60px -28px rgba(5, 6, 30, .6);
-      --radius: 16px;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --glass: rgba(15, 17, 44, .64);
-        --glass-strong: rgba(15, 17, 44, .84);
-        --glass-soft: rgba(15, 17, 44, .36);
-        --glass-line: rgba(255, 255, 255, .2);
-        --ink: #f2f3ff;
-        --ink-muted: #c6c9ea;
-        --accent: #a9c8ff;
-        --on-accent: #0e1233;
-        --blue: #8fb6ff; --purple: #c4adff; --teal: #5fdccb; --amber: #f5bd5c;
-        --rose: #ff94af; --green: #57d99c; --indigo: #b3acff;
-      }
-    }
-    /* No backdrop blur, or the reader asked for less transparency: make the panels nearly solid. */
-    @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-      :root { --glass: rgba(255, 255, 255, .9); --glass-soft: rgba(255, 255, 255, .7); }
-    }
-    @media (prefers-reduced-transparency: reduce) {
-      :root { --glass: rgba(255, 255, 255, .92); --glass-soft: rgba(255, 255, 255, .78); --blur: none; }
-    }
-    @media (prefers-reduced-transparency: reduce) and (prefers-color-scheme: dark) {
-      :root { --glass: rgba(15, 17, 44, .94); --glass-soft: rgba(15, 17, 44, .8); }
+      color-scheme: light;
+      --paper: #f1f4fb;
+      --paper-deep: #e2e8f6;
+      --rule: #6c88dd;
+      --form: #2748b5;
+      --ink: #1c1740;
+      --ink-soft: #4a4672;
+      --violet: #4a25c9;
+      --green: #0b7a45;
+      --red: #c91d38;
+      --on-ink: #f4f6fc;
+      --stamp-ink: var(--violet);
+      --stamp-face: 'League Gothic', sans-serif;
+      --text-face: 'Libre Franklin', sans-serif;
+      --ease: cubic-bezier(.16, 1, .3, 1);
+      --grain-paper: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .11 0 0 0 0 .09 0 0 0 0 .25 0 0 0 .13 -.02'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 -.08'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
 
-    html { scroll-behavior: smooth; scroll-padding-top: 96px; overflow-x: clip; }
+    html { scroll-behavior: smooth; scroll-padding-top: 84px; scrollbar-color: var(--violet) var(--paper-deep); }
     body {
-      font-family: 'DM Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
-      font-size: 17px;
-      line-height: 1.55;
-      color: var(--ink);
-      background: #0b0a2a;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: clip;
+      font-family: var(--text-face); font-size: 1.0625rem; line-height: 1.55;
+      color: var(--ink); background: var(--paper) var(--grain-paper); caret-color: var(--violet);
+      -webkit-font-smoothing: antialiased; overflow-x: clip;
     }
+    ::selection { background: var(--violet); color: var(--on-ink); }
     img { max-width: 100%; height: auto; display: block; }
-    a { color: inherit; }
-    :focus-visible { outline: 2px solid #fff; outline-offset: 3px; border-radius: 8px; box-shadow: 0 0 0 5px rgba(20, 23, 61, .7); }
-    .wrap { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
-    .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    a { color: inherit; text-underline-offset: .18em; text-decoration-thickness: .08em; }
+    button { font: inherit; color: inherit; }
+    :focus-visible { outline: 3px solid var(--violet); outline-offset: 3px; }
+    .flood :focus-visible { outline-color: var(--on-ink); }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+    .defs { position: absolute; width: 0; height: 0; }
+    svg.i { width: 1.15em; height: 1.15em; flex: none; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 
-    /* The one panel recipe every card shares */
-    .stage, .plan, .faq {
-      background: var(--glass);
-      -webkit-backdrop-filter: var(--blur);
-              backdrop-filter: var(--blur);
-      border: 1px solid var(--glass-line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      color: var(--ink);
-      text-shadow: none;
+    /* ── Lettering ── */
+    h1, h2, .stamp, .numeral {
+      font-family: var(--stamp-face); font-weight: 400; text-transform: uppercase; letter-spacing: .012em; line-height: .96;
     }
+    h1 { font-size: clamp(3.3rem, 8.3vw, 6rem); text-wrap: balance; }
+    h2 { font-size: clamp(2.7rem, 5.6vw, 4.6rem); text-wrap: balance; max-width: 15em; }
+    h3 { font-size: 1.3rem; font-weight: 700; line-height: 1.25; letter-spacing: -.01em; }
+    p { max-width: 68ch; }
+    .lead { font-size: 1.22rem; line-height: 1.5; color: var(--ink-soft); max-width: 58ch; }
+    .cap { font-size: .75rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--form); }
+    .note { font-size: .92rem; color: var(--ink-soft); }
+    kbd { font-family: inherit; font-size: .82em; font-weight: 700; padding: 1px 6px; border: 1.5px solid currentColor; border-radius: 4px; white-space: nowrap; }
 
-    kbd {
-      font-family: inherit; font-size: .78em; font-weight: 600;
-      padding: 1px 6px; border-radius: 5px;
-      background: var(--glass-strong); border: 1px solid var(--glass-line); border-bottom-width: 2px;
-      white-space: nowrap;
-    }
+    /* An inked headline: the same letters, pressed into the sheet. */
+    .inked { filter: url(#ink); color: var(--stamp-ink); }
+    section:nth-of-type(even) .inked, .stampbox:nth-child(even) .stamp, .track li:nth-child(even) .stamp { filter: url(#ink-2); }
+    .ink-green { --stamp-ink: var(--green); }
+    .ink-red { --stamp-ink: var(--red); }
 
-    /* ── Scenes: a backdrop pinned behind its sections ── */
-    .scene {
-      position: relative; z-index: 0; overflow: clip;
-      --on: #ffffff; --on-muted: rgba(255, 255, 255, .88); --eyebrow: #c9f3ff; --line: rgba(255, 255, 255, .22);
-      --halo: 0 0 18px rgba(8, 9, 50, .6), 0 1px 2px rgba(8, 9, 50, .45);
-      background: var(--base); text-shadow: var(--halo);
+    /* ── Stamps ── */
+    .stamp {
+      display: inline-flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+      padding: .3em .55em .22em; border: .085em solid currentColor; border-radius: .2em;
+      outline: .035em solid currentColor; outline-offset: .07em;
+      color: var(--stamp-ink); font-size: 2.4rem; white-space: nowrap; font-variant-numeric: tabular-nums;
+      rotate: var(--tilt, -2deg); filter: url(#ink); mix-blend-mode: multiply;
     }
-    .scene + .scene { margin-top: -32px; border-radius: 32px 32px 0 0; box-shadow: 0 -24px 60px -20px rgba(4, 5, 24, .7); }
-    .scene-bg { position: sticky; top: 0; height: 100vh; height: 100lvh; background: var(--art); }
-    .scene-body { position: relative; margin-top: -100vh; margin-top: -100lvh; padding-bottom: 32px; }
+    .stamp small { font: inherit; font-size: .42em; letter-spacing: .08em; line-height: 1.3; }
+    .stamp b { font-weight: 400; font-size: 1em; }
+    .stamp--sm { font-size: 1.32rem; padding: .2em .5em .12em; border-width: 2px; outline: 0; letter-spacing: .05em; filter: url(#ink-fine); --tilt: -1.5deg; }
+    .stamp--dash { border-style: dashed; outline: 0; }
+    .stamp--plain { border-color: transparent; outline: 0; padding-left: 0; padding-right: 0; }
+    .flood .stamp { mix-blend-mode: normal; }
+    .stampbox { position: relative; display: inline-flex; }
+    .stampbox .ghost { position: absolute; inset: 0; opacity: .17; --tilt: 3.5deg; translate: 7px 5px; pointer-events: none; }
+    .stampbox .ghost:empty { display: none; }
+    .rev {
+      position: absolute; right: -14px; top: -16px; z-index: 1; font-size: 1.05rem; --stamp-ink: var(--red); --tilt: 7deg;
+      padding: .2em .45em .12em; border-width: 2px; outline: 0; filter: url(#ink-fine);
+    }
+    .stamps .stamp.rev { font-size: 1.25rem; min-width: 0; right: -16px; top: -18px; }
+    .stampbox:nth-child(n) .stamp.rev { filter: url(#ink-fine); }
+    .rev[hidden] { display: none; }
+    .thump { animation: thump .24s var(--ease); }
+    @keyframes thump { from { scale: 1.24; opacity: 0; } }
 
-    .scene-peaks {
-      --base: #171a52;
-      --ridge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 300' preserveAspectRatio='none'%3E%3Cpath fill='%232d2670' fill-opacity='.85' d='M0 300V190l120-60 90 50 130-110 110 90 100-60 140 100 120-130 150 120 110-70 130 90 120-80 180 110v160z'/%3E%3Cpath fill='%230b0a2a' d='M0 300V250l160-50 120 40 150-70 130 60 170-40 150 60 140-70 160 60 140-40 180 60v90z'/%3E%3C/svg%3E");
-      --art:
-        var(--ridge) bottom / 100% 30vh no-repeat,
-        radial-gradient(55% 40% at 80% 20%, rgba(110, 231, 200, .5), transparent 70%),
-        radial-gradient(45% 32% at 55% 10%, rgba(122, 142, 255, .45), transparent 70%),
-        radial-gradient(58% 40% at 72% 80%, rgba(255, 95, 162, .78), transparent 70%),
-        radial-gradient(34% 26% at 90% 68%, rgba(255, 214, 150, .6), transparent 70%),
-        radial-gradient(50% 36% at 10% 80%, rgba(206, 76, 160, .42), transparent 70%),
-        linear-gradient(180deg, #0b0c3a 0%, #23215f 36%, #5f4796 60%, #9c4f8c 80%, #3a2468 100%);
-    }
-    .scene-glacier {
-      --on: #0c2340; --on-muted: #1f3d5c; --eyebrow: #0a4c88; --line: rgba(12, 35, 64, .2);
-      --halo: 0 0 16px rgba(255, 255, 255, .8);
-      --base: #8fd0f4;
-      --art:
-        linear-gradient(118deg, transparent 0 54%, rgba(255, 255, 255, .4) 54% 61%, transparent 61%),
-        linear-gradient(64deg, transparent 0 28%, rgba(255, 255, 255, .28) 28% 40%, transparent 40%),
-        linear-gradient(140deg, transparent 0 72%, rgba(10, 110, 190, .28) 72% 84%, transparent 84%),
-        radial-gradient(70% 45% at 50% 0%, #ffffff, transparent 72%),
-        linear-gradient(180deg, #e9f5fc 0%, #c4e6f8 30%, #84cff5 64%, #3aa6e6 100%);
-    }
-    .scene-shore {
-      --on: #23301f; --on-muted: #3b4636; --eyebrow: #0a5a5f; --line: rgba(35, 48, 31, .2);
-      --halo: 0 0 16px rgba(255, 255, 255, .8);
-      --base: #bfe6df;
-      --art:
-        radial-gradient(120% 16% at 50% 47%, rgba(255, 255, 255, .95), transparent 72%),
-        radial-gradient(80% 12% at 30% 53%, rgba(255, 255, 255, .6), transparent 72%),
-        linear-gradient(180deg, #f3e9d6 0%, #ead9bd 36%, #cfeee8 50%, #93d9d1 70%, #62c6bf 100%);
-    }
-    .scene-night {
-      --eyebrow: #b8f7e2;
-      --base: #070b1c;
-      --ridge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 300' preserveAspectRatio='none'%3E%3Cpath fill='%23030409' d='M0 300V230l140-70 110 60 120-100 130 80 150-50 130 70 150-110 140 100 120-50 150 70 110-40 150 60v110z'/%3E%3C/svg%3E");
-      --art:
-        var(--ridge) bottom / 100% 22vh no-repeat,
-        radial-gradient(70% 36% at 28% 22%, rgba(45, 226, 166, .45), transparent 70%),
-        radial-gradient(50% 34% at 76% 30%, rgba(106, 92, 255, .5), transparent 70%),
-        radial-gradient(60% 34% at 55% 92%, rgba(240, 90, 170, .32), transparent 70%),
-        linear-gradient(180deg, #04050f 0%, #0a1026 60%, #170f33 100%);
-    }
-    .scene-forest {
-      --eyebrow: #cdf7c4;
-      --base: #0f3b2a;
-      --ridge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 300' preserveAspectRatio='none'%3E%3Cpath fill='%23174d33' d='M0 300V170l40 40 50-110 50 100 40-70 60 120 50-150 60 140 40-60 60 110 50-130 60 120 50-80 50 110 60-160 60 150 40-70 60 120 50-140 60 130 50-60 50 100 60-150 60 140 40-80 60 120 50-100 50 90 40-60v190z'/%3E%3Cpath fill='%2305170f' d='M0 300V230l60-80 50 90 60-110 60 120 50-70 70 100 50-130 70 130 60-90 60 110 50-120 70 120 60-80 60 110 50-140 70 130 60-70 60 100 50-110 70 120 60-90 60 100 50-80 60 70v90z'/%3E%3C/svg%3E");
-      --art:
-        var(--ridge) bottom / 100% 30vh no-repeat,
-        linear-gradient(108deg, transparent 0 30%, rgba(214, 255, 190, .16) 30% 37%, transparent 37%),
-        linear-gradient(100deg, transparent 0 52%, rgba(214, 255, 190, .12) 52% 61%, transparent 61%),
-        radial-gradient(60% 42% at 34% 6%, rgba(196, 255, 170, .5), transparent 70%),
-        radial-gradient(50% 40% at 82% 34%, rgba(84, 214, 140, .34), transparent 70%),
-        linear-gradient(180deg, #061c13 0%, #0f3b2a 45%, #1f6a45 100%);
-    }
-    .scene-dunes {
-      --eyebrow: #d3dcff;
-      --base: #1a2552;
-      --ridge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 300' preserveAspectRatio='none'%3E%3Cpath fill='%23324489' d='M0 300V200c260-120 480-150 760-70 300 86 520 60 840-70v240z'/%3E%3Cpath fill='%231b2760' d='M0 300V260c300-90 560-80 820-20 280 64 500 40 780-40v100z'/%3E%3C/svg%3E");
-      --art:
-        var(--ridge) bottom / 100% 34vh no-repeat,
-        radial-gradient(60% 40% at 82% 12%, rgba(120, 150, 255, .4), transparent 70%),
-        linear-gradient(180deg, #0a0f2b 0%, #16204d 55%, #2a3a7c 100%);
-    }
-    .scene-dusk {
-      --eyebrow: #ffe1ef;
-      --base: #2b2466;
-      --ridge: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 300' preserveAspectRatio='none'%3E%3Cpath fill='%23372a78' fill-opacity='.9' d='M0 300V200l150-80 100 60 140-120 120 100 110-50 150 90 110-110 140 110 120-60 140 80 120-70 200 100v150z'/%3E%3Cpath fill='%230b0a2a' d='M0 300V255l180-55 130 45 140-65 150 55 160-45 140 60 150-65 170 55 130-35 250 55v95z'/%3E%3C/svg%3E");
-      --art:
-        var(--ridge) bottom / 100% 28vh no-repeat,
-        radial-gradient(60% 40% at 50% 88%, rgba(255, 160, 120, .8), transparent 70%),
-        radial-gradient(55% 40% at 12% 66%, rgba(255, 95, 162, .6), transparent 70%),
-        radial-gradient(50% 34% at 86% 22%, rgba(110, 231, 200, .34), transparent 70%),
-        linear-gradient(180deg, #0b0c3a 0%, #2b2466 44%, #7a4f95 76%, #d0738f 100%);
-    }
-    @media (prefers-color-scheme: dark) {
-      .scene-glacier {
-        --on: #ffffff; --on-muted: rgba(255, 255, 255, .88); --eyebrow: #c9f3ff; --line: rgba(255, 255, 255, .22);
-        --halo: 0 0 18px rgba(4, 16, 40, .6), 0 1px 2px rgba(4, 16, 40, .45);
-        --base: #0b4f8a;
-        --art:
-          linear-gradient(118deg, transparent 0 54%, rgba(255, 255, 255, .1) 54% 61%, transparent 61%),
-          linear-gradient(64deg, transparent 0 28%, rgba(255, 255, 255, .07) 28% 40%, transparent 40%),
-          radial-gradient(70% 45% at 50% 0%, rgba(120, 200, 255, .35), transparent 72%),
-          linear-gradient(180deg, #051a33 0%, #0a3f72 50%, #1a7fc0 100%);
-      }
-      .scene-shore {
-        --on: #ffffff; --on-muted: rgba(255, 255, 255, .88); --eyebrow: #c4f7ef; --line: rgba(255, 255, 255, .22);
-        --halo: 0 0 18px rgba(4, 24, 28, .6), 0 1px 2px rgba(4, 24, 28, .45);
-        --base: #0e4a52;
-        --art:
-          radial-gradient(120% 14% at 50% 47%, rgba(190, 240, 235, .35), transparent 72%),
-          linear-gradient(180deg, #2a2415 0%, #3a3320 34%, #12474d 52%, #0b5c66 72%, #063840 100%);
-      }
-    }
-
-    /* ── Nav: a floating glass bar ── */
-    .nav { position: fixed; top: 14px; left: 0; right: 0; z-index: 50; pointer-events: none; }
-    .nav .wrap {
-      pointer-events: auto;
-      width: min(1112px, calc(100% - 24px)); height: 58px; padding: 0 10px 0 18px;
-      display: flex; align-items: center; gap: 28px;
-      background: var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
-      border: 1px solid var(--glass-line); border-radius: 18px; box-shadow: var(--shadow);
-    }
-    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 700; font-size: 18px; letter-spacing: -.01em; }
-    .brand img { width: 38px; height: auto; }
-    .brand em { font-style: normal; font-weight: 500; color: var(--ink-muted); }
-    .nav ul { display: flex; gap: 26px; list-style: none; margin-left: auto; font-size: 15px; font-weight: 500; }
-    .nav ul a { text-decoration: none; color: var(--ink-muted); transition: color .15s; }
-    .nav ul a:hover { color: var(--ink); }
-
+    /* ── Buttons ── */
     .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 9px;
-      padding: 13px 22px; border-radius: 12px; border: 1px solid transparent;
-      font: inherit; font-weight: 600; font-size: 16px; text-decoration: none; cursor: pointer;
-      transition: transform .15s, box-shadow .15s, background .15s;
-      text-shadow: none;
+      display: inline-flex; align-items: center; justify-content: center; gap: .55em; cursor: pointer;
+      padding: .8em 1.3em; border: 2px solid var(--violet); border-radius: 6px;
+      background: var(--violet); color: var(--on-ink); font-weight: 700; font-size: 1.02rem; text-decoration: none;
+      transition: translate .1s var(--ease), box-shadow .1s var(--ease), background .12s;
+      box-shadow: 0 9px 18px -10px rgba(28, 23, 64, .75);
     }
-    .btn:hover { transform: translateY(-1px); }
-    .btn-primary { background: var(--accent); color: var(--on-accent); box-shadow: 0 10px 24px -12px rgba(8, 20, 60, .8); }
-    .btn-light { background: #ffffff; color: #14173d; box-shadow: 0 14px 34px -14px rgba(0, 0, 0, .7); }
-    .btn-ghost {
-      background: var(--glass-soft); border-color: var(--glass-line); color: inherit;
-      -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
-    }
-    .hero .btn-ghost { background: rgba(11, 12, 58, .42); border-color: rgba(255, 255, 255, .5); color: #fff; }
-    .btn-sm { padding: 9px 16px; font-size: 14px; border-radius: 11px; }
+    .btn:hover { background: #3a1ba6; border-color: #3a1ba6; }
+    .btn:active { translate: 0 3px; box-shadow: 0 2px 5px -3px rgba(28, 23, 64, .8); }
+    .btn:disabled { opacity: .55; cursor: default; translate: none; }
+    .btn--line { background: transparent; color: var(--violet); box-shadow: none; }
+    .btn--line:hover { background: var(--paper-deep); border-color: var(--violet); box-shadow: none; }
+    .btn--green { background: var(--green); border-color: var(--green); }
+    .btn--green:hover { background: #086236; border-color: #086236; }
+    .btn--sm { padding: .5em .95em; font-size: .93rem; }
+    .flood .btn, .flood .btn:hover { background: var(--on-ink); border-color: var(--on-ink); color: var(--flood); }
+    .flood .btn:hover { background: #fff; }
+    .flood .btn--line, .flood .btn--line:hover { background: transparent; color: var(--on-ink); }
+    .flood .btn--line:hover { background: rgba(255, 255, 255, .14); }
 
-    /* ── Hero ── */
-    .hero { padding: 136px 0 0; text-align: center; color: var(--on); }
-    .pill {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 6px 14px; border-radius: 99px; font-size: 14px; font-weight: 600;
-      color: #fff; background: rgba(255, 255, 255, .14); border: 1px solid rgba(255, 255, 255, .32);
-      -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); text-shadow: none;
-    }
-    .pill i { width: 6px; height: 6px; border-radius: 50%; background: #8ff0d0; }
-    h1 {
-      font-size: clamp(40px, 6.4vw, 78px); line-height: 1.04; letter-spacing: -.025em; font-weight: 700;
-      max-width: 15ch; margin: 22px auto 22px; text-shadow: 0 2px 30px rgba(8, 9, 50, .45);
-    }
-    h1 span { background: linear-gradient(100deg, #8fe6ff, #c7b8ff 50%, #ffa6d0); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: none; }
-    .lead { font-size: clamp(18px, 2vw, 21px); color: var(--on-muted); max-width: 60ch; margin: 0 auto; }
-    .cta { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 32px; }
-    .fine { font-size: 14px; color: var(--on-muted); margin-top: 16px; }
+    /* ── Letterhead ── */
+    .top { position: sticky; top: 0; z-index: 30; background: var(--paper) var(--grain-paper); border-bottom: 1.5px solid var(--rule); }
+    .top .wrap { display: flex; align-items: center; gap: 30px; height: 64px; }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; font-size: 1.1rem; letter-spacing: -.01em; }
+    .brand img { width: 40px; }
+    .top ul { display: flex; gap: 26px; list-style: none; margin-left: auto; font-size: .95rem; font-weight: 600; }
+    .top ul a { text-decoration: none; color: var(--ink-soft); }
+    .top ul a:hover { color: var(--violet); text-decoration: underline; }
 
-    .shot { position: relative; margin-top: 60px; }
-    .frame {
-      display: block; border-radius: 14px; overflow: hidden; background: #1b1b3a;
-      border: 1px solid rgba(255, 255, 255, .5);
-      box-shadow: 0 40px 90px -30px rgba(4, 5, 30, .8), 0 0 0 6px rgba(255, 255, 255, .1);
+    /* ── The sheet's head: what this is, for whom, at what price ── */
+    .head { padding: 26px 0 104px; }
+    .fields { display: grid; grid-template-columns: 1.1fr 1.2fr 1.2fr 1.5fr; border: 1.5px solid var(--rule); border-radius: 3px; }
+    .fields div { padding: 8px 14px 9px; border-left: 1.5px solid var(--rule); }
+    .fields div:first-child { border-left: 0; }
+    .fields dd { font-weight: 600; font-size: 1rem; }
+    .title { margin-top: 26px; }
+    .title .lead { margin-top: 16px; }
+    @media (min-width: 1240px) {
+      .title { display: grid; }
+      .title > * { grid-area: 1 / 1; }
+      .title .lead { justify-self: end; align-self: end; max-width: 41rem; margin: 0; padding-bottom: .2rem; }
     }
+    .cta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; margin-top: 22px; }
+    .cta-terms { display: none; }
+
+    /* ── The live job lines ── */
+    .job { margin-top: 26px; border-top: 1.5px solid var(--rule); }
+    .job-body {
+      display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 0 44px; min-height: 307.5px; border-bottom: 1.5px solid var(--rule);
+      background: repeating-linear-gradient(180deg, var(--rule) 0 1.5px, transparent 1.5px 46px) 0 30px / 100% calc(100% - 30px) no-repeat;
+    }
+    .job-ctl { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 18px; padding: 14px 0; border-bottom: 1.5px solid var(--rule); }
+    .job-ctl label { font-weight: 700; }
+    .job-ctl output { font-family: var(--stamp-face); font-size: 1.9rem; line-height: 1; text-transform: uppercase; min-width: 4.3em; color: var(--violet); font-variant-numeric: tabular-nums; }
+    .step { display: grid; place-items: center; width: 38px; height: 38px; border: 2px solid var(--violet); border-radius: 50%; background: transparent; color: var(--violet); cursor: pointer; }
+    .step:hover { background: var(--violet); color: var(--on-ink); }
+    input[type="range"] { -webkit-appearance: none; appearance: none; width: 210px; height: 30px; background: transparent; cursor: pointer; }
+    input[type="range"]::-webkit-slider-runnable-track { height: 4px; background: var(--violet); }
+    input[type="range"]::-moz-range-track { height: 4px; background: var(--violet); }
+    input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; margin-top: -10px; border-radius: 50%; background: var(--paper); border: 4px solid var(--violet); }
+    input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--paper); border: 4px solid var(--violet); }
+    input[type="range"]:hover::-webkit-slider-thumb { background: var(--violet); }
+    input[type="range"]:hover::-moz-range-thumb { background: var(--violet); }
+    .dial { display: inline-flex; align-items: center; gap: 10px; }
+    .job-note { margin-top: 12px; }
+
+    .g-axis, .g-row { display: grid; grid-template-columns: 196px 1fr; align-items: center; }
+    .g-axis { height: 30px; }
+    .g-axis div { position: relative; height: 100%; }
+    .g-axis i { position: absolute; bottom: 6px; font-style: normal; white-space: nowrap; }
+    .g-row { height: 46px; border-top: 1.5px solid var(--rule); }
+    .g-who { display: flex; align-items: center; gap: 10px; font-weight: 700; white-space: nowrap; overflow: hidden; }
+    .g-av { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border: 2px solid var(--violet); border-radius: 50%; font-family: var(--stamp-face); font-style: normal; font-size: 1rem; letter-spacing: .04em; color: var(--violet); padding-top: 1px; }
+    .g-val { display: none; margin-left: auto; font-weight: 600; font-size: .86rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+    .g-track { position: relative; height: 28px; background: repeating-linear-gradient(90deg, transparent 0 calc(21.875% - 1.5px), rgba(108, 136, 221, .5) calc(21.875% - 1.5px) 21.875%); }
+    .g-bar {
+      position: absolute; top: 0; height: 28px; padding: 2px 9px 0; display: flex; align-items: center; overflow: hidden;
+      background: var(--violet); color: var(--on-ink); border-radius: 3px;
+      font-family: var(--stamp-face); font-size: 1.12rem; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; font-variant-numeric: tabular-nums;
+      transition: left .5s var(--ease), width .5s var(--ease);
+    }
+    .g-row.is-live .g-bar { outline: 2px dashed var(--red); outline-offset: 3px; }
+
+    .stamps { display: flex; flex-wrap: wrap; align-content: center; justify-content: center; gap: 22px 22px; padding: 30px 0 6px; }
+    .stamps .stamp { font-size: 3.2rem; min-width: 3.9em; }
+    .stamps .stamp--crew { font-size: 1.95rem; min-width: 9.2em; --tilt: 1.5deg; padding-top: .4em; padding-bottom: .28em; }
+    .stamps .stamp--crew small { font-size: .56em; }
+    .stamps .stampbox:nth-child(2) .stamp { --tilt: 2.5deg; }
 
     /* ── Sections ── */
-    section { padding: 104px 0; color: var(--on); }
-    .eyebrow { font-size: 14px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--eyebrow); }
-    h2 { font-size: clamp(30px, 4.2vw, 48px); line-height: 1.1; letter-spacing: -.02em; font-weight: 700; margin-top: 10px; }
-    .head { max-width: 680px; margin-bottom: 44px; }
-    .head p { color: var(--on-muted); font-size: 19px; margin-top: 16px; }
+    section { padding: 112px 0; }
+    .sec-head { margin-bottom: 44px; }
+    .sec-head .lead { margin-top: 18px; }
+    .ruled { border-top: 1.5px solid var(--rule); padding-top: 30px; }
+    .sub { margin-top: 104px; }
+    .aside { margin-top: 26px; font-size: 1.08rem; color: var(--ink-soft); }
 
-    svg.i { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .flood { position: relative; background: var(--flood); color: var(--on-ink); --stamp-ink: var(--on-ink); --rule: rgba(244, 246, 252, .5); }
+    .flood::before { content: ""; position: absolute; inset: 0; background: var(--grain); opacity: .5; pointer-events: none; }
+    .flood > .wrap { position: relative; }
+    .flood .lead, .flood .note, .flood .aside { color: var(--tint); }
+    .flood .cap { color: var(--tint); }
+    .flood ::selection { background: var(--on-ink); color: var(--flood); }
+    .flood--violet { --flood: var(--violet); --tint: #ddd6ff; }
+    .flood--green { --flood: var(--green); --tint: #d3f5e2; }
+    .flood--red { --flood: var(--red); --tint: #ffe9ec; }
 
-    /* ── Lists and figures ── */
+    /* ── Terms set as form rows ── */
+    .terms { display: grid; }
+    .terms div { display: grid; grid-template-columns: 190px 1fr; gap: 20px; align-items: start; padding: 18px 0; border-top: 1.5px solid var(--rule); }
+    .terms div:last-child { border-bottom: 1.5px solid var(--rule); }
+    .terms dt { font-family: var(--stamp-face); font-size: 2rem; line-height: 1; text-transform: uppercase; letter-spacing: .02em; color: var(--stamp-ink); padding-top: 2px; }
+    .terms dd { color: var(--ink-soft); }
 
-    .ticks { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 28px; margin-top: 22px; }
-    .ticks li { position: relative; padding-left: 26px; font-size: 16px; }
-    .ticks li::before {
-      content: ""; position: absolute; left: 2px; top: .42em; width: 11px; height: 6px;
-      border-left: 2px solid var(--hue, var(--accent)); border-bottom: 2px solid var(--hue, var(--accent));
-      transform: rotate(-45deg);
+    /* ── Attachments: app captures stapled to the sheet ── */
+    .attach { position: relative; margin-top: 56px; }
+    .attach a { position: relative; display: block; padding: 34px 10px 10px; background: #fff; rotate: var(--lean, .5deg); box-shadow: 0 1px 2px rgba(28, 23, 64, .25), 0 22px 44px -22px rgba(28, 23, 64, .55); }
+    .attach a::after {
+      content: ""; position: absolute; left: 14px; top: 8px; width: 30px; height: 18px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 18'%3E%3Cpath d='M3 15 27 3' fill='none' stroke='%23565c7a' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
     }
+    .attach img { width: 100%; background: #1b1b3a; }
+    .attach figcaption { margin-top: 16px; font-size: .95rem; color: var(--ink-soft); max-width: 68ch; }
+    .flood .attach figcaption { color: var(--tint); }
+    .attach--left a { --lean: -.5deg; }
 
-    figcaption { text-align: center; color: var(--on); font-size: 14px; font-weight: 500; margin-top: 16px; }
+    /* ── AI: a routing slip. Everyone who asks goes through one layer. ── */
+    .route { margin: 8px 0 72px; }
+    .route ul { list-style: none; display: grid; }
+    .from { grid-template-columns: repeat(5, 1fr); }
+    .from li { position: relative; padding: 0 10px 46px; text-align: center; }
+    .from b { display: block; font-size: 1.12rem; }
+    .from span { display: block; font-size: .9rem; color: var(--tint); }
+    .from li::after { content: ""; position: absolute; left: 50%; bottom: 0; width: 2px; height: 34px; margin-left: -1px; background: var(--on-ink); }
+    .route-rail { height: 2px; margin: 0 10%; background: var(--on-ink); }
+    .seal { position: relative; display: grid; place-items: center; width: 300px; margin: 26px auto; }
+    .seal::before, .seal::after { content: ""; position: absolute; left: 50%; width: 2px; height: 26px; margin-left: -1px; background: var(--on-ink); }
+    .seal::before { top: -26px; }
+    .seal::after { bottom: -26px; }
+    .seal svg { width: 100%; height: auto; filter: url(#ink); rotate: -7deg; overflow: visible; }
+    .seal text { font-family: var(--stamp-face); fill: var(--on-ink); text-transform: uppercase; }
+    .to { grid-template-columns: repeat(6, 1fr); border-top: 2px solid var(--on-ink); }
+    .to li { position: relative; padding-top: 24px; text-align: center; font-weight: 700; }
+    .to li::before { content: ""; position: absolute; left: 50%; top: 0; width: 2px; height: 16px; margin-left: -1px; background: var(--on-ink); }
+    .route .note { text-align: center; margin: 14px auto 0; }
+
+    /* A work order: what you ask, what gets done. */
+    .slip { position: relative; background: var(--paper); color: var(--ink); padding: 30px 34px 34px; border-radius: 2px; box-shadow: 0 2px 3px rgba(12, 6, 60, .3), 0 26px 50px -24px rgba(12, 6, 60, .8); --rule: #6c88dd; --stamp-ink: var(--violet); }
+    .slip .stamp { mix-blend-mode: multiply; }
+    .slip .note, .slip .cap { color: var(--form); }
+    .slip :focus-visible { outline-color: var(--violet); }
+    .slip-top { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 14px 28px; padding-bottom: 18px; border-bottom: 1.5px solid var(--rule); }
+    .jobs { display: flex; flex-wrap: wrap; gap: 4px 6px; }
+    .jobs button { padding: .35em .8em; border: 2px solid transparent; border-radius: 5px; background: transparent; font-weight: 700; color: var(--ink-soft); cursor: pointer; }
+    .jobs button:hover { color: var(--violet); border-color: var(--rule); }
+    .jobs button[aria-selected="true"] { background: var(--violet); border-color: var(--violet); color: var(--on-ink); }
+    .order { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding-top: 22px; min-height: 232px; }
+    .order-ask p { margin-top: 10px; min-height: 2.9em; font-size: 1.5rem; font-weight: 600; line-height: 1.3; letter-spacing: -.012em; border-bottom: 1.5px solid var(--rule); padding-bottom: 12px; }
+    .caret { display: inline-block; width: 2px; height: 1.05em; margin-left: 2px; background: var(--violet); vertical-align: -.16em; animation: blink 1s steps(2) infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+    .done { list-style: none; display: grid; gap: 9px; margin-top: 12px; }
+    .done li { display: flex; align-items: baseline; gap: 10px; }
+    .done svg { color: var(--green); translate: 0 .18em; }
+    .done code { margin-left: 2px; padding: 0 6px; border: 1.5px solid var(--rule); border-radius: 4px; font: 600 .82em/1.5 var(--text-face); color: var(--form); }
+    .js .done li:not(.in) { visibility: hidden; }
+    .order-result { display: flex; align-items: center; gap: 16px; margin-top: 18px; font-weight: 700; }
+    .order-result .stamp { --stamp-ink: var(--green); font-size: 1.9rem; --tilt: -5deg; }
+    .js .order-result:not(.in) { visibility: hidden; }
+    .runs-on { margin-top: 22px; color: var(--tint); }
+    .runs-on b { color: var(--on-ink); }
+
+    /* The rack: pick the stamp that sets how far agents may go. */
+    .rack { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 56px; align-items: center; margin-top: 88px; padding-top: 30px; border-top: 2px solid var(--rule); }
+    .rack h3 { font-family: var(--stamp-face); font-weight: 400; font-size: 2.6rem; line-height: 1; text-transform: uppercase; letter-spacing: .012em; }
+    .rack p { margin-top: 14px; color: var(--tint); }
+    .heads { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .heads button { padding: .7em .2em; border: 2px solid var(--on-ink); border-radius: 6px; background: transparent; font-weight: 700; cursor: pointer; }
+    .heads button:hover { background: rgba(255, 255, 255, .14); }
+    .heads button[aria-pressed="true"] { background: var(--on-ink); color: var(--violet); }
+    .pressed { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 24px; margin-top: 26px; min-height: 5.6em; }
+    .pressed .stamp { font-size: 2.3rem; --tilt: -4deg; }
+    .pressed p { margin: 0; color: var(--on-ink); font-size: 1.1rem; }
+
+    /* ── Materials ── */
+    .pricer { display: grid; grid-template-columns: .8fr auto 1.7fr; gap: 34px; align-items: center; }
+    .pricer pre { margin-top: 10px; padding: 14px 16px; border: 1.5px dashed var(--rule); border-radius: 3px; font: 500 .97rem/1.9 var(--text-face); white-space: pre-wrap; }
+    .pricer .note { margin-top: 10px; }
+    .pricer-go { display: grid; justify-items: center; gap: 12px; text-align: center; max-width: 12rem; }
+    .ptable { width: 100%; margin-top: 10px; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+    .ptable th { padding: 0 10px 8px 0; text-align: left; }
+    .ptable td { padding: 9px 10px 9px 0; border-top: 1.5px solid var(--rule); white-space: nowrap; height: 53px; }
+    .ptable .num { text-align: right; padding-right: 18px; }
+    .ptable .miss td:nth-child(4) { color: var(--ink-soft); font-style: italic; white-space: normal; }
+    .ptable tfoot td { border-top: 4px double var(--rule); font-weight: 700; }
+    .ptable tfoot .note { margin-left: 18px; font-weight: 400; }
+    .pricer-out > .note { margin-top: 12px; }
+    .ptable .stamp--sm { min-width: 4.6em; }
+    .ptable tr.searching .fill { position: relative; color: transparent; }
+    .ptable tr.searching .fill::after { content: ""; position: absolute; inset: 16px 14px 16px 0; border-radius: 3px; background: linear-gradient(90deg, var(--paper-deep) 25%, #fff 50%, var(--paper-deep) 75%) 0 0 / 200% 100%; animation: shimmer .9s linear infinite; }
+    .ptable tr.searching .stamp { visibility: hidden; }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+    .s-needed { --stamp-ink: var(--red); border-style: dashed; }
+    .s-priced, .s-ordered, .s-progress { --stamp-ink: var(--violet); }
+    .s-received, .s-done, .s-match { --stamp-ink: var(--green); }
+    .s-open { --stamp-ink: var(--ink-soft); border-style: dashed; }
+    .s-near { --stamp-ink: var(--red); border-style: dashed; }
+
+    .track { list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0 28px; margin-top: 46px; padding-top: 26px; border-top: 1.5px solid var(--rule); }
+    .track li { position: relative; }
+    .track .stamp { font-size: 2.1rem; }
+    .track li:nth-child(even) .stamp { --tilt: 1.5deg; }
+    .track p { margin-top: 12px; font-size: .97rem; color: var(--ink-soft); }
+    .track li + li > svg { position: absolute; left: -29px; top: 18px; width: 26px; height: 26px; color: var(--form); }
+
+    /* ── Compare ── */
+    .versus { display: grid; grid-template-columns: .75fr 1.75fr; gap: 56px; align-items: start; }
+    .hunt dd { font-size: 1.5rem; font-weight: 700; line-height: 1.2; letter-spacing: -.012em; margin: 4px 0 18px; }
+    .musts { list-style: none; display: grid; gap: 8px; margin: 8px 0 18px; }
+    .musts li { display: flex; align-items: baseline; gap: 10px; font-weight: 600; }
+    .musts svg { color: var(--green); translate: 0 .18em; }
+    .bids { list-style: none; position: relative; display: grid; gap: 26px; padding-bottom: 34px; }
+    .bid-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px 14px; padding-right: 14px; }
+    .bid-head b { font-size: 1.1rem; }
+    .bid-head span { font-size: .93rem; color: var(--ink-soft); }
+    .bid-track { position: relative; height: 34px; margin-top: 8px; background: var(--paper-deep); }
+    .bid-fill { width: var(--w); height: 100%; background: var(--green); }
+    .near .bid-fill { background: repeating-linear-gradient(45deg, var(--red) 0 7px, #d8475c 7px 14px); }
+    .bid-track em { position: absolute; left: 12px; top: 3px; font-family: var(--stamp-face); font-style: normal; font-size: 1.55rem; line-height: 34px; letter-spacing: .03em; color: #fff; font-variant-numeric: tabular-nums; }
+    .near .bid-track em { text-shadow: 0 0 6px rgba(120, 10, 30, .85); }
+    .bids p { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 14px; margin-top: 12px; padding-right: 14px; font-size: .97rem; color: var(--ink-soft); }
+    .bid-limit { position: absolute; right: 0; top: 0; bottom: 34px; width: 0; border-right: 2px dashed var(--ink); pointer-events: none; }
+    .versus-note { grid-column: 2; margin-top: -8px; }
+    .bid-limit span { position: absolute; right: 0; bottom: -30px; white-space: nowrap; color: var(--ink); }
+
+    /* ── Changes and status ── */
+    .changer { display: grid; grid-template-columns: 1.25fr 1fr; }
+    .demo { padding: 4px 40px 0 0; }
+    .demo + .demo { padding: 4px 0 0 40px; border-left: 1.5px solid var(--rule); }
+    .demo-title { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 18px; font-size: 1.5rem; font-weight: 700; letter-spacing: -.012em; }
+    .demo-title small { font-size: .95rem; font-weight: 600; color: var(--ink-soft); letter-spacing: 0; }
+    .demo-title .stamp { font-size: 1.7rem; }
+    .demo-say { min-height: 4.8em; margin-top: 18px; color: var(--ink-soft); }
+    .demo-say b { color: var(--ink); }
+    .demo-ctl { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .co-axis { position: relative; height: 26px; margin-top: 22px; }
+    .co-axis i { position: absolute; bottom: 5px; font-style: normal; }
+    .co-track { position: relative; height: 70px; border-top: 1.5px solid var(--rule); border-bottom: 1.5px solid var(--rule); background: repeating-linear-gradient(90deg, transparent 0 calc(25% - 1.5px), rgba(108, 136, 221, .5) calc(25% - 1.5px) 25%); }
+    .co-gate { position: absolute; top: 0; bottom: 0; width: 0; border-left: 2px dashed var(--ink); transition: left .55s var(--ease); }
+    .co-gate b { position: absolute; left: -17px; top: 19px; width: 32px; height: 32px; rotate: 45deg; display: grid; place-items: center; background: var(--ink); border-radius: 3px; }
+    .co-gate b span { rotate: -45deg; font-family: var(--stamp-face); font-weight: 400; font-size: 1.05rem; letter-spacing: .04em; color: var(--on-ink); padding-top: 1px; }
+    .co-bar { position: absolute; top: 19px; width: 17.9%; height: 32px; padding: 2px 10px 0; display: flex; align-items: center; border: 2px dashed var(--red); border-radius: 3px; background: repeating-linear-gradient(45deg, rgba(201, 29, 56, .16) 0 7px, transparent 7px 14px); font-family: var(--stamp-face); font-size: 1.15rem; letter-spacing: .05em; white-space: nowrap; color: var(--red); transition: left .55s var(--ease); }
+    .co-bar.done { background: var(--green); border: 2px solid var(--green); color: var(--on-ink); }
+    .st-range { display: block; margin-top: 22px; }
+    .st-range span { display: flex; align-items: center; gap: 14px; margin-top: 4px; }
+    .st-range input { flex: 1; width: auto; }
+    .st-range output { font-family: var(--stamp-face); font-size: 1.9rem; line-height: 1; min-width: 2.6em; color: var(--violet); font-variant-numeric: tabular-nums; }
+    .board { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 18px; border: 1.5px solid var(--rule); border-radius: 3px; }
+    .board div { height: 92px; padding: 8px 10px; border-left: 1.5px solid var(--rule); }
+    .board div:first-child { border-left: 0; }
+    .tok { position: absolute; left: 0; bottom: 12px; width: calc(100% / 3 - 20px); margin-left: 10px; padding: 7px 10px 6px; border-radius: 3px; font-style: normal; font-weight: 700; font-size: .95rem; color: var(--on-ink); background: var(--violet); translate: calc(var(--col) * (100% + 20px)) 0; transition: translate .5s var(--ease), background .3s; }
+    .board[data-col="0"] { --col: 0; } .board[data-col="1"] { --col: 1; } .board[data-col="2"] { --col: 2; }
+    .board[data-col="0"] .tok { background: var(--ink-soft); }
+    .board[data-col="2"] .tok { background: var(--green); }
+
+    /* ── Workspace: the capture, keyed ── */
+    .annot { display: grid; grid-template-columns: 1.85fr 1fr; gap: 48px; align-items: center; }
+    .annot .attach { margin-top: 0; }
+    .annot-img { position: relative; }
+    .pin, .key .num { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; font-family: var(--stamp-face); font-style: normal; font-size: 1.3rem; line-height: 1; padding-top: 2px; color: var(--on-ink); background: var(--red); transition: scale .18s var(--ease), background .18s; }
+    .pin { position: absolute; z-index: 2; left: var(--x); top: var(--y); margin: -16px 0 0 -16px; box-shadow: 0 0 0 3px #fff, 0 6px 14px rgba(28, 23, 64, .5); }
+    .pin.hot, .key li.hot .num { background: var(--violet); scale: 1.2; }
+    .key { list-style: none; }
+    .key li { display: grid; grid-template-columns: 32px 1fr; gap: 16px; padding: 14px 0; border-top: 1.5px solid var(--rule); }
+    .key li:last-child { border-bottom: 1.5px solid var(--rule); }
+    .key b { display: block; font-size: 1.1rem; }
+    .key span { color: var(--ink-soft); font-size: .98rem; }
+    .terms--plain div { grid-template-columns: 310px 1fr; padding: 15px 0; }
+    .terms--plain dt { font-family: var(--text-face); font-size: 1.1rem; font-weight: 700; line-height: 1.5; text-transform: none; letter-spacing: 0; color: var(--ink); padding: 0; }
 
     /* ── Pricing ── */
-    .plans { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 780px; margin: 0 auto; }
-    .plan { position: relative; border-radius: 20px; padding: 32px; display: flex; flex-direction: column; }
-    .plan.best { border-color: #fff; box-shadow: 0 0 0 2px rgba(255, 255, 255, .7), 0 30px 70px -30px rgba(255, 150, 200, .9); }
-    .plan .tag { position: absolute; top: -13px; right: 24px; padding: 3px 12px; border-radius: 99px; font-size: 13px; font-weight: 700; background: var(--accent); color: var(--on-accent); }
-    .plan h3 { font-size: 17px; color: var(--ink-muted); font-weight: 600; }
-    .price { font-size: 56px; font-weight: 700; letter-spacing: -.025em; line-height: 1.1; margin-top: 6px; }
-    .price small { font-size: 17px; font-weight: 500; color: var(--ink-muted); letter-spacing: 0; }
-    .plan .note { color: var(--ink-muted); font-size: 15px; min-height: 1.6em; }
-    .plan .ticks { grid-template-columns: 1fr; margin: 22px 0 28px; }
-    .plan .btn { margin-top: auto; }
-    .plan .btn-ghost { background: var(--glass-strong); }
-    .under { text-align: center; color: var(--on-muted); font-size: 15px; margin-top: 22px; }
+    .plans { display: grid; grid-template-columns: 1fr 1fr; border-top: 2px solid var(--rule); border-bottom: 2px solid var(--rule); }
+    .plan { position: relative; display: flex; flex-direction: column; padding: 30px 44px 34px 0; }
+    .plan + .plan { padding: 30px 0 34px 44px; border-left: 2px solid var(--rule); }
+    .plan h3 { font-size: 1.15rem; }
+    .price { font-size: 6rem; line-height: .9; margin-top: 8px; }
+    .price small { font-family: var(--text-face); font-size: 1.05rem; font-weight: 600; text-transform: none; letter-spacing: 0; color: var(--tint); }
+    .plan > p { color: var(--tint); min-height: 1.6em; }
+    .ticks { list-style: none; display: grid; gap: 9px; margin: 22px 0 28px; }
+    .ticks li { display: flex; align-items: baseline; gap: 10px; }
+    .ticks svg { translate: 0 .18em; }
+    .plan .btn { margin-top: auto; align-self: flex-start; }
+    .plan .stamp { position: absolute; right: 12px; top: 40px; font-size: 2.1rem; --tilt: 6deg; }
 
-    /* ── FAQ ── */
-    .faq { max-width: 780px; margin: 0 auto; padding: 6px 28px; }
-    .faq details { border-top: 1px solid var(--glass-line); }
-    .faq details:first-child { border-top: 0; }
-    .faq summary { list-style: none; cursor: pointer; padding: 20px 36px 20px 0; font-weight: 600; font-size: 18px; position: relative; }
+    /* ── Questions ── */
+    .faq { max-width: 860px; border-bottom: 1.5px solid var(--rule); }
+    .faq details { border-top: 1.5px solid var(--rule); }
+    .faq summary { list-style: none; cursor: pointer; position: relative; padding: 20px 48px 20px 0; font-weight: 700; font-size: 1.15rem; }
     .faq summary::-webkit-details-marker { display: none; }
-    .faq summary::after { content: "+"; position: absolute; right: 4px; top: 50%; transform: translateY(-50%); font-size: 24px; font-weight: 400; color: var(--ink-muted); transition: transform .2s; }
-    .faq details[open] summary::after { transform: translateY(-50%) rotate(45deg); }
-    .faq details p { color: var(--ink-muted); padding: 0 36px 22px 0; }
-    .faq a { color: var(--accent); font-weight: 600; }
+    .faq summary::before, .faq summary::after { content: ""; position: absolute; right: 6px; top: 50%; width: 18px; height: 2.5px; margin-top: -1px; background: var(--violet); transition: rotate .2s var(--ease); }
+    .faq summary::after { rotate: 90deg; }
+    .faq details[open] summary::after { rotate: 0deg; }
+    .faq summary:hover { color: var(--violet); }
+    .faq details p { padding: 0 48px 22px 0; color: var(--ink-soft); }
+    .faq a { color: var(--violet); font-weight: 600; }
 
-    /* ── Final + footer ── */
-    .final { text-align: center; padding: 40px 0 34vh; }
-    .final img { width: 104px; margin: 0 auto 20px; }
-    .final h2 { max-width: 18ch; margin-left: auto; margin-right: auto; text-shadow: 0 2px 30px rgba(8, 9, 50, .45); }
-    footer { background: #0b0a2a; padding: 30px 0 44px; color: rgba(255, 255, 255, .72); font-size: 15px; }
-    footer .wrap { display: flex; flex-wrap: wrap; gap: 10px 28px; justify-content: space-between; }
-    footer nav { display: flex; flex-wrap: wrap; gap: 8px 22px; }
-    footer a { text-decoration: none; }
-    footer a:hover { color: #fff; }
+    /* ── Close ── */
+    .close { padding: 120px 0 128px; }
+    .close h2 { font-size: clamp(3.3rem, 8.3vw, 6rem); max-width: 11em; }
+    .close .cta { margin-top: 34px; }
+    footer { padding: 26px 0 40px; border-top: 1.5px solid var(--rule); font-size: .95rem; color: var(--ink-soft); }
+    footer .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 26px; }
+    footer img { width: 34px; }
+    footer nav { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-left: auto; }
 
-    /* ── Shared pieces of the interactive stages ── */
-    .stage { padding: 30px; border-radius: 22px; }
-    .kicker { display: block; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
-    .stage-note { margin-top: 18px; font-size: 14px; color: var(--ink-muted); }
-    .aside { color: var(--on-muted); font-size: 17px; max-width: 72ch; margin-top: 22px; }
-    figure.shot { margin-top: 44px; }
-    .sub { margin-top: 96px; }
-    .head.center, .pricing .head { margin-left: auto; margin-right: auto; text-align: center; }
-    .chip { display: inline-block; padding: 1px 9px; border-radius: 99px; font-size: 12.5px; font-weight: 700; white-space: nowrap; }
-    .chip.needed { color: var(--rose); background: color-mix(in srgb, var(--rose) 16%, transparent); }
-    .chip.priced { color: var(--amber); background: color-mix(in srgb, var(--amber) 18%, transparent); }
-    .chip.ordered { color: var(--blue); background: color-mix(in srgb, var(--blue) 16%, transparent); }
-    .chip.received { color: var(--green); background: color-mix(in srgb, var(--green) 16%, transparent); }
-    input[type="range"] { accent-color: var(--accent); }
-
-    /* ── Hero: an index instead of tiles ── */
-    .rail { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 0; margin-top: 48px; }
-    .rail a { display: flex; align-items: baseline; gap: 9px; padding: 4px 24px; border-left: 1px solid var(--line); color: var(--on); font-size: 17px; font-weight: 600; text-decoration: none; }
-    .rail a:first-child { border-left: 0; }
-    .rail a:hover { text-decoration: underline; text-underline-offset: 6px; }
-    .rail i { font-style: normal; font-size: 12px; font-weight: 700; letter-spacing: .08em; color: var(--eyebrow); }
-
-    /* ── In sync: a schedule you can stretch ── */
-    .sim-top { display: flex; align-items: center; justify-content: space-between; gap: 16px 28px; flex-wrap: wrap; }
-    .sim-top b, .console-top b { display: block; font-size: 22px; letter-spacing: -.015em; line-height: 1.2; margin-top: 2px; }
-    .sim-ctl { display: flex; align-items: center; gap: 10px; }
-    .sim-ctl button { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--glass-line); background: var(--glass-strong); color: var(--ink); font: inherit; font-size: 20px; font-weight: 600; line-height: 1; cursor: pointer; }
-    .sim-ctl input { width: 190px; }
-    .sim-ctl output { min-width: 4.6em; font-weight: 700; font-variant-numeric: tabular-nums; }
-    .sim-body { display: grid; grid-template-columns: 1.65fr 1fr; gap: 36px; margin-top: 26px; align-items: start; }
-    .g-axis, .g-row { display: grid; grid-template-columns: 168px 1fr; align-items: center; }
-    .g-axis div { position: relative; height: 20px; }
-    .g-axis i { position: absolute; top: 0; font-style: normal; font-size: 12px; color: var(--ink-muted); white-space: nowrap; }
-    .g-row { height: 50px; border-top: 1px solid var(--glass-line); }
-    .g-who { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px; white-space: nowrap; overflow: hidden; }
-    .g-val { display: none; margin-left: auto; font-weight: 600; font-size: 13px; color: var(--ink-muted); font-variant-numeric: tabular-nums; }
-    .g-av { flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-size: 11px; font-weight: 700; color: #fff; background: var(--hue); }
-    .g-track { position: relative; height: 28px; background: repeating-linear-gradient(90deg, transparent 0 calc(21.875% - 1px), var(--glass-line) calc(21.875% - 1px) 21.875%); }
-    .g-bar {
-      position: absolute; top: 0; height: 28px; padding: 0 9px; border-radius: 7px; background: var(--hue); color: #fff;
-      display: flex; align-items: center; font-size: 12px; font-weight: 700; white-space: nowrap; overflow: hidden;
-      box-shadow: 0 8px 16px -10px var(--hue); transition: left .5s cubic-bezier(.2, .8, .2, 1), width .5s cubic-bezier(.2, .8, .2, 1);
-    }
-    .g-row.is-live .g-bar { box-shadow: 0 0 0 2px var(--glass-strong), 0 0 0 4px var(--hue); }
-    .sim-read { display: grid; gap: 20px; }
-    .sim-read div { padding-left: 16px; border-left: 3px solid var(--hue); }
-    .sim-read dt { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--hue); }
-    .sim-read dd { font-size: 28px; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; font-variant-numeric: tabular-nums; }
-    .sim-read dd small { margin-left: 6px; padding: 2px 9px; border-radius: 99px; font-size: 13px; letter-spacing: 0; vertical-align: middle; color: var(--hue); background: color-mix(in srgb, var(--hue) 16%, transparent); }
-    .sim-read p { font-size: 15px; color: var(--ink-muted); margin-top: 3px; }
-    .bump { animation: bump .45s; }
-    @keyframes bump { 40% { transform: scale(1.045); } }
-
-    /* ── AI-native: everything goes through one tool layer ── */
-    .bus { color: var(--on); margin-bottom: 52px; }
-    .ports, .stores { list-style: none; display: grid; }
-    .ports { grid-template-columns: repeat(5, 1fr); }
-    .ports li { position: relative; text-align: center; padding: 0 8px 58px; }
-    .ports b { display: block; font-size: 18px; letter-spacing: -.01em; }
-    .ports span { display: block; font-size: 14px; color: var(--on-muted); }
-    .ports li::after { content: ""; position: absolute; left: 50%; bottom: 0; width: 2px; height: 46px; margin-left: -1px; background: linear-gradient(180deg, transparent, #8ff0d0); }
-    .ports li::before {
-      content: ""; position: absolute; left: 50%; bottom: 40px; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%;
-      background: #d9fff2; box-shadow: 0 0 12px 2px #8ff0d0; opacity: 0;
-      animation: drop 2.6s linear infinite; animation-delay: calc(var(--i) * .42s);
-    }
-    @keyframes drop { 0% { transform: translateY(0); opacity: 0; } 15%, 80% { opacity: 1; } 100% { transform: translateY(40px); opacity: 0; } }
-    .bus-rail { height: 2px; margin: 0 10%; background: #8ff0d0; box-shadow: 0 0 14px #8ff0d0; }
-    .core {
-      position: relative; width: max-content; max-width: 100%; margin: 30px auto 0; padding: 22px 56px 24px; text-align: center; border-radius: 99px;
-      background: rgba(6, 12, 30, .78); border: 1px solid #8ff0d0; text-shadow: none;
-      box-shadow: 0 0 0 7px rgba(143, 240, 208, .13), 0 0 70px rgba(70, 230, 170, .6);
-    }
-    .core::before, .core::after { content: ""; position: absolute; left: 50%; width: 2px; height: 30px; margin-left: -1px; background: #8ff0d0; }
-    .core::before { top: -31px; }
-    .core::after { bottom: -31px; }
-    .core strong { display: block; font-size: 60px; line-height: 1; letter-spacing: -.03em; background: linear-gradient(100deg, #8fe6ff, #8ff0d0); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .core span { display: block; font-size: 18px; font-weight: 700; color: #fff; }
-    .core em { display: block; font-style: normal; font-size: 14px; color: rgba(255, 255, 255, .8); }
-    .stores { grid-template-columns: repeat(6, 1fr); margin-top: 30px; border-top: 2px solid #8ff0d0; }
-    .stores li { position: relative; padding-top: 26px; text-align: center; font-weight: 600; }
-    .stores li::before { content: ""; position: absolute; left: 50%; top: 0; width: 2px; height: 18px; margin-left: -1px; background: #8ff0d0; }
-    .bus-note { text-align: center; font-size: 14px; color: var(--on-muted); margin-top: 12px; }
-
-    .console-top { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px 28px; flex-wrap: wrap; }
-    .scn-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
-    .scn-tabs button { padding: 7px 15px; border-radius: 99px; border: 1px solid var(--glass-line); background: transparent; font: inherit; font-size: 15px; font-weight: 600; color: var(--ink-muted); cursor: pointer; }
-    .scn-tabs button[aria-selected="true"] { background: var(--accent); border-color: transparent; color: var(--on-accent); }
-    .scn { display: grid; grid-template-columns: 1.05fr 1fr; gap: 36px; margin-top: 26px; min-height: 212px; align-items: start; }
-    .scn-prompt { margin-top: 10px; min-height: 60px; padding: 15px 18px; border-radius: 13px; background: var(--glass-strong); border: 1px solid var(--glass-line); font-size: 19px; font-weight: 500; }
-    .caret { display: inline-block; width: 2px; height: 1.1em; margin-left: 2px; background: var(--accent); vertical-align: -.18em; animation: blink 1s steps(2) infinite; }
-    @keyframes blink { 50% { opacity: 0; } }
-    .scn-steps { list-style: none; display: grid; gap: 10px; margin-top: 12px; }
-    .scn-steps li { position: relative; padding-left: 34px; font-size: 17px; transition: opacity .35s, transform .35s; }
-    .js .scn-steps li:not(.in), .js .scn-result:not(.in) { opacity: 0; transform: translateY(6px); }
-    .scn-steps li::before { content: "\2713"; position: absolute; left: 0; top: 2px; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 700; background: var(--accent); color: var(--on-accent); }
-    .scn-steps code { margin-left: 6px; padding: 1px 7px; border-radius: 5px; font-family: Consolas, ui-monospace, monospace; font-size: .8em; background: var(--glass-strong); border: 1px solid var(--glass-line); }
-    .scn-result { margin-top: 16px; font-size: 18px; font-weight: 700; transition: opacity .4s, transform .4s; }
-    .runs-on { text-align: center; color: var(--on-muted); font-size: 16px; margin-top: 20px; }
-    .runs-on b { color: var(--on); }
-
-    .guard { display: grid; grid-template-columns: 1fr 1.25fr; gap: 48px; align-items: center; margin-top: 72px; padding-top: 64px; border-top: 1px solid var(--line); color: var(--on); }
-    .guard h3 { font-size: 28px; letter-spacing: -.02em; line-height: 1.15; margin-top: 10px; }
-    .guard p { color: var(--on-muted); margin-top: 12px; }
-    .levels { display: grid; grid-template-columns: repeat(4, 1fr); padding: 5px; border-radius: 99px; background: rgba(255, 255, 255, .12); border: 1px solid var(--line); }
-    .levels button { padding: 11px 6px; border: 0; border-radius: 99px; background: transparent; font: inherit; font-size: 16px; font-weight: 600; color: var(--on-muted); cursor: pointer; text-shadow: none; transition: background .2s, color .2s; }
-    .levels button[aria-pressed="true"] { background: #fff; color: #14173d; box-shadow: 0 8px 20px -8px rgba(0, 0, 0, .6); }
-    .guard .levels-say { min-height: 3.2em; margin-top: 16px; font-size: 18px; color: var(--on); }
-
-    /* ── Materials: a list goes in, prices come back ── */
-    .pricer { display: grid; grid-template-columns: .82fr .5fr 1.65fr; gap: 30px; align-items: center; }
-    .pricer small, .versus small { display: block; margin-top: 10px; font-size: 14px; color: var(--ink-muted); }
-    .pricer-list pre { margin-top: 10px; padding: 16px 18px; border-radius: 13px; background: var(--glass-strong); border: 1px dashed var(--glass-line); font: 15px/1.95 Consolas, ui-monospace, monospace; white-space: pre-wrap; }
-    .pricer-go { text-align: center; }
-    .pricer-go .btn { margin-top: 12px; border-radius: 99px; padding: 13px 26px; }
-    .pricer-go .btn::after { content: "\2192"; }
-    .ptable { width: 100%; margin-top: 10px; border-collapse: collapse; font-size: 15px; }
-    .ptable th { padding: 0 8px 7px; text-align: left; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-muted); }
-    .ptable td { padding: 9px 8px; border-top: 1px solid var(--glass-line); white-space: nowrap; }
-    .ptable .num { text-align: right; font-variant-numeric: tabular-nums; }
-    .ptable .miss td:nth-child(4) { color: var(--ink-muted); font-style: italic; white-space: normal; }
-    .ptable tfoot td { font-weight: 700; border-top: 2px solid var(--glass-line); }
-    .ptable tr.searching .fill { position: relative; color: transparent; }
-    .ptable tr.searching .fill::after { content: ""; position: absolute; inset: 11px 8px; border-radius: 6px; background: linear-gradient(90deg, var(--glass-line) 25%, var(--glass-strong) 50%, var(--glass-line) 75%) 0 0 / 200% 100%; animation: shimmer .9s linear infinite; }
-    @keyframes shimmer { to { background-position: -200% 0; } }
-    .track { grid-column: 1 / -1; list-style: none; display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 6px; }
-    .track li { position: relative; padding: 12px 18px 0 0; border-top: 4px solid var(--c); font-size: 14px; color: var(--ink-muted); }
-    .track li + li::before { content: ""; position: absolute; left: -1px; top: -10px; border: 8px solid transparent; border-left-color: var(--glass-strong); }
-    .track b { display: block; font-size: 16px; color: var(--ink); }
-
-    /* ── Compared for you: price bars against your limit ── */
-    .versus { display: grid; grid-template-columns: .8fr 1.75fr; gap: 44px; align-items: start; }
-    .versus-want b { display: block; font-size: 24px; letter-spacing: -.02em; line-height: 1.15; margin-top: 4px; }
-    .musts { list-style: none; display: grid; gap: 7px; margin-top: 14px; }
-    .musts li { position: relative; padding-left: 26px; }
-    .musts li::before { content: ""; position: absolute; left: 2px; top: .42em; width: 11px; height: 6px; border-left: 2px solid var(--accent); border-bottom: 2px solid var(--accent); transform: rotate(-45deg); }
-    .vbars { list-style: none; position: relative; display: grid; gap: 22px; padding-bottom: 30px; }
-    .vb-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px 12px; padding-right: 12px; }
-    .vb-head b { font-size: 17px; }
-    .vb-head span { font-size: 14px; color: var(--ink-muted); white-space: nowrap; }
-    .vb-track { position: relative; height: 30px; margin-top: 7px; border-radius: 8px; background: var(--glass-strong); }
-    .vb-fill { width: var(--w); height: 100%; border-radius: 8px; background: #0f7f72; transition: width 1.1s cubic-bezier(.2, .8, .2, 1); }
-    .js .versus:not(.in) .vb-fill { width: 0; }
-    .near .vb-fill { background: repeating-linear-gradient(45deg, #c98600 0 7px, #e9b24c 7px 14px); }
-    .vb-track em { position: absolute; left: 12px; top: 0; line-height: 30px; font-style: normal; font-size: 15px; font-weight: 700; color: #fff; text-shadow: 0 1px 2px rgba(0, 0, 0, .45); }
-    .vbars p { margin-top: 8px; padding-right: 12px; font-size: 15px; color: var(--ink-muted); }
-    .vbars .chip { margin-right: 6px; }
-    .vb-limit { position: absolute; right: 0; top: 0; bottom: 30px; width: 0; border-right: 2px dashed var(--ink-muted); pointer-events: none; }
-    .vb-limit span { position: absolute; right: 0; bottom: -28px; font-size: 13px; font-weight: 700; color: var(--ink-muted); white-space: nowrap; }
-
-    /* ── Changes and status: two things to try ── */
-    .changer { display: grid; grid-template-columns: 1.25fr 1fr; gap: 0; }
-    .demo { padding-right: 36px; }
-    .demo + .demo { padding: 0 0 0 36px; border-left: 1px solid var(--glass-line); }
-    .demo-title { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px; font-size: 22px; letter-spacing: -.015em; margin-top: 4px; }
-    .demo-title span:not(.chip) { font-size: 15px; font-weight: 600; color: var(--ink-muted); letter-spacing: 0; }
-    .demo-say { min-height: 4.7em; margin-top: 16px; color: var(--ink-muted); }
-    .demo-say b { color: var(--ink); }
-    .demo-ctl { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
-    .demo-ctl .btn-ghost { background: var(--glass-strong); }
-    .co-line { margin-top: 20px; }
-    .co-axis { position: relative; height: 20px; }
-    .co-axis i { position: absolute; font-style: normal; font-size: 12px; color: var(--ink-muted); }
-    .co-track { position: relative; height: 64px; border-top: 1px solid var(--glass-line); background: repeating-linear-gradient(90deg, transparent 0 calc(25% - 1px), var(--glass-line) calc(25% - 1px) 25%); }
-    .co-gate { position: absolute; top: 0; bottom: 0; width: 0; border-left: 2px dashed var(--ink-muted); transition: left .6s cubic-bezier(.2, .8, .2, 1); }
-    .co-gate b { position: absolute; left: -15px; top: 20px; width: 28px; height: 28px; transform: rotate(45deg); display: grid; place-items: center; border-radius: 5px; background: var(--ink); color: var(--glass-strong); font-size: 0; }
-    .co-gate b::after { content: "G2"; transform: rotate(-45deg); font-size: 11px; font-weight: 700; font-style: normal; }
-    .co-bar {
-      position: absolute; top: 18px; width: 17.9%; height: 30px; padding: 0 10px; border-radius: 7px; display: flex; align-items: center;
-      font-size: 12px; font-weight: 700; white-space: nowrap; color: #4a3200; border: 2px dashed #c98600;
-      background: repeating-linear-gradient(45deg, rgba(240, 165, 0, .5) 0 7px, rgba(255, 217, 138, .6) 7px 14px);
-      transition: left .6s cubic-bezier(.2, .8, .2, 1), background .3s, color .3s, border-color .3s;
-    }
-    .co-bar.done { background: #0f7f72; border: 2px solid #0f7f72; color: #fff; }
-    .st-range { display: block; margin-top: 20px; font-size: 14px; font-weight: 600; color: var(--ink-muted); }
-    .st-range span { display: flex; align-items: center; gap: 12px; margin-top: 6px; }
-    .st-range input { flex: 1; }
-    .st-range output { min-width: 3.2em; font-size: 18px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
-    .board { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 18px; }
-    .board div { height: 84px; padding: 9px 10px; border-radius: 11px; background: var(--glass-soft); border: 1px dashed var(--glass-line); }
-    .board em { font-style: normal; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-muted); }
-    .tok {
-      position: absolute; left: 0; bottom: 12px; width: calc((100% - 16px) / 3 - 20px); margin-left: 10px; padding: 6px 10px; border-radius: 8px;
-      font-style: normal; font-size: 14px; font-weight: 700; color: #fff; background: #3a63c9; box-shadow: 0 8px 16px -8px #3a63c9;
-      transform: translateX(calc(var(--col) * (100% + 28px))); transition: transform .5s cubic-bezier(.2, .8, .2, 1), background .3s;
-    }
-    .board[data-col="0"] { --col: 0; } .board[data-col="1"] { --col: 1; } .board[data-col="2"] { --col: 2; }
-    .board[data-col="0"] .tok { background: #5c6079; box-shadow: none; }
-    .board[data-col="2"] .tok { background: #0f7f72; box-shadow: 0 8px 16px -8px #0f7f72; }
-
-    /* ── Your workspace: the screenshot, annotated ── */
-    .annot { display: grid; grid-template-columns: 1.9fr 1fr; gap: 40px; align-items: center; }
-    .annot-img { position: relative; }
-    .pin, .legend .num { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; font-style: normal; font-size: 14px; font-weight: 700; color: #14173d; background: #fff; text-shadow: none; transition: background .2s, transform .2s; }
-    .pin { position: absolute; left: var(--x); top: var(--y); margin: -15px 0 0 -15px; cursor: default; box-shadow: 0 0 0 5px rgba(255, 255, 255, .35), 0 8px 18px rgba(0, 0, 0, .55); animation: ping 2.6s infinite; }
-    @keyframes ping { 50% { box-shadow: 0 0 0 11px rgba(255, 255, 255, .12), 0 8px 18px rgba(0, 0, 0, .55); } }
-    .pin.hot, .legend li.hot .num { background: #ffd98a; transform: scale(1.18); }
-    .legend { list-style: none; display: grid; gap: 4px; color: var(--on); }
-    .legend li { display: grid; grid-template-columns: 30px 1fr; gap: 14px; padding: 10px 12px; margin: 0 -12px; border-radius: 12px; outline-offset: -2px; transition: background .2s; }
-    .legend li.hot { background: rgba(255, 255, 255, .1); }
-    .legend b { display: block; font-size: 18px; }
-    .legend span { font-size: 16px; color: var(--on-muted); }
-
-    /* ── Also inside: a plain index ── */
-    .index { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 44px; color: var(--on); }
-    .index div { padding: 20px 0; border-top: 1px solid var(--line); }
-    .index dt { font-size: 18px; font-weight: 700; }
-    .index dd { font-size: 16px; color: var(--on-muted); margin-top: 2px; }
-    .chip.open { color: var(--ink-muted); background: var(--glass-strong); }
-
-    /* ── Responsive ── */
-    @media (max-width: 960px) {
-      .nav ul { display: none; }
-      .nav .btn { margin-left: auto; }
-
-      section { padding: 80px 0; }
-
-      .sim-body, .scn, .guard, .pricer, .versus, .changer, .annot { grid-template-columns: 1fr; }
-      .sim-body, .scn, .versus, .annot { gap: 28px; }
-      .demo { padding-right: 0; }
-      .demo + .demo { margin-top: 28px; padding: 28px 0 0; border-left: 0; border-top: 1px solid var(--glass-line); }
-      .ports { grid-template-columns: 1fr 1fr; gap: 16px 8px; }
-      .ports li { padding-bottom: 0; }
-      .ports li::before, .ports li::after { display: none; }
-      .ports li:first-child { grid-column: span 2; }
-      .bus-rail { margin-top: 24px; }
-      .stores { grid-template-columns: repeat(3, 1fr); }
-      .stores li { padding: 20px 0 2px; }
-      .index { grid-template-columns: 1fr 1fr; }
-      .pricer-go { text-align: left; }
-      .guard { gap: 28px; margin-top: 56px; padding-top: 48px; }
-      .rail a { padding: 4px 16px; font-size: 15px; }
-      .sub { margin-top: 72px; }
+    /* ── Narrower sheets ── */
+    @media (max-width: 1020px) {
+      .top ul { display: none; }
+      .top .btn { margin-left: auto; }
+      .job-body, .order, .rack, .pricer, .versus, .changer, .annot { grid-template-columns: minmax(0, 1fr); }
+      .job-body { min-height: 0; background: none; border-bottom: 0; }
+      .g-row:last-child { border-bottom: 1.5px solid var(--rule); }
+      .rack, .versus, .annot, .order { gap: 34px; }
+      .versus-note { grid-column: auto; margin-top: 0; }
+      .stamps { justify-content: flex-start; padding: 30px 0 22px; }
+      .demo { padding: 0; }
+      .demo + .demo { margin-top: 34px; padding: 30px 0 0; border-left: 0; border-top: 1.5px solid var(--rule); }
+      .from { grid-template-columns: 1fr 1fr; gap: 18px 10px; }
+      .from li { padding-bottom: 0; }
+      .from li::after { display: none; }
+      .from li:first-child { grid-column: span 2; }
+      .route-rail { margin-top: 26px; }
+      .to { grid-template-columns: repeat(3, 1fr); }
+      .to li { padding: 20px 0 4px; }
+      .pricer-go { justify-items: start; text-align: left; max-width: none; }
+      .fields { grid-template-columns: 1fr 1fr; }
+      .fields div:nth-child(3) { border-left: 0; }
+      .fields div:nth-child(n+3) { border-top: 1.5px solid var(--rule); }
+      section { padding: 88px 0; }
+      .sub { margin-top: 80px; }
     }
     @media (max-width: 640px) {
-      body { font-size: 16px; }
-      .wrap { padding: 0 16px; }
-      .nav { top: 10px; }
-      .hero { padding-top: 116px; }
-      .plans, .ticks { grid-template-columns: 1fr; }
-
-      .cta .btn { width: 100%; }
-      .shot { margin-top: 44px; }
-      section { padding: 64px 0; }
-
-      .faq { padding: 4px 20px; }
-      .scene + .scene { border-radius: 24px 24px 0 0; }
-
-      .stage { padding: 22px 16px; border-radius: 18px; }
-      .g-axis, .g-row { grid-template-columns: 1fr; }
-      .g-axis span { display: none; }
-      .g-row { height: auto; padding: 9px 0 11px; gap: 7px; }
-      .g-who .g-av { width: 24px; height: 24px; font-size: 10px; }
+      body { font-size: 1rem; }
+      .wrap { padding: 0 18px; }
+      .lead { font-size: 1.1rem; }
+      .head { padding: 22px 0 72px; }
+      .hero { display: flex; flex-direction: column; }
+      .hero .title, .hero .job, .hero .job-body { display: contents; }
+      .hero h1 { order: 1; }
+      .hero .stamps { order: 2; justify-content: flex-start; gap: 14px 12px; padding: 18px 0 4px; }
+      .hero .lead { order: 3; margin-top: 12px; }
+      .hero .cta { order: 4; margin-top: 18px; }
+      .hero .job-ctl { order: 5; margin-top: 30px; border-top: 1.5px solid var(--rule); justify-content: space-between; }
+      .hero .gantt { order: 6; }
+      .hero .job-note { order: 7; }
+      .hero .fields { order: 8; margin-top: 30px; }
+      .hero .attach { order: 9; }
+      .cta .btn { flex: 1 1 100%; }
+      .cta .btn--line { flex: 0 0 auto; padding: .2em 0; border: 0; text-decoration: underline; }
+      .cta .btn--line:hover { background: transparent; }
+      .cta-terms { display: block; flex: 1 1 100%; }
+      .dial { order: 3; flex: 1 1 100%; }
+      .dial input { flex: 1; width: auto; }
+      .stamps .stamp, .stamps .stampbox:nth-child(even) .stamp { filter: url(#ink-fine); }
+      .g-axis, .g-row { grid-template-columns: minmax(0, 1fr); }
+      .g-axis > span { display: none; }
+      .g-row { height: auto; padding: 9px 0 12px; gap: 7px; }
       .g-val { display: block; }
-      .g-track, .g-bar { height: 16px; }
-      .g-bar { padding: 0; font-size: 0; border-radius: 5px; }
-      .sim-ctl input { width: 130px; }
-      .sim-read dd { font-size: 24px; }
-      .index { grid-template-columns: 1fr; }
+      .g-track, .g-bar { height: 18px; }
+      .g-bar { padding: 0; font-size: 0; }
+      .stamps .stamp { font-size: 2.5rem; min-width: 3.6em; }
+      .stamps .stamp--crew { font-size: 1.6rem; min-width: 0; }
+      .stamps .stamp.rev { font-size: 1.05rem; right: -8px; top: -14px; }
+      .terms div { grid-template-columns: 1fr; gap: 4px; }
+      .slip { padding: 22px 18px 26px; }
+      .order-ask p { font-size: 1.25rem; }
+      .heads button { font-size: .86rem; }
+      .pressed { grid-template-columns: 1fr; gap: 14px; }
+      .pressed .stamp { justify-self: start; }
       .pricer-out { overflow-x: auto; }
-      .ptable { font-size: 13px; }
-      .ptable th, .ptable td { padding-left: 5px; padding-right: 5px; }
+      .ptable { font-size: .9rem; }
+      .ptable td { white-space: normal; padding-right: 8px; }
+      .ptable .num { padding-right: 10px; white-space: nowrap; }
+      .ptable .stamp--sm { font-size: 1.08rem; min-width: 0; }
       .ptable thead th:nth-child(2), .ptable tbody td:nth-child(2) { display: none; }
-      .track { grid-template-columns: 1fr 1fr; gap: 16px 0; }
-      .levels button { padding: 10px 2px; font-size: 13px; }
-      .rail { flex-direction: column; align-items: center; margin-top: 36px; }
-      .rail a { border-left: 0; }
-      .scn-prompt { font-size: 16px; }
-      .core { padding: 18px 28px 20px; }
-      .core strong { font-size: 48px; }
-      .pin { width: 22px; height: 22px; margin: -11px 0 0 -11px; font-size: 11px; }
-      .co-bar { padding: 0 4px; font-size: 10.5px; }
+      .track { grid-template-columns: 1fr 1fr; gap: 28px 20px; }
+      .track li + li > svg { display: none; }
+      .plans { grid-template-columns: 1fr; }
+      .plan, .plan + .plan { padding: 28px 0 30px; }
+      .plan + .plan { border-left: 0; border-top: 2px solid var(--rule); }
+      .price { font-size: 5rem; }
+      .attach a { padding: 22px 5px 5px; }
+      .attach a::after { width: 22px; height: 13px; left: 8px; top: 5px; }
+      .pin { width: 24px; height: 24px; margin: -12px 0 0 -12px; font-size: 1rem; box-shadow: 0 0 0 2px #fff; }
+      .seal { width: 230px; }
+      .co-bar { padding: 2px 4px 0; font-size: 1rem; }
+      section { padding: 68px 0; }
+      .close { padding: 84px 0 92px; }
+      footer nav { margin-left: 0; }
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      * { transition: none !important; animation: none !important; }
+      *, *::before, *::after { transition: none !important; animation: none !important; }
     }
   </style>
 </head>
 <body>
 
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 3.5v11m0 0-4.5-4.5m4.5 4.5 4.5-4.5M4.5 20h15"/></symbol>
+<svg class="defs" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- Rubber-stamp ink: rough edges and uneven pad pressure, with a floor so lettering always reads. Two variants so impressions differ. -->
+    <filter id="ink" x="-4%" y="-12%" width="108%" height="124%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency=".7" numOctaves="2" seed="4" result="grain"/>
+      <feDisplacementMap in="SourceGraphic" in2="grain" scale="1.5" xChannelSelector="R" yChannelSelector="G" result="rough"/>
+      <feTurbulence type="fractalNoise" baseFrequency=".011 .028" numOctaves="2" seed="11" result="blot"/>
+      <feColorMatrix in="blot" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0" result="level"/>
+      <feComponentTransfer in="level" result="pressure"><feFuncA type="table" tableValues="1 1 1 1 .94 .85 .82 .82 .82"/></feComponentTransfer>
+      <feComposite in="rough" in2="pressure" operator="in"/>
+    </filter>
+    <filter id="ink-2" x="-4%" y="-12%" width="108%" height="124%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency=".62" numOctaves="2" seed="29" result="grain"/>
+      <feDisplacementMap in="SourceGraphic" in2="grain" scale="1.7" xChannelSelector="G" yChannelSelector="R" result="rough"/>
+      <feTurbulence type="fractalNoise" baseFrequency=".016 .022" numOctaves="2" seed="37" result="blot"/>
+      <feColorMatrix in="blot" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0" result="level"/>
+      <feComponentTransfer in="level" result="pressure"><feFuncA type="table" tableValues="1 1 1 1 .96 .87 .83 .83 .83"/></feComponentTransfer>
+      <feComposite in="rough" in2="pressure" operator="in"/>
+    </filter>
+    <filter id="ink-fine" x="-4%" y="-14%" width="108%" height="128%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7" result="grain"/>
+      <feDisplacementMap in="SourceGraphic" in2="grain" scale="1.1" xChannelSelector="R" yChannelSelector="G" result="rough"/>
+      <feTurbulence type="fractalNoise" baseFrequency=".05 .09" numOctaves="2" seed="15" result="blot"/>
+      <feColorMatrix in="blot" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0" result="level"/>
+      <feComponentTransfer in="level" result="pressure"><feFuncA type="table" tableValues="1 1 1 1 .97 .9 .88 .88 .88"/></feComponentTransfer>
+      <feComposite in="rough" in2="pressure" operator="in"/>
+    </filter>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 3.5v11m0 0-4.5-4.5m4.5 4.5 4.5-4.5M4.5 20h15"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1.5"/><path d="m7.5 12.4 3.3 3.3 5.8-7.2"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15m0 0-6-6m6 6-6 6"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M6 12h12"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M6 12h12M12 6v12"/></symbol>
+  </defs>
 </svg>
 
-<nav class="nav" aria-label="Main">
+<header class="top">
   <div class="wrap">
-    <a class="brand" href="#top">
-      <picture>
-        <source srcset="assets/logo-dk.png" media="(prefers-color-scheme: dark)">
-        <img src="assets/logo.png" width="320" height="196" alt="">
-      </picture>
-      <span>Caldera <em>Pro</em></span>
-    </a>
-    <ul>
-      <li><a href="#sync">In sync</a></li>
-      <li><a href="#ai">AI-native</a></li>
-      <li><a href="#materials">Materials</a></li>
-      <li><a href="#changes">Changes</a></li>
-      <li><a href="#workspace">Dashboards</a></li>
-      <li><a href="#pricing">Pricing</a></li>
-    </ul>
-    <a class="btn btn-primary btn-sm" href="https://downloads.zenfrogstudio.com/caldera/win/Caldera-Setup.exe">Download</a>
-  </div>
-</nav>
-
-<main id="top">
-
-<div class="scene scene-peaks">
-<div class="scene-bg" aria-hidden="true"></div>
-<div class="scene-body">
-
-<header class="hero">
-  <div class="wrap">
-    <span class="pill"><i></i>AI-native project management for Windows</span>
-    <h1>Time, budget and resources, <span>kept in sync.</span></h1>
-    <p class="lead">Caldera Pro keeps the schedule, the costs and the crew on one plan. It's AI-native underneath, so agents price your materials, compare the options and take routine work off your desk, while live dashboards show where the job stands.</p>
-    <div class="cta">
-      <a class="btn btn-light" href="https://downloads.zenfrogstudio.com/caldera/win/Caldera-Setup.exe">
-        <svg class="i"><use href="#i-down"/></svg>Download for Windows
-      </a>
-      <a class="btn btn-ghost" href="#pricing">See pricing</a>
-    </div>
-    <p class="fine">Free for 30 days · No card needed · Windows 10 or later, 64-bit</p>
-
-    <div class="shot">
-      <a class="frame" href="assets/hero-dashboard.webp" target="_blank" rel="noopener" title="Open full size">
-        <img src="assets/hero-dashboard.webp" width="1600" height="1060" alt="A Caldera Pro dashboard: a 3D bar chart of planned and earned cost for each Schedule line, a doughnut of materials by status, progress bars for every line, the task inbox and the procurement list with prices and vendors.">
-      </a>
-    </div>
-
-    <nav class="rail" aria-label="What Caldera Pro does">
-      <a href="#sync"><i>01</i>One plan</a>
-      <a href="#ai"><i>02</i>AI-native</a>
-      <a href="#materials"><i>03</i>Materials, sourced</a>
-      <a href="#changes"><i>04</i>Changes, tracked</a>
-      <a href="#workspace"><i>05</i>Live dashboards</a>
+    <a class="brand" href="#top"><img src="assets/logo.png" width="320" height="196" alt="">Caldera Pro</a>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="#sync">In sync</a></li>
+        <li><a href="#ai">AI-native</a></li>
+        <li><a href="#materials">Materials</a></li>
+        <li><a href="#changes">Changes</a></li>
+        <li><a href="#workspace">Dashboards</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+      </ul>
     </nav>
+    <a class="btn btn--sm" href="https://downloads.zenfrogstudio.com/caldera/win/Caldera-Setup.exe">Download</a>
   </div>
 </header>
 
-</div>
-</div>
+<main id="top">
 
-<div class="scene scene-glacier">
-<div class="scene-bg" aria-hidden="true"></div>
-<div class="scene-body">
-
-<section id="sync">
-  <div class="wrap">
-    <div class="head">
-      <div class="eyebrow">In sync</div>
-      <h2>Move the schedule and the budget already knows.</h2>
-      <p>Scope, the Schedule and the Manager board are one plan seen three ways. Change it in one place and the other two follow.</p>
+<section class="head" id="sync">
+  <div class="wrap hero">
+    <dl class="fields">
+      <div><dt class="cap">Product</dt><dd>Caldera Pro</dd></div>
+      <div><dt class="cap">Runs on</dt><dd>Windows 10 or later</dd></div>
+      <div><dt class="cap">Trial</dt><dd>30 days free, no card</dd></div>
+      <div><dt class="cap">Then</dt><dd>$16 a month or $149 a year</dd></div>
+    </dl>
+    <div class="title">
+      <h1 class="inked">Time, budget and resources,<br>kept in sync.</h1>
+      <p class="lead">Project management that keeps the schedule, the costs and the crew on one plan. It's AI-native underneath, so agents price your materials and take routine work off your desk.</p>
     </div>
-
-    <div class="stage sim">
-      <div class="sim-top">
-        <div>
-          <span class="kicker">Try it</span>
-          <b>Stretch the drywall and watch the rest follow.</b>
+    <div class="cta">
+      <a class="btn" href="https://downloads.zenfrogstudio.com/caldera/win/Caldera-Setup.exe"><svg class="i"><use href="#i-down"/></svg>Download for Windows</a>
+      <a class="btn btn--line" href="#pricing">See pricing</a>
+      <span class="note cta-terms">Free for 30 days. No card needed. Windows 10 or later.</span>
+    </div>
+    <div class="job">
+      <div class="job-ctl">
+        <label for="sim-days">Try it. Drywall takes</label>
+        <span class="dial">
+          <button type="button" class="step" data-d="-1" aria-label="One day shorter"><svg class="i"><use href="#i-minus"/></svg></button>
+          <input type="range" id="sim-days" min="4" max="14" value="8">
+          <button type="button" class="step" data-d="1" aria-label="One day longer"><svg class="i"><use href="#i-plus"/></svg></button>
+        </span>
+        <output id="sim-days-out" for="sim-days">8 days</output>
+      </div>
+      <div class="job-body">
+        <div class="gantt" role="img" aria-label="Four linked Schedule lines: Framing, Electrical, Drywall, then Finishes and paint, each with an owner. Making Drywall longer pushes Finishes and paint later.">
+          <div class="g-axis"><span></span><div><i class="cap" style="left:0">Nov 2</i><i class="cap" style="left:21.875%">Nov 9</i><i class="cap" style="left:43.75%">Nov 16</i><i class="cap" style="left:65.625%">Nov 23</i><i class="cap" style="left:87.5%">Nov 30</i></div></div>
+          <div class="g-row"><div class="g-who"><i class="g-av">TB</i>Framing<span class="g-val" id="val-framing">6d · $8.1k</span></div><div class="g-track"><div class="g-bar" id="bar-framing" style="left:0;width:18.75%">6d · $8.1k</div></div></div>
+          <div class="g-row"><div class="g-who"><i class="g-av">LF</i>Electrical<span class="g-val" id="val-electrical">7d · $8.8k</span></div><div class="g-track"><div class="g-bar" id="bar-electrical" style="left:18.75%;width:21.875%">7d · $8.8k</div></div></div>
+          <div class="g-row is-live"><div class="g-who"><i class="g-av">TB</i>Drywall<span class="g-val" id="val-drywall">8d · $7.0k</span></div><div class="g-track"><div class="g-bar" id="bar-drywall" style="left:40.625%;width:25%">8d · $7.0k</div></div></div>
+          <div class="g-row"><div class="g-who"><i class="g-av">MO</i>Finishes &amp; paint<span class="g-val" id="val-paint">5d · $4.2k</span></div><div class="g-track"><div class="g-bar" id="bar-paint" style="left:65.625%;width:15.625%">5d · $4.2k</div></div></div>
         </div>
-        <div class="sim-ctl">
-          <button type="button" data-d="-1" aria-label="One day shorter">−</button>
-          <input type="range" id="sim-days" min="4" max="14" value="8" aria-label="Drywall length in days">
-          <button type="button" data-d="1" aria-label="One day longer">+</button>
-          <output id="sim-days-out" for="sim-days">8 days</output>
+        <div class="stamps" aria-live="polite">
+          <span class="stampbox">
+            <span class="stamp ghost" aria-hidden="true"></span>
+            <span class="stamp" id="r-time"><small>Finish</small><b>Nov 27</b></span>
+            <span class="stamp rev" hidden></span>
+          </span>
+          <span class="stampbox" style="--stamp-ink:var(--green)">
+            <span class="stamp ghost" aria-hidden="true"></span>
+            <span class="stamp" id="r-money"><small>Cost</small><b>$28,100</b></span>
+            <span class="stamp rev" hidden></span>
+          </span>
+          <span class="stampbox">
+            <span class="stamp stamp--crew ghost" aria-hidden="true"></span>
+            <span class="stamp stamp--crew" id="r-crew"><small>Crew</small><b>Maya starts Nov 23</b><small id="r-crew-sub">Tom booked 14 days</small></span>
+            <span class="stamp rev" hidden></span>
+          </span>
         </div>
       </div>
-
-      <div class="sim-body">
-        <div class="gantt" role="img" aria-label="Four linked Schedule lines: Framing, Electrical, Drywall, then Finishes and paint, each with an owner. Stretching Drywall pushes Finishes and paint later.">
-          <div class="g-axis"><span></span><div><i style="left:0">Nov 2</i><i style="left:21.875%">Nov 9</i><i style="left:43.75%">Nov 16</i><i style="left:65.625%">Nov 23</i><i style="left:87.5%">Nov 30</i></div></div>
-          <div class="g-row" style="--hue:#3a63c9"><div class="g-who"><i class="g-av">TB</i>Framing<span class="g-val" id="val-framing">6d · $8.1k</span></div><div class="g-track"><div class="g-bar" id="bar-framing" style="left:0;width:18.75%">6d · $8.1k</div></div></div>
-          <div class="g-row" style="--hue:#7442c8"><div class="g-who"><i class="g-av">LF</i>Electrical<span class="g-val" id="val-electrical">7d · $8.8k</span></div><div class="g-track"><div class="g-bar" id="bar-electrical" style="left:18.75%;width:21.875%">7d · $8.8k</div></div></div>
-          <div class="g-row is-live" style="--hue:#0f7f72"><div class="g-who"><i class="g-av">TB</i>Drywall<span class="g-val" id="val-drywall">8d · $7.0k</span></div><div class="g-track"><div class="g-bar" id="bar-drywall" style="left:40.625%;width:25%">8d · $7.0k</div></div></div>
-          <div class="g-row" style="--hue:#b25e12"><div class="g-who"><i class="g-av">MO</i>Finishes &amp; paint<span class="g-val" id="val-paint">5d · $4.2k</span></div><div class="g-track"><div class="g-bar" id="bar-paint" style="left:65.625%;width:15.625%">5d · $4.2k</div></div></div>
-        </div>
-
-        <dl class="sim-read">
-          <div style="--hue:var(--blue)">
-            <dt>Time</dt>
-            <dd id="r-time">Nov 27 <small hidden></small></dd>
-            <p>The job's finish date. Lines are linked, so a late one pushes everything waiting behind it.</p>
-          </div>
-          <div style="--hue:var(--green)">
-            <dt>Budget</dt>
-            <dd id="r-money">$28,100 <small hidden></small></dd>
-            <p>A line costs its fixed cost plus its daily rate for every day it runs. Stages and the plan add themselves up.</p>
-          </div>
-          <div style="--hue:var(--purple)">
-            <dt>Resources</dt>
-            <dd id="r-crew">Maya starts Nov 23 <small hidden></small></dd>
-            <p id="r-crew-sub">Tom is booked 14 days. Every line has an owner and a paired task on the Manager board.</p>
-          </div>
-        </dl>
-      </div>
-      <p class="stage-note">An illustration that follows Caldera's own rules. The real Schedule is below.</p>
+      <p class="note job-note">A sample job. The sums follow Caldera's own rule: a line costs its fixed cost plus its daily rate for each day it runs.</p>
     </div>
-
-    <figure class="shot">
-      <a class="frame" href="assets/schedule.webp" target="_blank" rel="noopener" title="Open full size">
-        <img src="assets/schedule.webp" width="1600" height="1060" loading="lazy" alt="The Schedule: a Gantt chart with an owner, a status and a percent done on every line, dependency arrows between bars, two decision gates, and a drawer open on the Drywall line showing its dates, progress and cost.">
+    <figure class="attach">
+      <a href="assets/hero-dashboard.webp" target="_blank" rel="noopener" title="Open full size">
+        <img src="assets/hero-dashboard.webp" width="1600" height="1060" loading="lazy" alt="A dashboard in the app for the same kind of job: a 3D bar chart of planned and earned cost for each Schedule line, a doughnut of materials by status, progress bars for every line, the task inbox and the procurement list with prices and vendors.">
       </a>
-      <figcaption>The Schedule. Owner, status, dates and cost live on every line, and the plan's total sits in the toolbar.</figcaption>
+      <figcaption>The same kind of job in the app: a dashboard built from the plan's live data, with sample figures.</figcaption>
     </figure>
   </div>
 </section>
 
-</div>
-</div>
-
-<div class="scene scene-night">
-<div class="scene-bg" aria-hidden="true"></div>
-<div class="scene-body">
-
-<section id="ai">
+<section id="how" style="padding-top:0">
   <div class="wrap">
-    <div class="head">
-      <div class="eyebrow">AI-native architecture</div>
-      <h2>Built for agents, so your day has fewer steps.</h2>
-      <p>Caldera wasn't given a chatbot. Every action in the app is a tool, 140 of them, and the same tools serve you, your panels and your AI agents. Anything you can do yourself, you can hand off.</p>
+    <div class="sec-head">
+      <h2 class="inked">Move the schedule and the budget already knows.</h2>
+      <p class="lead">Scope, the Schedule and the Manager board are one plan seen three ways. Change it in one place and the other two follow.</p>
+    </div>
+    <dl class="terms">
+      <div><dt>Time</dt><dd>Every dated line is a bar on the Gantt chart. Link two lines and a late one pushes the next, and everything waiting behind it.</dd></div>
+      <div style="--stamp-ink:var(--green)"><dt>Budget</dt><dd>Give a line a fixed cost and a daily rate. Stretch its bar and its total changes. Stages and the whole plan add themselves up.</dd></div>
+      <div><dt>People</dt><dd>Every line has an owner from one shared address book, and a paired task on the Manager board. Mark a line 60% done and its task moves to In work.</dd></div>
+    </dl>
+    <figure class="attach">
+      <a href="assets/schedule.webp" target="_blank" rel="noopener" title="Open full size">
+        <img src="assets/schedule.webp" width="1600" height="1060" loading="lazy" alt="The Schedule in the app: a Gantt chart with an owner, a status and a percent done on every line, dependency arrows between bars, two decision gates, and a drawer open on the Drywall line showing its dates, progress and cost.">
+      </a>
+      <figcaption>The Schedule in the app. Owner, status, dates and cost live on every line, and the plan's total sits in the toolbar.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="ai" class="flood flood--violet">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="inked">Built for agents, so your day has fewer steps.</h2>
+      <p class="lead">Caldera wasn't given a chatbot. Every action in the app is a tool, 140 of them, and the same tools serve you, your panels and your AI agents. Anything you can do yourself, you can hand off.</p>
     </div>
 
-    <div class="bus">
-      <ul class="ports">
-        <li style="--i:0"><b>You</b><span>the "What's next?" bar</span></li>
-        <li style="--i:1"><b>Task agents</b><span>cards on the Manager board</span></li>
-        <li style="--i:2"><b>Scheduled prompts</b><span>once, daily or weekly</span></li>
-        <li style="--i:3"><b>Outside agents</b><span>Claude Desktop, any MCP client</span></li>
-        <li style="--i:4"><b>Your panels</b><span>charts and mini-apps</span></li>
+    <div class="route">
+      <ul class="from" aria-label="Who can ask">
+        <li><b>You</b><span>the "What's next?" bar</span></li>
+        <li><b>Task agents</b><span>cards on the Manager board</span></li>
+        <li><b>Scheduled prompts</b><span>once, daily or weekly</span></li>
+        <li><b>Outside agents</b><span>Claude Desktop, any MCP client</span></li>
+        <li><b>Your panels</b><span>charts and mini-apps</span></li>
       </ul>
-      <div class="bus-rail" aria-hidden="true"></div>
-      <div class="core">
-        <strong>140</strong>
-        <span>tools, one layer</span>
-        <em>24 read · 105 make changes · 11 run AI jobs</em>
+      <div class="route-rail" aria-hidden="true"></div>
+      <div class="seal" role="img" aria-label="All of them go through one layer of 140 tools.">
+        <svg viewBox="0 0 250 250" fill="none" stroke="currentColor" aria-hidden="true">
+          <circle cx="125" cy="125" r="119" stroke-width="6"/>
+          <circle cx="125" cy="125" r="111" stroke-width="1.6"/>
+          <circle cx="125" cy="125" r="82" stroke-width="2.4"/>
+          <path id="seal-arc" d="M125 125m-90 0a90 90 0 1 1 180 0a90 90 0 1 1-180 0" stroke="none"/>
+          <text stroke="none" font-size="22" letter-spacing="1.5"><textPath href="#seal-arc" textLength="556" lengthAdjust="spacing">Every action is a tool · One layer for everyone ·</textPath></text>
+          <text stroke="none" x="125" y="150" text-anchor="middle" font-size="100">140</text>
+          <text stroke="none" x="125" y="178" text-anchor="middle" font-size="25" letter-spacing="3">Tools</text>
+        </svg>
       </div>
-      <ul class="stores">
+      <ul class="to" aria-label="What they work on">
         <li>Schedule</li><li>Costs</li><li>People</li><li>Tasks</li><li>Materials</li><li>Notes and files</li>
       </ul>
-      <p class="bus-note">Your project, kept on your own PC.</p>
+      <p class="note">24 tools read, 105 make changes and 11 run AI jobs. Your project stays on your own PC.</p>
     </div>
 
-    <div class="stage console" id="console">
-      <div class="console-top">
-        <div>
-          <span class="kicker">What that takes off your desk</span>
-          <b>Pick a job. Watch how little you do.</b>
-        </div>
-        <div class="scn-tabs" role="tablist" aria-label="Examples">
+    <div class="slip" id="console">
+      <div class="slip-top">
+        <h3>Pick a job. Watch how little you do.</h3>
+        <div class="jobs" role="tablist" aria-label="Examples">
           <button type="button" role="tab" aria-selected="true">Ask</button>
           <button type="button" role="tab" aria-selected="false">Hand off</button>
           <button type="button" role="tab" aria-selected="false">Schedule</button>
@@ -780,149 +694,147 @@
           <button type="button" role="tab" aria-selected="false">Build</button>
         </div>
       </div>
-      <div class="scn" role="tabpanel" aria-live="off">
-        <div class="scn-ask">
-          <span class="kicker" id="scn-kind">You type, after Ctrl+K</span>
-          <p class="scn-prompt"><span id="scn-text">move Tuesday's inspection to Thursday</span><i class="caret"></i></p>
+      <div class="order" role="tabpanel">
+        <div class="order-ask">
+          <span class="cap" id="scn-kind">You type, after Ctrl+K</span>
+          <p><span id="scn-text">move Tuesday's inspection to Thursday</span><i class="caret"></i></p>
         </div>
-        <div class="scn-does">
-          <span class="kicker">Caldera does</span>
-          <ol class="scn-steps" id="scn-steps">
-            <li class="in">Reads Tuesday's blocks <code>get_day</code></li>
-            <li class="in">Moves the inspection to Thursday <code>move_block</code></li>
+        <div>
+          <span class="cap">Caldera does</span>
+          <ol class="done" id="scn-steps">
+            <li class="in"><svg class="i"><use href="#i-check"/></svg><span>Reads Tuesday's blocks <code>get_day</code></span></li>
+            <li class="in"><svg class="i"><use href="#i-check"/></svg><span>Moves the inspection to Thursday <code>move_block</code></span></li>
           </ol>
-          <p class="scn-result in" id="scn-result">Done. Ctrl+Z if you change your mind.</p>
+          <p class="order-result in" id="scn-result"><span class="stamp" id="scn-stamp">Done</span><span id="scn-result-text">Ctrl+Z if you change your mind.</span></p>
         </div>
       </div>
     </div>
     <p class="runs-on">It runs on the AI you already have: <b>Claude Code</b>, <b>Codex</b>, <b>OpenCode</b>, a local <b>Ollama</b> model, or an API key.</p>
 
-    <div class="guard">
+    <div class="rack">
       <div>
-        <div class="eyebrow">You stay in charge</div>
         <h3>Set how far agents can go.</h3>
         <p>Every agent call is written to a log, and <kbd>Ctrl</kbd> <kbd>Z</kbd> undoes an agent's recent changes.</p>
       </div>
       <div>
-        <div class="levels" role="group" aria-label="Agent access level">
-          <button type="button" aria-pressed="false" data-level="0">Off</button>
-          <button type="button" aria-pressed="false" data-level="1">Read only</button>
-          <button type="button" aria-pressed="true" data-level="2">Read + write</button>
-          <button type="button" aria-pressed="false" data-level="3">Full</button>
+        <div class="heads" role="group" aria-label="Agent access level">
+          <button type="button" aria-pressed="false">Off</button>
+          <button type="button" aria-pressed="false">Read only</button>
+          <button type="button" aria-pressed="true">Read + write</button>
+          <button type="button" aria-pressed="false">Full</button>
         </div>
-        <p class="levels-say" id="levels-say">Agents also add, edit and delete tasks, blocks, budgets and plans.</p>
+        <div class="pressed" aria-live="polite">
+          <span class="stamp" id="levels-stamp">Read + write</span>
+          <p id="levels-say">Agents also add, edit and delete tasks, blocks, budgets and plans.</p>
+        </div>
       </div>
     </div>
 
-    <figure class="shot">
-      <a class="frame" href="assets/ai.webp" target="_blank" rel="noopener" title="Open full size">
-        <img src="assets/ai.webp" width="1600" height="1060" loading="lazy" alt="The Manager board with an Agent desk column: three tasks assigned to Claude Code, each with written details and Generate plan, Run now and Chain buttons. A plain request is typed in the prompt bar at the top, and the Task detail panel shows the selected agent task.">
+    <figure class="attach attach--left">
+      <a href="assets/ai.webp" target="_blank" rel="noopener" title="Open full size">
+        <img src="assets/ai.webp" width="1600" height="1060" loading="lazy" alt="The Manager board in the app with an Agent desk column: three tasks assigned to Claude Code, each with written details and Generate plan, Run now and Chain buttons. A plain request is typed in the prompt bar at the top.">
       </a>
-      <figcaption>A column of work handed to an agent, and a plain request typed in the prompt bar.</figcaption>
+      <figcaption>In the app: a column of work handed to an agent, and a plain request typed in the prompt bar.</figcaption>
     </figure>
   </div>
 </section>
 
-</div>
-</div>
-
-<div class="scene scene-shore">
-<div class="scene-bg" aria-hidden="true"></div>
-<div class="scene-body">
-
 <section id="materials">
   <div class="wrap">
-    <div class="head">
-      <div class="eyebrow">Materials</div>
-      <h2>Hand it a list. It finds your materials.</h2>
-      <p>Caldera searches online stores for every item on your list, using the AI you already have, and brings back a real listing: the price, the vendor and a link.</p>
+    <div class="sec-head">
+      <h2 class="inked ink-green">Hand it a list. It finds your materials.</h2>
+      <p class="lead">Caldera searches online stores for every item on your list, using the AI you already have, and brings back a real listing: the price, the vendor and a link.</p>
     </div>
 
-    <div class="stage pricer" id="pricer">
-      <div class="pricer-list">
-        <span class="kicker">1 · Your list</span>
+    <div class="pricer ruled" id="pricer">
+      <div>
+        <span class="cap">Your list</span>
         <pre>24 acoustic panels, 2x4 ft
 60 drywall sheets, 5/8 Type X
 40 ft cable tray, 12 in
 4 door seals, 36 in
 18 LED downlights, 4 in</pre>
-        <small>Typed in, or read out of a document. Excel works too.</small>
+        <p class="note">Typed in, or read out of a document. Excel works too.</p>
       </div>
       <div class="pricer-go">
-        <span class="kicker">2 · One click</span>
-        <button type="button" class="btn btn-primary" id="price-all">Price all</button>
-        <small>Turn on Auto-reprice and it checks again each day you open the list.</small>
+        <button type="button" class="btn btn--green" id="price-all">Price all<svg class="i"><use href="#i-arrow"/></svg></button>
+        <p class="note">Turn on Auto-reprice and it checks again each day you open the list.</p>
       </div>
       <div class="pricer-out">
-        <span class="kicker">3 · What comes back</span>
+        <span class="cap">What comes back</span>
         <table class="ptable">
-          <thead><tr><th>Item</th><th class="num">Qty</th><th class="num">Price</th><th>Vendor</th><th>Status</th></tr></thead>
+          <thead><tr><th class="cap">Item</th><th class="cap num">Qty</th><th class="cap num">Price</th><th class="cap">Vendor</th><th class="cap">Status</th></tr></thead>
           <tbody id="ptable-body">
-            <tr><td>Acoustic panels</td><td class="num">24</td><td class="num fill">$89.00</td><td class="fill">SoundCo</td><td><span class="chip priced">Priced</span></td></tr>
-            <tr><td>Drywall sheets</td><td class="num">60</td><td class="num fill">$16.50</td><td class="fill">BuildMart</td><td><span class="chip priced">Priced</span></td></tr>
-            <tr><td>Cable tray</td><td class="num">40 ft</td><td class="num fill">$11.20</td><td class="fill">ElectroSupply</td><td><span class="chip priced">Priced</span></td></tr>
-            <tr class="miss"><td>Door seals</td><td class="num">4</td><td class="num fill">—</td><td class="fill">no listing with a price yet</td><td><span class="chip needed">Needed</span></td></tr>
-            <tr><td>LED downlights</td><td class="num">18</td><td class="num fill">$24.99</td><td class="fill">LightHouse</td><td><span class="chip priced">Priced</span></td></tr>
+            <tr><td>Acoustic panels</td><td class="num">24</td><td class="num fill">$89.00</td><td class="fill">SoundCo</td><td><span class="stamp stamp--sm s-priced">Priced</span></td></tr>
+            <tr><td>Drywall sheets</td><td class="num">60</td><td class="num fill">$16.50</td><td class="fill">BuildMart</td><td><span class="stamp stamp--sm s-priced">Priced</span></td></tr>
+            <tr><td>Cable tray</td><td class="num">40 ft</td><td class="num fill">$11.20</td><td class="fill">ElectroSupply</td><td><span class="stamp stamp--sm s-priced">Priced</span></td></tr>
+            <tr class="miss"><td>Door seals</td><td class="num">4</td><td class="num fill">none</td><td class="fill">no listing with a price yet</td><td><span class="stamp stamp--sm s-needed">Needed</span></td></tr>
+            <tr><td>LED downlights</td><td class="num">18</td><td class="num fill">$24.99</td><td class="fill">LightHouse</td><td><span class="stamp stamp--sm s-priced">Priced</span></td></tr>
           </tbody>
-          <tfoot><tr><td colspan="5">Total <span id="ptable-total">$4,023.82</span> <span id="ptable-left">· 1 unpriced</span></td></tr></tfoot>
+          <tfoot><tr><td colspan="5">Total <span id="ptable-total">$4,023.82</span><span class="note" id="ptable-left">1 unpriced</span></td></tr></tfoot>
         </table>
+        <p class="note">A sample list. These stores and prices are invented for the demo.</p>
       </div>
-      <ol class="track" aria-label="The status every item moves through">
-        <li style="--c:#c2415b"><b>Needed</b>It's on the list.</li>
-        <li style="--c:#c98600"><b>Priced</b>A real listing was found.</li>
-        <li style="--c:#3a63c9"><b>Ordered</b>You placed the order.</li>
-        <li style="--c:#0f7f72"><b>Received</b>It's on site.</li>
-      </ol>
     </div>
 
-    <figure class="shot">
-      <a class="frame" href="assets/procurement.webp" target="_blank" rel="noopener" title="Open full size">
-        <img src="assets/procurement.webp" width="1600" height="424" loading="lazy" alt="A procurement list called Phase 1: five items with spec, quantity, unit, price, vendor, the time each was priced, a status from needed to received, and a total per line.">
+    <ol class="track" aria-label="The status every item moves through">
+      <li><span class="stamp s-needed">Needed</span><p>It's on the list.</p></li>
+      <li><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg><span class="stamp s-priced">Priced</span><p>A real listing was found.</p></li>
+      <li><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg><span class="stamp s-ordered">Ordered</span><p>You placed the order.</p></li>
+      <li><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg><span class="stamp s-received">Received</span><p>It's on site.</p></li>
+    </ol>
+
+    <figure class="attach">
+      <a href="assets/procurement.webp" target="_blank" rel="noopener" title="Open full size">
+        <img src="assets/procurement.webp" width="1600" height="424" loading="lazy" alt="A procurement list in the app called Phase 1: five items with spec, quantity, unit, price, vendor, the time each was priced, a status from needed to received, and a total per line.">
       </a>
-      <figcaption>The real list after pricing. Caldera finds and prices; you place the order.</figcaption>
+      <figcaption>The same list in the app after pricing. Caldera finds and prices; you place the order.</figcaption>
     </figure>
 
     <div class="sub" id="compare">
-      <div class="head">
-        <div class="eyebrow">Compared for you</div>
-        <h2>Three options, side by side.</h2>
-        <p>Hunting for one hard-to-find thing? Put it on the wantlist. Caldera brings back the best listings it can find, each already checked against what you asked for.</p>
+      <div class="sec-head">
+        <h2 class="inked">Three options, side by side.</h2>
+        <p class="lead">Hunting for one hard-to-find thing? Put it on the wantlist. Caldera brings back the best listings it can find, each already checked against what you asked for.</p>
       </div>
-
-      <div class="stage versus" id="versus">
-        <div class="versus-want">
-          <span class="kicker">The hunt</span>
-          <b>Vocal booth door, 36 in</b>
-          <ul class="musts">
-            <li>STC 50 or better</li>
-            <li>Under $1,900</li>
-            <li>Delivered by Dec 4</li>
-          </ul>
-          <small>Reject a listing and say why. The reason becomes a rule for every later search, and Daily sweep keeps looking until you approve one.</small>
+      <div class="versus ruled">
+        <div>
+        <dl class="hunt">
+          <dt class="cap">Looking for</dt>
+          <dd>Vocal booth door, 36 in</dd>
+          <dt class="cap">Must have</dt>
+          <dd style="font:inherit;margin:0">
+            <ul class="musts">
+              <li><svg class="i"><use href="#i-check"/></svg>STC 50 or better</li>
+              <li><svg class="i"><use href="#i-check"/></svg>Under $1,900</li>
+              <li><svg class="i"><use href="#i-check"/></svg>Delivered by Dec 4</li>
+            </ul>
+          </dd>
+        </dl>
+        <p class="note">Reject a listing and say why. The reason becomes a rule for every later search, and Daily sweep keeps looking until you approve one.</p>
         </div>
-        <ol class="vbars">
+        <ol class="bids">
           <li style="--w:86.3%">
-            <div class="vb-head"><b>IsoDoor studio door, STC 52</b><span>Northline Acoustics</span></div>
-            <div class="vb-track"><div class="vb-fill"></div><em>$1,640</em></div>
-            <p><span class="chip received">Full match</span> STC 52 and a 36 in leaf. In stock, delivery quoted for Dec 1.</p>
+            <div class="bid-head"><b>IsoDoor studio door, STC 52</b><span>Northline Acoustics</span></div>
+            <div class="bid-track"><div class="bid-fill"></div><em>$1,640</em></div>
+            <p><span class="stamp stamp--sm s-match">Full match</span>STC 52 and a 36 in leaf. In stock, delivery quoted for Dec 1.</p>
           </li>
           <li style="--w:93.9%">
-            <div class="vb-head"><b>QuietSeal steel door kit, STC 51</b><span>SoundCo</span></div>
-            <div class="vb-track"><div class="vb-fill"></div><em>$1,785</em></div>
-            <p><span class="chip received">Full match</span> Meets the STC and the size. Delivery quoted for Dec 3, a day inside the deadline.</p>
+            <div class="bid-head"><b>QuietSeal steel door kit, STC 51</b><span>SoundCo</span></div>
+            <div class="bid-track"><div class="bid-fill"></div><em>$1,785</em></div>
+            <p><span class="stamp stamp--sm s-match">Full match</span>Meets the STC and the size. Delivery quoted for Dec 3, a day inside the deadline.</p>
           </li>
           <li class="near" style="--w:74.7%">
-            <div class="vb-head"><b>ProBooth solid-core door with seals</b><span>BuildMart</span></div>
-            <div class="vb-track"><div class="vb-fill"></div><em>$1,420</em></div>
-            <p><span class="chip priced">Not a full match</span> STC 48, below the STC 50 asked for. Cheapest of the three.</p>
+            <div class="bid-head"><b>ProBooth solid-core door with seals</b><span>BuildMart</span></div>
+            <div class="bid-track"><div class="bid-fill"></div><em>$1,420</em></div>
+            <p><span class="stamp stamp--sm s-near">Not a full match</span>STC 48, below the STC 50 asked for. Cheapest of the three.</p>
           </li>
-          <li class="vb-limit" aria-hidden="true"><span>Your limit · $1,900</span></li>
+          <li class="bid-limit" aria-hidden="true"><span class="cap">Your limit, $1,900</span></li>
         </ol>
+        <p class="note versus-note">A sample hunt. These listings, stores and prices are invented for the demo.</p>
       </div>
-
-      <figure class="shot">
-        <a class="frame" href="assets/compare.webp" target="_blank" rel="noopener" title="Open full size">
-          <img src="assets/compare.webp" width="1600" height="725" loading="lazy" alt="The wantlist: a hunt for a 36 inch vocal booth door with three candidate listings, each showing its price, store and a sentence on how well it matches, with Approve, Reject and Open listing buttons.">
+      <figure class="attach attach--left">
+        <a href="assets/compare.webp" target="_blank" rel="noopener" title="Open full size">
+          <img src="assets/compare.webp" width="1600" height="725" loading="lazy" alt="The wantlist in the app: a hunt for a 36 inch vocal booth door with three candidate listings, each showing its price, store and a sentence on how well it matches, with Approve, Reject and Open listing buttons.">
         </a>
         <figcaption>The same hunt in the app. Each listing comes with its price, its store and one line on why it fits.</figcaption>
       </figure>
@@ -930,91 +842,77 @@
   </div>
 </section>
 
-</div>
-</div>
-
-<div class="scene scene-forest">
-<div class="scene-bg" aria-hidden="true"></div>
-<div class="scene-body">
-
-<section id="changes">
+<section id="changes" style="padding-top:0">
   <div class="wrap">
-    <div class="head">
-      <div class="eyebrow">Changes and status</div>
-      <h2>Every change and every status, tracked.</h2>
-      <p>Jobs change. Caldera keeps the maybe, the decision and the result on the same plan, so nothing lives in someone's inbox.</p>
+    <div class="sec-head">
+      <h2 class="inked ink-red">Every change and every status, tracked.</h2>
+      <p class="lead">Jobs change. Caldera keeps the maybe, the decision and the result on the same plan, so nothing lives in someone's inbox.</p>
     </div>
 
-    <div class="stage changer">
+    <div class="changer ruled">
       <div class="demo" id="co">
-        <span class="kicker">A change order</span>
-        <b class="demo-title">CO-01 Add vocal booth <span>5 days · $8,300</span></b>
-        <div class="co-line" aria-hidden="true">
-          <div class="co-axis"><i style="left:0">Nov 23</i><i style="left:25%">Nov 30</i><i style="left:50%">Dec 7</i><i style="left:75%">Dec 14</i></div>
-          <div class="co-track">
-            <i class="co-gate" id="co-gate" style="left:14.3%"><b>G2</b></i>
-            <div class="co-bar" id="co-bar" style="left:25%">CO-01</div>
-          </div>
+        <h3 class="demo-title">CO-01 Add vocal booth <small>a change order: 5 days, $8,300</small>
+          <span class="stampbox"><span class="stamp ghost" aria-hidden="true"></span><span class="stamp s-near" id="co-stamp">Tentative</span></span>
+        </h3>
+        <div class="co-axis" aria-hidden="true"><i class="cap" style="left:0">Nov 23</i><i class="cap" style="left:25%">Nov 30</i><i class="cap" style="left:50%">Dec 7</i><i class="cap" style="left:75%">Dec 14</i></div>
+        <div class="co-track" aria-hidden="true">
+          <i class="co-gate" id="co-gate" style="left:14.3%"><b><span>G2</span></b></i>
+          <div class="co-bar" id="co-bar" style="left:25%">CO-01</div>
         </div>
-        <p class="demo-say" id="co-say"><b>Tentative.</b> Costed and drawn hatched on the Schedule, waiting on the gate "Client approves vocal booth".</p>
+        <p class="demo-say" id="co-say" aria-live="polite"><b>Tentative.</b> Costed and drawn hatched on the Schedule, waiting on the gate "Client approves vocal booth".</p>
         <div class="demo-ctl">
-          <button type="button" class="btn btn-primary btn-sm" id="co-approve" aria-pressed="false">Approve it</button>
-          <button type="button" class="btn btn-ghost btn-sm" id="co-slip">Decision slips a week</button>
-          <button type="button" class="btn btn-ghost btn-sm" id="co-reset">Reset</button>
+          <button type="button" class="btn btn--sm" id="co-approve" aria-pressed="false">Approve it</button>
+          <button type="button" class="btn btn--line btn--sm" id="co-slip">Decision slips a week</button>
+          <button type="button" class="btn btn--line btn--sm" id="co-reset">Reset</button>
         </div>
       </div>
 
       <div class="demo" id="st">
-        <span class="kicker">A status change</span>
-        <b class="demo-title">Drywall <span class="chip ordered" id="st-pill">In progress</span></b>
-        <label class="st-range">Percent done on the Schedule
+        <h3 class="demo-title">Drywall <small>a line on the Schedule</small>
+          <span class="stampbox"><span class="stamp ghost" aria-hidden="true"></span><span class="stamp s-progress" id="st-pill">In progress</span></span>
+        </h3>
+        <label class="st-range"><span class="cap" style="display:block">Percent done on the Schedule</span>
           <span><input type="range" id="st-range" min="0" max="100" step="10" value="60"><output id="st-out" for="st-range">60%</output></span>
         </label>
         <div class="board" id="st-board" data-col="1" aria-hidden="true">
-          <div><em>New</em></div><div><em>In work</em></div><div><em>Complete</em></div>
+          <div><span class="cap">New</span></div><div><span class="cap">In work</span></div><div><span class="cap">Complete</span></div>
           <i class="tok">Drywall</i>
         </div>
-        <p class="demo-say" id="st-say">Its task sits in <b>In work</b> on the Manager board. Nobody had to move it.</p>
+        <p class="demo-say" id="st-say" aria-live="polite">Its task sits in <b>In work</b> on the Manager board. Nobody had to move it.</p>
       </div>
     </div>
     <p class="aside">Also tracked on the same plan: materials from needed to received, a risk register, and a lookahead board right under the Schedule.</p>
 
-    <figure class="shot">
-      <a class="frame" href="assets/change-order.webp" target="_blank" rel="noopener" title="Open full size">
-        <img src="assets/change-order.webp" width="1600" height="1060" loading="lazy" alt="The Schedule with a change order line, CO-01 Add vocal booth, drawn hatched on the Gantt chart. Its drawer shows the owner, the decision gate it waits on, Client approves vocal booth, and the Tentative box ticked.">
+    <figure class="attach">
+      <a href="assets/change-order.webp" target="_blank" rel="noopener" title="Open full size">
+        <img src="assets/change-order.webp" width="1600" height="1060" loading="lazy" alt="The Schedule in the app with a change order line, CO-01 Add vocal booth, drawn hatched on the Gantt chart. Its drawer shows the owner, the decision gate it waits on, Client approves vocal booth, and the Tentative box ticked.">
       </a>
       <figcaption>The change order in the app: hatched, costed, and waiting on the gate "Client approves vocal booth".</figcaption>
     </figure>
   </div>
 </section>
 
-</div>
-</div>
-
-<div class="scene scene-dunes">
-<div class="scene-bg" aria-hidden="true"></div>
-<div class="scene-body">
-
-<section id="workspace">
+<section id="workspace" style="padding-top:0">
   <div class="wrap">
-    <div class="head">
-      <div class="eyebrow">Your workspace</div>
-      <h2>Build the dashboard your job needs.</h2>
-      <p>Every screen is a board of panels. Put charts, graphs and lists side by side, and they keep themselves up to date as the job moves.</p>
+    <div class="sec-head">
+      <h2 class="inked">Build the dashboard your job needs.</h2>
+      <p class="lead">Every screen is a board of panels. Put charts, graphs and lists side by side, and they keep themselves up to date as the job moves.</p>
     </div>
 
     <div class="annot" id="annot">
       <div class="annot-img">
-        <a class="frame" href="assets/workspace.webp" target="_blank" rel="noopener" title="Open full size">
-          <img src="assets/workspace.webp" width="1600" height="1060" loading="lazy" alt="A custom dashboard board: a 3D chart of cost by Schedule line with the pending change order in amber, a doughnut of materials by status, progress bars per line, the inbox and the procurement list.">
-        </a>
-        <i class="pin" data-pin="1" style="--x:25%;--y:30%">1</i>
-        <i class="pin" data-pin="2" style="--x:62%;--y:30%">2</i>
-        <i class="pin" data-pin="3" style="--x:87%;--y:30%">3</i>
-        <i class="pin" data-pin="4" style="--x:17%;--y:76%">4</i>
-        <i class="pin" data-pin="5" style="--x:66%;--y:76%">5</i>
+        <figure class="attach" style="--lean:0deg">
+          <a href="assets/workspace.webp" target="_blank" rel="noopener" title="Open full size" style="--lean:0deg">
+            <img src="assets/workspace.webp" width="1600" height="1060" loading="lazy" alt="A custom dashboard board in the app: a 3D chart of cost by Schedule line with the pending change order in amber, a doughnut of materials by status, progress bars per line, the inbox and the procurement list.">
+          </a>
+        </figure>
+        <i class="pin" data-pin="1" style="--x:25%;--y:34%">1</i>
+        <i class="pin" data-pin="2" style="--x:62%;--y:34%">2</i>
+        <i class="pin" data-pin="3" style="--x:87%;--y:34%">3</i>
+        <i class="pin" data-pin="4" style="--x:17%;--y:78%">4</i>
+        <i class="pin" data-pin="5" style="--x:66%;--y:78%">5</i>
       </div>
-      <ol class="legend">
+      <ol class="key">
         <li data-pin="1" tabindex="0"><i class="num">1</i><div><b>A 3D chart</b><span>A panel can draw anything a browser can. The amber bar is the change order nobody has approved yet.</span></div></li>
         <li data-pin="2" tabindex="0"><i class="num">2</i><div><b>Graphs</b><span>Chart.js, Recharts and D3 are built in.</span></div></li>
         <li data-pin="3" tabindex="0"><i class="num">3</i><div><b>Lists that keep up</b><span>With your permission a panel reads the project's own data and redraws the moment it changes.</span></div></li>
@@ -1025,11 +923,10 @@
     <p class="aside">Drag, resize and lock panels. Pop one out to a second screen. Copy a whole board, panels and all, to the next job.</p>
 
     <div class="sub">
-      <div class="head">
-        <div class="eyebrow">Also inside</div>
-        <h2>The rest of the job, in the same window.</h2>
+      <div class="sec-head">
+        <h2 class="inked">The rest of the job, in the same window.</h2>
       </div>
-      <dl class="index">
+      <dl class="terms terms--plain">
         <div><dt>Calendar and week timeline</dt><dd>Year, Month, Week and Day. Drag to draw a time block, then drag it to another day.</dd></div>
         <div><dt>People and teams</dt><dd>One address book, teams with a lead, email on your own account and encrypted chat.</dd></div>
         <div><dt>Files and drawings</dt><dd>A viewer for PDFs, DXF drawings, Excel, Word, images and video, on a real folder on your disk.</dd></div>
@@ -1041,54 +938,45 @@
   </div>
 </section>
 
-</div>
-</div>
-
-<div class="scene scene-dusk">
-<div class="scene-bg" aria-hidden="true"></div>
-<div class="scene-body">
-
-<section id="pricing" class="pricing">
+<section id="pricing" class="flood flood--green">
   <div class="wrap">
-    <div class="head">
-      <div class="eyebrow">Pricing</div>
-      <h2>Free for 30 days. Then one plan.</h2>
-      <p>Try everything on each computer for 30 days, no card needed. Either plan covers up to 5 machines on one account.</p>
+    <div class="sec-head">
+      <h2 class="inked">Free for 30 days. Then one plan.</h2>
+      <p class="lead">Try everything on each computer for 30 days, no card needed. Either plan covers up to 5 machines on one account.</p>
     </div>
     <div class="plans">
       <div class="plan">
         <h3>Monthly</h3>
-        <div class="price">$16 <small>/ month</small></div>
-        <p class="note">Billed monthly.</p>
+        <div class="price numeral">$16 <small>a month</small></div>
+        <p>Billed monthly.</p>
         <ul class="ticks">
-          <li>Every feature</li>
-          <li>Up to 5 machines on one account</li>
-          <li>Manage or cancel in Settings › Account</li>
+          <li><svg class="i"><use href="#i-check"/></svg>Every feature</li>
+          <li><svg class="i"><use href="#i-check"/></svg>Up to 5 machines on one account</li>
+          <li><svg class="i"><use href="#i-check"/></svg>Manage or cancel in Settings, Account</li>
         </ul>
-        <a class="btn btn-ghost" href="https://downloads.zenfrogstudio.com/caldera/win/Caldera-Setup.exe">Start free trial</a>
+        <a class="btn btn--line" href="https://downloads.zenfrogstudio.com/caldera/win/Caldera-Setup.exe">Start free trial</a>
       </div>
-      <div class="plan best">
-        <span class="tag">Save $43 a year</span>
+      <div class="plan">
+        <span class="stamp">Save $43 a year</span>
         <h3>Yearly</h3>
-        <div class="price">$149 <small>/ year</small></div>
-        <p class="note">About $12.42 a month.</p>
+        <div class="price numeral">$149 <small>a year</small></div>
+        <p>About $12.42 a month.</p>
         <ul class="ticks">
-          <li>Every feature</li>
-          <li>Up to 5 machines on one account</li>
-          <li>Manage or cancel in Settings › Account</li>
+          <li><svg class="i"><use href="#i-check"/></svg>Every feature</li>
+          <li><svg class="i"><use href="#i-check"/></svg>Up to 5 machines on one account</li>
+          <li><svg class="i"><use href="#i-check"/></svg>Manage or cancel in Settings, Account</li>
         </ul>
-        <a class="btn btn-primary" href="https://downloads.zenfrogstudio.com/caldera/win/Caldera-Setup.exe">Start free trial</a>
+        <a class="btn" href="https://downloads.zenfrogstudio.com/caldera/win/Caldera-Setup.exe">Start free trial</a>
       </div>
     </div>
-    <p class="under">Download, use it free, then sign in and subscribe from Settings › Account when you're ready.</p>
+    <p class="aside">Download, use it free, then sign in and subscribe from Settings, Account when you're ready.</p>
   </div>
 </section>
 
-<section id="faq" style="padding-top:0">
+<section id="faq">
   <div class="wrap">
-    <div class="head center">
-      <div class="eyebrow">Questions</div>
-      <h2>Good to know.</h2>
+    <div class="sec-head">
+      <h2 class="inked">Good to know.</h2>
     </div>
     <div class="faq">
       <details>
@@ -1109,7 +997,7 @@
       </details>
       <details>
         <summary>Windows SmartScreen warned me. Is that expected?</summary>
-        <p>Yes. The installer isn't code-signed yet, so SmartScreen may warn you on first run. Click <b>More info › Run anyway</b>.</p>
+        <p>Yes. The installer isn't code-signed yet, so SmartScreen may warn you on first run. Click <b>More info</b>, then <b>Run anyway</b>.</p>
       </details>
       <details>
         <summary>Is there a free version?</summary>
@@ -1119,26 +1007,21 @@
   </div>
 </section>
 
-<section class="final">
+<section class="close flood flood--red">
   <div class="wrap">
-    <img src="assets/logo-dk.png" width="320" height="196" loading="lazy" alt="">
-    <h2>One plan. Every moving part.</h2>
+    <h2 class="inked">One plan. Every moving part.</h2>
     <div class="cta">
-      <a class="btn btn-light" href="https://downloads.zenfrogstudio.com/caldera/win/Caldera-Setup.exe">
-        <svg class="i"><use href="#i-down"/></svg>Download for Windows
-      </a>
+      <a class="btn" href="https://downloads.zenfrogstudio.com/caldera/win/Caldera-Setup.exe"><svg class="i"><use href="#i-down"/></svg>Download for Windows</a>
+      <span class="note">Free for 30 days. No card needed.</span>
     </div>
-    <p class="fine">Free for 30 days · No card needed</p>
   </div>
 </section>
-
-</div>
-</div>
 
 </main>
 
 <footer>
   <div class="wrap">
+    <img src="assets/logo.png" width="320" height="196" loading="lazy" alt="">
     <span>© 2026 Z3n. Caldera Pro is proprietary software.</span>
     <nav aria-label="Footer">
       <a href="mailto:support@zenfrogstudio.com">support@zenfrogstudio.com</a>
@@ -1162,6 +1045,18 @@
     io.observe(el);
   };
 
+  // The thump: a stamp lands again. With `was` it leaves the old impression ghosted underneath.
+  function thump(stamp) {
+    if (reduce) return;
+    stamp.classList.remove('thump'); void stamp.offsetWidth; stamp.classList.add('thump');
+  }
+  function restamp(stamp, write) {
+    var ghost = stamp.parentNode.querySelector('.ghost');
+    if (ghost) { ghost.innerHTML = stamp.innerHTML; ghost.className = stamp.className.replace('thump', '') + ' ghost'; }
+    write(stamp);
+    thump(stamp);
+  }
+
   // ── In sync: a line costs its fixed cost plus its daily rate for each day it runs, and linked lines push each other.
   (function () {
     var range = $('sim-days'); if (!range) return;
@@ -1171,14 +1066,16 @@
       { id: 'drywall', days: 8, cost: 1900, rate: 640 },
       { id: 'paint', days: 5, cost: 1400, rate: 560 }
     ];
-    var SPAN = 32, BASE = 8;
-    function show(id, text, badge) {
-      var el = $(id), tag = el.querySelector('small');
-      if (el.firstChild.nodeValue.trim() !== text) {
-        el.firstChild.nodeValue = text + ' ';
-        if (!reduce) { el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); }
-      }
-      tag.hidden = !badge; tag.textContent = badge || '';
+    var SPAN = 32, BASE = 8, shown = {}, baseline = {};
+    function show(id, value, delta) {
+      var stamp = $(id), main = stamp.querySelector('b'), box = stamp.parentNode, rev = box.querySelector('.rev'), ghost = box.querySelector('.ghost');
+      var changed = shown[id] !== undefined && shown[id] !== value;
+      main.textContent = value; shown[id] = value;
+      if (baseline[id] === undefined) baseline[id] = stamp.innerHTML;
+      ghost.innerHTML = delta ? baseline[id] : '';
+      if (changed) thump(stamp);
+      if (delta && rev.textContent !== delta) { rev.textContent = delta; rev.hidden = false; thump(rev); }
+      rev.hidden = !delta;
     }
     function render() {
       var days = +range.value, start = 0, total = 0, tom = 0, paintStart = 0;
@@ -1193,15 +1090,15 @@
         if (line.id === 'framing' || line.id === 'drywall') tom += line.days;
         total += cost; start += line.days;
       });
-      var diff = days - BASE, n = Math.abs(diff), sign = diff > 0 ? '+' : '−';
-      $('sim-days-out').textContent = days + ' days';
-      show('r-time', dateOf(start - 1), diff ? sign + n + (n === 1 ? ' day' : ' days') : '');
+      var diff = days - BASE, n = Math.abs(diff), sign = diff > 0 ? '+' : '−', unit = n === 1 ? ' day' : ' days';
+      $('sim-days-out').textContent = days + (days === 1 ? ' day' : ' days');
+      $('r-crew-sub').textContent = 'Tom booked ' + tom + ' days';
+      show('r-time', dateOf(start - 1), diff ? sign + n + unit : '');
       show('r-money', money(total), diff ? sign + money(n * 640) : '');
-      show('r-crew', 'Maya starts ' + dateOf(paintStart), diff ? sign + n + (n === 1 ? ' day' : ' days') : '');
-      $('r-crew-sub').textContent = 'Tom is booked ' + tom + ' days. Every line has an owner and a paired task on the Manager board.';
+      show('r-crew', 'Maya starts ' + dateOf(paintStart), diff ? sign + n + unit : '');
     }
     range.addEventListener('input', render);
-    [].forEach.call(document.querySelectorAll('.sim-ctl button'), function (button) {
+    [].forEach.call(document.querySelectorAll('.step'), function (button) {
       button.addEventListener('click', function () {
         range.value = Math.min(+range.max, Math.max(+range.min, +range.value + (+button.getAttribute('data-d'))));
         render();
@@ -1212,33 +1109,36 @@
 
   // ── AI-native: six jobs, played back.
   (function () {
-    var tabs = [].slice.call(document.querySelectorAll('.scn-tabs button')); if (!tabs.length) return;
+    var tabs = [].slice.call(document.querySelectorAll('.jobs button')); if (!tabs.length) return;
     var SCENES = [
-      { kind: 'You type, after Ctrl+K', text: "move Tuesday's inspection to Thursday",
-        steps: [["Reads Tuesday's blocks", 'get_day'], ['Moves the inspection to Thursday', 'move_block']], result: 'Done. Ctrl+Z if you change your mind.' },
-      { kind: 'You assign a card to Claude Code', text: 'Draft the weekly client update',
+      { kind: 'You type, after Ctrl+K', text: "move Tuesday's inspection to Thursday", stamp: 'Done',
+        steps: [["Reads Tuesday's blocks", 'get_day'], ['Moves the inspection to Thursday', 'move_block']], result: 'Ctrl+Z if you change your mind.' },
+      { kind: 'You assign a card to Claude Code', text: 'Draft the weekly client update', stamp: 'Done',
         steps: [['Drafts a plan'], ['You read it and approve'], ["Runs in the task's own folder"]], result: 'Its reply and the files it changed land on the card.' },
-      { kind: 'You set a prompt to repeat', text: 'Every Friday, summarise the open risks',
+      { kind: 'You set a prompt to repeat', text: 'Every Friday, summarise the open risks', stamp: 'Set',
         steps: [['Writes a plan first'], ['You approve it once'], ['Runs weekly from then on']], result: 'Watch any run live in the built-in terminal.' },
-      { kind: 'You click Price all', text: 'Phase 1, five items',
+      { kind: 'You click Price all', text: 'Phase 1, five items', stamp: 'Priced',
         steps: [['Searches online stores for each item'], ['Reads the price off a real listing'], ['Fills in price, vendor and link']], result: 'Four priced. One left to chase.' },
-      { kind: 'You drop in a document', text: 'Electrical schedule.xlsx',
+      { kind: 'You drop in a document', text: 'Electrical schedule.xlsx', stamp: 'Listed',
         steps: [['Reads the items out of the document'], ['You keep the ones you want'], ['They become a procurement list']], result: 'Nothing retyped.' },
-      { kind: 'You describe a panel', text: 'a 3D chart of cost by Schedule line',
+      { kind: 'You describe a panel', text: 'a 3D chart of cost by Schedule line', stamp: 'Built',
         steps: [['Your agent writes the panel'], ['The panel reads the live project'], ['It redraws when the data changes']], result: 'A new tool on your board.' }
     ];
-    var text = $('scn-text'), steps = $('scn-steps'), result = $('scn-result'), kind = $('scn-kind');
-    var run = 0, current = 0, auto = !reduce, timers = [];
+    var text = $('scn-text'), steps = $('scn-steps'), result = $('scn-result'), kind = $('scn-kind'), stamp = $('scn-stamp'), resultText = $('scn-result-text');
+    var check = steps.querySelector('svg').cloneNode(true);
+    var run = 0, auto = !reduce, timers = [];
     var later = function (fn, ms) { timers.push(setTimeout(fn, ms)); };
     function play(index) {
       var scene = SCENES[index], mine = ++run;
-      timers.forEach(clearTimeout); timers = []; current = index;
+      timers.forEach(clearTimeout); timers = [];
       tabs.forEach(function (tab, i) { tab.setAttribute('aria-selected', i === index); });
       kind.textContent = scene.kind;
-      steps.textContent = ''; result.textContent = scene.result; result.classList.remove('in');
+      steps.textContent = ''; stamp.textContent = scene.stamp; resultText.textContent = scene.result; result.classList.remove('in');
       var items = scene.steps.map(function (step) {
-        var li = document.createElement('li'); li.textContent = step[0];
-        if (step[1]) { var code = document.createElement('code'); code.textContent = step[1]; li.appendChild(code); }
+        var li = document.createElement('li'), span = document.createElement('span');
+        span.textContent = step[0] + ' ';
+        if (step[1]) { var code = document.createElement('code'); code.textContent = step[1]; span.appendChild(code); }
+        li.appendChild(check.cloneNode(true)); li.appendChild(span);
         steps.appendChild(li); return li;
       });
       if (reduce) { text.textContent = scene.text; items.forEach(function (li) { li.classList.add('in'); }); result.classList.add('in'); return; }
@@ -1249,17 +1149,17 @@
         text.textContent = scene.text.slice(0, ++typed);
         if (typed < scene.text.length) return later(type, 26);
         items.forEach(function (li, i) { later(function () { li.classList.add('in'); }, 420 + i * 480); });
-        later(function () { result.classList.add('in'); }, 420 + items.length * 480);
-        if (auto) later(function () { play((index + 1) % SCENES.length); }, 420 + items.length * 480 + 3400);
+        later(function () { result.classList.add('in'); thump(stamp); }, 420 + items.length * 480);
+        if (auto && index < SCENES.length - 1) later(function () { play(index + 1); }, 420 + items.length * 480 + 3400);
       })();
     }
     tabs.forEach(function (tab, i) { tab.addEventListener('click', function () { auto = false; play(i); }); });
     if (!reduce) onView($('console'), function () { play(0); });
   })();
 
-  // ── Agent access levels.
+  // ── Agent access: the chosen stamp is pressed.
   (function () {
-    var buttons = [].slice.call(document.querySelectorAll('.levels button')), say = $('levels-say'); if (!say) return;
+    var buttons = [].slice.call(document.querySelectorAll('.heads button')), say = $('levels-say'), stamp = $('levels-stamp'); if (!say) return;
     var TEXT = [
       "Nothing. The agent server doesn't run.",
       'Agents see your projects, schedule and budgets, and change nothing.',
@@ -1269,29 +1169,29 @@
     buttons.forEach(function (button, i) {
       button.addEventListener('click', function () {
         buttons.forEach(function (other) { other.setAttribute('aria-pressed', other === button); });
-        say.textContent = TEXT[i];
+        stamp.textContent = button.textContent; say.textContent = TEXT[i]; thump(stamp);
       });
     });
   })();
 
-  // ── Materials: price the list, row by row.
+  // ── Materials: price the list, and each row gets its stamp.
   (function () {
     var body = $('ptable-body'), button = $('price-all'); if (!body) return;
     var rows = [].slice.call(body.rows), LINE = [2136, 990, 448, 0, 449.82], busy = false;
     var total = $('ptable-total'), left = $('ptable-left');
-    function chip(row, cls, label) { var c = row.querySelector('.chip'); c.className = 'chip ' + cls; c.textContent = label; }
+    function mark(row, cls, label) { var s = row.querySelector('.stamp'); s.className = 'stamp stamp--sm ' + cls; s.textContent = label; return s; }
     function run() {
-      if (busy) return; busy = true;
+      if (busy) return; busy = true; button.disabled = true;
       var sum = 0;
-      rows.forEach(function (row) { row.classList.add('searching'); chip(row, 'needed', 'Needed'); });
-      total.textContent = '$0.00'; left.textContent = '· searching 5 items';
+      rows.forEach(function (row) { row.classList.add('searching'); mark(row, 's-needed', 'Needed'); });
+      total.textContent = '$0.00'; left.textContent = 'searching 5 items';
       rows.forEach(function (row, i) {
         setTimeout(function () {
           row.classList.remove('searching');
-          if (!row.classList.contains('miss')) chip(row, 'priced', 'Priced');
+          thump(row.classList.contains('miss') ? mark(row, 's-needed', 'Needed') : mark(row, 's-priced', 'Priced'));
           sum += LINE[i];
           total.textContent = '$' + sum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-          if (i === rows.length - 1) { left.textContent = '· 1 unpriced'; busy = false; }
+          if (i === rows.length - 1) { left.textContent = '1 unpriced'; busy = false; button.disabled = false; }
         }, reduce ? 0 : 650 + i * 520);
       });
     }
@@ -1299,42 +1199,46 @@
     if (!reduce) onView($('pricer'), run);
   })();
 
-  // ── Compared for you: grow the price bars when they come into view.
-  onView($('versus'), function () { $('versus').classList.add('in'); });
-
   // ── Changes: approve the change order, or let the decision slip.
   (function () {
     var bar = $('co-bar'); if (!bar) return;
-    var gate = $('co-gate'), say = $('co-say'), approve = $('co-approve'), slip = $('co-slip'), weeks = 0, approved = false;
-    function draw() {
+    var gate = $('co-gate'), say = $('co-say'), stamp = $('co-stamp'), approve = $('co-approve'), slip = $('co-slip'), weeks = 0, approved = false;
+    function draw(hit) {
       gate.style.left = (14.3 + weeks * 25) + '%';
       bar.style.left = (25 + weeks * 25) + '%';
       bar.classList.toggle('done', approved);
       approve.setAttribute('aria-pressed', approved);
       approve.textContent = approved ? 'Approved' : 'Approve it';
       slip.disabled = weeks >= 2;
+      var label = approved ? 'Approved' : 'Tentative', cls = 'stamp ' + (approved ? 's-done' : 's-near');
+      if (stamp.textContent !== label) {
+        if (hit) restamp(stamp, function () { stamp.textContent = label; stamp.className = cls; });
+        else { stamp.textContent = label; stamp.className = cls; stamp.parentNode.querySelector('.ghost').textContent = ''; }
+      }
       say.innerHTML = approved
         ? '<b>Committed.</b> Untick Tentative and the line is drawn solid: part of the plan, with its cost and its owner.'
         : weeks
           ? '<b>Still tentative.</b> The decision moved ' + (weeks === 1 ? 'a week' : 'two weeks') + ' and the change order followed its gate.'
           : '<b>Tentative.</b> Costed and drawn hatched on the Schedule, waiting on the gate "Client approves vocal booth".';
     }
-    approve.addEventListener('click', function () { approved = !approved; draw(); });
-    slip.addEventListener('click', function () { if (weeks < 2) weeks++; draw(); });
-    $('co-reset').addEventListener('click', function () { weeks = 0; approved = false; draw(); });
-    draw();
+    approve.addEventListener('click', function () { approved = !approved; draw(true); });
+    slip.addEventListener('click', function () { if (weeks < 2) weeks++; draw(true); });
+    $('co-reset').addEventListener('click', function () { weeks = 0; approved = false; draw(false); });
+    draw(false);
   })();
 
   // ── Status: percent done on the Schedule decides the column on the Manager board.
   (function () {
     var range = $('st-range'); if (!range) return;
-    var pill = $('st-pill'), board = $('st-board'), say = $('st-say'), out = $('st-out');
+    var pill = $('st-pill'), board = $('st-board'), say = $('st-say'), out = $('st-out'), last = -1;
     function draw() {
       var pct = +range.value, col = pct === 0 ? 0 : pct < 100 ? 1 : 2;
       out.textContent = pct + '%';
+      if (col === last) return;
+      var write = function () { pill.className = 'stamp ' + ['s-open', 's-progress', 's-done'][col]; pill.textContent = ['Open', 'In progress', 'Done'][col]; };
+      if (last < 0) write(); else restamp(pill, write);
+      last = col;
       board.setAttribute('data-col', col);
-      pill.className = 'chip ' + ['open', 'ordered', 'received'][col];
-      pill.textContent = ['Open', 'In progress', 'Done'][col];
       say.innerHTML = [
         'Not started. Its task waits in <b>New</b> on the Manager board.',
         'Its task sits in <b>In work</b> on the Manager board. Nobody had to move it.',
@@ -1345,7 +1249,7 @@
     draw();
   })();
 
-  // ── Workspace: link each numbered pin to its line in the legend.
+  // ── Workspace: link each numbered pin to its line in the key.
   (function () {
     var root = $('annot'); if (!root) return;
     function light(n, on) {
