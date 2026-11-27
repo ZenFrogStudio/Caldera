@@ -98,6 +98,7 @@
       padding: .2em .45em .12em; border-width: 2px; outline: 0; filter: url(#ink-fine);
     }
     .stamps .stamp.rev { font-size: 1.25rem; min-width: 0; right: -16px; top: -18px; }
+    .stampbox:nth-child(n) .stamp.rev { filter: url(#ink-fine); }
     .rev[hidden] { display: none; }
     .thump { animation: thump .24s var(--ease); }
     @keyframes thump { from { scale: 1.24; opacity: 0; } }
@@ -146,6 +147,7 @@
       .title .lead { justify-self: end; align-self: end; max-width: 41rem; margin: 0; padding-bottom: .2rem; }
     }
     .cta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; margin-top: 22px; }
+    .cta-terms { display: none; }
 
     /* ── The live job lines ── */
     .job { margin-top: 26px; border-top: 1.5px solid var(--rule); }
@@ -424,6 +426,7 @@
       .job-body { min-height: 0; background: none; border-bottom: 0; }
       .g-row:last-child { border-bottom: 1.5px solid var(--rule); }
       .rack, .versus, .annot, .order { gap: 34px; }
+      .versus-note { grid-column: auto; margin-top: 0; }
       .stamps { justify-content: flex-start; padding: 30px 0 22px; }
       .demo { padding: 0; }
       .demo + .demo { margin-top: 34px; padding: 30px 0 0; border-left: 0; border-top: 1.5px solid var(--rule); }
@@ -460,6 +463,7 @@
       .cta .btn { flex: 1 1 100%; }
       .cta .btn--line { flex: 0 0 auto; padding: .2em 0; border: 0; text-decoration: underline; }
       .cta .btn--line:hover { background: transparent; }
+      .cta-terms { display: block; flex: 1 1 100%; }
       .dial { order: 3; flex: 1 1 100%; }
       .dial input { flex: 1; width: auto; }
       .stamps .stamp, .stamps .stampbox:nth-child(even) .stamp { filter: url(#ink-fine); }
@@ -514,21 +518,24 @@
       <feTurbulence type="fractalNoise" baseFrequency=".7" numOctaves="2" seed="4" result="grain"/>
       <feDisplacementMap in="SourceGraphic" in2="grain" scale="1.5" xChannelSelector="R" yChannelSelector="G" result="rough"/>
       <feTurbulence type="fractalNoise" baseFrequency=".011 .028" numOctaves="2" seed="11" result="blot"/>
-      <feColorMatrix in="blot" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -2.5 0 0 0 2.2" result="pressure"/>
+      <feColorMatrix in="blot" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0" result="level"/>
+      <feComponentTransfer in="level" result="pressure"><feFuncA type="table" tableValues="1 1 1 1 .94 .85 .82 .82 .82"/></feComponentTransfer>
       <feComposite in="rough" in2="pressure" operator="in"/>
     </filter>
     <filter id="ink-2" x="-4%" y="-12%" width="108%" height="124%" color-interpolation-filters="sRGB">
       <feTurbulence type="fractalNoise" baseFrequency=".62" numOctaves="2" seed="29" result="grain"/>
       <feDisplacementMap in="SourceGraphic" in2="grain" scale="1.7" xChannelSelector="G" yChannelSelector="R" result="rough"/>
       <feTurbulence type="fractalNoise" baseFrequency=".016 .022" numOctaves="2" seed="37" result="blot"/>
-      <feColorMatrix in="blot" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -2.2 0 0 0 2.02" result="pressure"/>
+      <feColorMatrix in="blot" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0" result="level"/>
+      <feComponentTransfer in="level" result="pressure"><feFuncA type="table" tableValues="1 1 1 1 .96 .87 .83 .83 .83"/></feComponentTransfer>
       <feComposite in="rough" in2="pressure" operator="in"/>
     </filter>
     <filter id="ink-fine" x="-4%" y="-14%" width="108%" height="128%" color-interpolation-filters="sRGB">
       <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7" result="grain"/>
       <feDisplacementMap in="SourceGraphic" in2="grain" scale="1.1" xChannelSelector="R" yChannelSelector="G" result="rough"/>
       <feTurbulence type="fractalNoise" baseFrequency=".05 .09" numOctaves="2" seed="15" result="blot"/>
-      <feColorMatrix in="blot" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -.9 0 0 0 1.5" result="pressure"/>
+      <feColorMatrix in="blot" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0" result="level"/>
+      <feComponentTransfer in="level" result="pressure"><feFuncA type="table" tableValues="1 1 1 1 .97 .9 .88 .88 .88"/></feComponentTransfer>
       <feComposite in="rough" in2="pressure" operator="in"/>
     </filter>
     <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 3.5v11m0 0-4.5-4.5m4.5 4.5 4.5-4.5M4.5 20h15"/></symbol>
@@ -573,6 +580,7 @@
     <div class="cta">
       <a class="btn" href="https://downloads.zenfrogstudio.com/caldera/win/Caldera-Setup.exe"><svg class="i"><use href="#i-down"/></svg>Download for Windows</a>
       <a class="btn btn--line" href="#pricing">See pricing</a>
+      <span class="note cta-terms">Free for 30 days. No card needed. Windows 10 or later.</span>
     </div>
     <div class="job">
       <div class="job-ctl">
