@@ -17,6 +17,6 @@ STORY: The visitor sees a plan re-stamp itself, believes one change reaches time
 
 FIRST VIEWPORT: Letterhead with the download button; the title set full width in stamp lettering; under it four ruled schedule lines with Drywall live at 8 days, overprinted by three large stamps, FINISH, COST and CREW. Changing the days re-hits all three with a thump, the old value ghosted beneath and a red REVISED stamp beside it. Download sits under the title.
 
-FORM: Rubber stamps on a job sheet; position 4 of 7 on the ordered list; seed: none (unavailable). Signature interaction: the thump. Motion grammar: every state change lands as a stamp impact; nothing else moves.
+FORM: Rubber stamps on a job sheet; position 4 of 7 on the ordered list; seed: none (unavailable). Signature interaction: the thump. Motion grammar: every state change lands as a stamp impact; bars, gates and task tokens slide to their new place; nothing decorative moves.
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
